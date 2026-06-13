@@ -1,0 +1,18 @@
+/* Mobile: fluid layout from 320px, adaptive from 393px */
+@media (min-width: 393px) {
+  :root {
+    --container-padding-mobile: 16px;
+  }
+}
+
+@media (min-width: 768px) {
+  :root {
+    --container-padding-mobile: var(--container-padding-tablet);
+  }
+}
+
+@media (min-width: 1440px) {
+  :root {
+    --container-padding-mobile: var(--container-padding-desktop);
+  }
+}
