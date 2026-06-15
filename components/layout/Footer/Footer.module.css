@@ -1,0 +1,107 @@
+/* ------- МОБ.------- */
+.footer-container {
+  background-color: #3D2218;
+  color: #ffffff;
+  padding: 24px 16px;
+  width: 100%;
+}
+
+.footer-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 32px; 
+  margin: 0 auto;
+  width: 100%;
+}
+.footer-logo {
+  display: flex;
+  align-items: center; 
+  justify-content: center;
+  gap: 4.97px;
+  margin: 0 auto;
+}
+
+.footer-logo-icon {
+  width: 31.50px;
+  height: auto;       
+  display: block;
+}
+
+.brand-text {
+  font-size: 20px;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.footer-nav {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.footer-nav-link {
+  color: #ffffff;
+  text-decoration: none;
+  transition: opacity 0.3s;
+  line-height: 24px;
+}
+
+.footer-nav-link:hover {
+  opacity: 0.8;
+}
+
+.footer-credits {
+  width: 100%;
+  text-align: center;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+
+/* ------- ПЛАНШЕТ ------ */
+@media (min-width: 768px) {
+  .footer-container {
+    padding: 48px 24px;
+  }
+
+  .footer-content {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+ .footer-logo {
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+  }
+
+  .footer-nav {
+    flex-direction: row; 
+    justify-content: center;
+    gap: 32px;
+  }
+}
+
+
+/* ------- ДЕКСКТОП ------- */
+@media (min-width: 1440px) {
+  .footer-container {
+    padding: 40px 108px;
+  }
+
+  .footer-content {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 auto;
+  }
+
+  .footer-nav {
+    margin: 0;
+    gap: 32px;
+  }
+}
