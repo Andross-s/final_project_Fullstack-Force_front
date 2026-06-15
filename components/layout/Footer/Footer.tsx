@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import styles from "./Footer.module.css";
+import LogoIcon from "../../icon/logo.svg";
 //import ModalNotAutor from "../../auth/ModalNotAutor/ModalNotAutor";
 
 type Props = {
@@ -13,6 +14,7 @@ type Props = {
 export const Footer = ({ isUserAuthorized }: Props) => {
   const pathname = usePathname();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const logoSrc = typeof LogoIcon === "string" ? LogoIcon : (LogoIcon?.src ?? "");
 
   const handleAccountClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     if (!isUserAuthorized) {
@@ -24,10 +26,10 @@ export const Footer = ({ isUserAuthorized }: Props) => {
     <footer className={styles["footer-container"]}>
       <div className={styles["footer-content"]}>
         <Link href="/" className={styles["footer-logo"]}>
-          <img src="/icons/logo.svg" alt="Tasteorama" className={styles["footer-logo-icon"]} />
+          <img src={logoSrc} alt="Tasteorama" className={styles["footer-logo-icon"]} />
           <span className={styles["brand-text"]}>Tasteorama</span>
         </Link>
-
+        
         <div className={styles["footer-credits"]}>
           <div>© 2025 CookingCompanion</div>
         </div>
