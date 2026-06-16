@@ -1,5 +1,5 @@
 import { RegisterLoginData, User } from '@/types/user';
-import { nextServer } from './api';
+import { CheckSession, nextServer } from './api';
 
 export type UserRegisterProps = {
   email: string;
@@ -20,3 +20,13 @@ export const login = async (data: RegisterLoginData) => {
   const res = await nextServer.post<User>(`/auth/login`, data);
   return res.data;
 };
+
+// export const checkSession = async () => {
+//   const res = await nextServer.get<CheckSession>('/auth/session');
+//   return res.data.success;
+// };
+
+// export const getMe = async () => {
+//   const { data } = await nextServer.get<User>('/users/me');
+//   return data;
+// };
