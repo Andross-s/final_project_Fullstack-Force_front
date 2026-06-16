@@ -1,0 +1,51 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  width: 100%;
+}
+
+/* Сітка карток */
+.grid {
+  display: grid;
+  gap: 24px;
+}
+
+/* Mobile: 1 колонка */
+@media (max-width: 767px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Tablet: 2 колонки */
+@media (min-width: 768px) and (max-width: 1439px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Desktop: 3 колонки */
+@media (min-width: 1440px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Кнопка Load More */
+.loadMore {
+  align-self: center;
+  padding: 12px 24px;
+  border-radius: 12px;
+  background: #ff7f50;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 500;
+  transition: 0.2s;
+}
+
+.loadMore:hover {
+  background: #ff6a33;
+}
