@@ -3,6 +3,7 @@ import { DM_Sans, Montserrat } from 'next/font/google';
 import './globals.css';
 import Layout from '@/components/layout/Layout/Layout';
 import TanStackProvider from '../components/TanStackProvider/TanStackProvider';
+import AuthProvider from '@/components/AuthProvider/AuthProvider';
 
 const montserrat = Montserrat({
   variable: '--font-montserrat',
@@ -32,7 +33,9 @@ export default function RootLayout({
     <html lang="uk">
       <body className={`${montserrat.variable} ${dmSans.variable}`}>
         <TanStackProvider>
-          <Layout>{children}</Layout>
+          <AuthProvider>
+            <Layout>{children}</Layout>
+          </AuthProvider>
         </TanStackProvider>
       </body>
     </html>

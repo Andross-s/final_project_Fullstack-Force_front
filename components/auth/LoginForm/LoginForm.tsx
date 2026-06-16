@@ -25,6 +25,9 @@ const Login = () => {
     mutationFn: login,
     onSuccess: res => {
       if (res) {
+        if (res._id) {
+          localStorage.setItem('userId', res._id);
+        }
         setUser(res);
         toast.success('Login successful!');
         router.push('/');

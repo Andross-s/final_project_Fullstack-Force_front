@@ -17,16 +17,16 @@ export const register = async (data: UserRegisterProps): Promise<RegisterRespons
 };
 
 export const login = async (data: RegisterLoginData) => {
-  const res = await nextServer.post<User>(`/auth/login`, data);
+  const res = await nextServer.post<User>(`/api/auth/login`, data);
   return res.data;
 };
 
-// export const checkSession = async () => {
-//   const res = await nextServer.get<CheckSession>('/auth/session');
-//   return res.data.success;
-// };
+export const refreshSession = async () => {
+  const { data } = await nextServer.post('/api/auth/refresh');
+  return data;
+};
 
-// export const getMe = async () => {
-//   const { data } = await nextServer.get<User>('/users/me');
-//   return data;
-// };
+export const getUserById = async (userId: string) => {
+  const { data } = await nextServer.get(`/api/user/${userId}`);
+  return data.data;
+};
