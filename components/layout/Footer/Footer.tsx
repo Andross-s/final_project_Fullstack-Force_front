@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
+
 import styles from './Footer.module.css';
 import LogoIcon from '../../icon/logo.svg';
 
@@ -11,7 +11,6 @@ type Props = {
 };
 
 export const Footer = ({ isUserAuthorized }: Props) => {
-  const logoSrc = LogoIcon.src;
 
   const handleAccountClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     if (!isUserAuthorized) {
@@ -23,13 +22,7 @@ export const Footer = ({ isUserAuthorized }: Props) => {
     <footer className={styles['footer-container']}>
       <div className={styles['footer-content']}>
         <Link href="/" className={styles['footer-logo']}>
-          <Image
-            src={logoSrc}
-            alt="Tasteorama"
-            width={40}
-            height={40}
-            className={styles['footer-logo-icon']}
-          />
+          <LogoIcon className={styles['footer-logo-icon']} aria-hidden="true" />
           <span className={styles['brand-text']}>Tasteorama</span>
         </Link>
 
