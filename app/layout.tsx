@@ -1,26 +1,26 @@
-import type { Metadata } from "next";
-import { DM_Sans, Montserrat } from "next/font/google";
-import "./globals.css";
-import Layout from "@/components/layout/Layout/Layout";
-
+import type { Metadata } from 'next';
+import { DM_Sans, Montserrat } from 'next/font/google';
+import './globals.css';
+import Layout from '@/components/layout/Layout/Layout';
+import QueryProvider from "../providers/TanStackProvider";
 
 const montserrat = Montserrat({
-  variable: "--font-montserrat",
-  subsets: ["latin", "cyrillic"],
-  weight: ["400", "600", "700"],
-  display: "swap",
+  variable: '--font-montserrat',
+  subsets: ['latin', 'cyrillic'],
+  weight: ['400', '600', '700'],
+  display: 'swap',
 });
 
 const dmSans = DM_Sans({
-  variable: "--font-dm-sans",
-  subsets: ["latin"],
-  weight: ["700"],
-  display: "swap",
+  variable: '--font-dm-sans',
+  subsets: ['latin'],
+  weight: ['700'],
+  display: 'swap',
 });
 
 export const metadata: Metadata = {
-  title: "Tasteorama",
-  description: "Save, search and share culinary recipes",
+  title: 'Tasteorama',
+  description: 'Save, search and share culinary recipes',
 };
 
 export default function RootLayout({
@@ -31,7 +31,9 @@ export default function RootLayout({
   return (
     <html lang="uk">
       <body className={`${montserrat.variable} ${dmSans.variable}`}>
-        <Layout>{children}</Layout>
+        <QueryProvider>
+          <Layout>{children}</Layout>
+        </QueryProvider>
       </body>
     </html>
   );

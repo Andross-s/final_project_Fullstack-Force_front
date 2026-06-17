@@ -1,0 +1,103 @@
+.backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+}
+
+.modal {
+    position: relative;
+    width: 100%;
+    max-width: 362px;
+    padding: 56px 24px 32px;
+height: auto;
+    border-radius: 32px;
+    background: var(--light-beige);
+    
+}
+
+.closeModalBtn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    
+}
+
+.title {
+    text-align: center;
+    color: var(--black);
+font-family: var(--font-montserrat),
+    'Montserrat',
+    sans-serif;
+    font-size: 32px;
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+
+.text {
+    text-align: center;
+    color: var(--black);
+    font-family: var(--font-montserrat),
+        'Montserrat',
+        sans-serif;
+        font-weight: 400;
+    font-size: 16px;
+    line-height: 1.55;
+    margin-bottom: 20px;
+}
+
+.actions {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.cancelBtn,
+.logoutBtn {
+    height: 54px;
+    border-radius: 8px;
+    font-family: var(--font-montserrat),
+            'Montserrat',
+            sans-serif;
+    font-weight: 600;
+    font-size: 18px;
+    width: 100%;
+    cursor: pointer;
+}
+
+.logoutBtn {
+    background: var(--red);
+    color: var(--white);
+    border: none;
+}
+
+.cancelBtn:hover,
+.logoutBtn:hover {
+    color: var(--light-brown);
+}
+
+.cancelBtn:focus,
+.logoutBtn:focus {
+    color: var(--light-brown);
+}
+
+
+@media (min-width: 768px) {
+    .modal {
+        max-width: 420px;
+        padding: 56px 32px 32px;
+        
+    }
+
+    .actions {
+        flex-direction: row;
+        justify-content: center;
+        gap: 27px;}
+}
+

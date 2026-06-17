@@ -1,0 +1,306 @@
+.header {
+    background-color: var(--darck-brown);
+    height: 74px;
+    width: 100%;
+    display: flex;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 950;
+    }
+
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    max-width: var(--container-max-width);
+    padding: 16px var(--container-padding-mobile);
+    margin: 0 auto;
+}
+
+
+.burgerBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    background: transparent;
+    padding: 0;
+    cursor: pointer;
+}
+
+.backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.15);
+        z-index: 999;
+}
+
+.mobileMenu {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: auto;
+        min-height: 288px;
+    background-color: var(--darck-brown);
+    padding: 14px 16px 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+
+.logoWrapper {
+    display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        
+}
+
+.closeBtn {
+    display: flex;
+        align-items: center;
+        justify-content: center;
+    
+        width: 32px;
+        height: 32px;
+    
+        padding: 0;
+        border: none;
+        background: transparent;
+        cursor: pointer;
+    color: var(--white);
+    
+}
+
+.nav {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 32px;
+    
+}
+
+.nav a {
+   font-family: var(--font-montserrat);
+    color: var(--white);
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.registerLink {
+    display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    border-radius: 8px;
+        width: 100%;
+        height: 44px;
+                   margin-top: auto;
+    background-color: var(--light-brown);
+    }
+
+.navDesktop {
+    display: none;
+}
+
+.userSection {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin-top: auto;
+
+    
+}
+
+.userBlock {
+    display: flex;
+        align-items: center;
+        gap: 9px;
+    }
+
+        .avatar {
+            width: 32px;
+            height: 32px;
+                border-radius: 50%;
+                background: var(--light-brown);
+                display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 600;
+            color: white;
+        }
+
+                .divider {
+                    width: 1px;
+                    height: 39px;
+        
+                    background-color: var(--white);
+                }
+
+                .userName {
+                    font-family: var(--font-montserrat);
+                    color: var(--white);
+                    font-weight: 600;
+                    font-size: 12px;
+                }
+.logoutBtn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    
+    
+}
+
+.addRecipeBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-montserrat);
+    color: var(--white);
+    font-weight: 600;
+    font-size: 16px;
+    border-radius: 8px;
+    width: 100%;
+    height: 44px;
+    background-color: var(--light-brown);
+}
+
+.burgerBtn:hover,
+.closeBtn:hover,
+.logoutBtn:hover {
+    opacity: 0.8;
+}
+
+.burgerBtn:focus-visible,
+.closeBtn:focus-visible,
+.logoutBtn:focus-visible {
+    outline: 2px solid var(--brown);
+    outline-offset: 2px;
+}
+
+.nav a:hover,
+.navDesktop a:hover {
+    color: var(--light-brown);
+}
+
+.nav a:focus-visible,
+.navDesktop a:focus-visible {
+    outline: 2px solid var(--brown);
+    outline-offset: 2px;
+    border-radius: 4px;
+}
+
+.registerLink:hover,
+.registerDesktop:hover,
+.addRecipeBtn:hover {
+    background-color: var(--brown);
+    color: var(--white);
+}
+
+.registerLink:focus-visible,
+.registerDesktop:focus-visible,
+.addRecipeBtn:focus-visible {
+    outline: 2px solid var(--white);
+    outline-offset: 2px;
+}
+
+
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                .registerLink:focus-visible,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           .registerDesktop:focus-visible,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                .addRecipeBtn:focus-visible {
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    outline: 2px solid var(--white);
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                outline-offset: 2px;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                }
+
+@media screen and (min-width: 768px) {
+    .container {
+        padding: 16px var(--container-padding-tablet);
+    }
+
+    .burgerBtn {
+        display: none;
+    }
+
+    .navDesktop {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-left: auto;
+
+        
+    }
+
+        .navDesktop a {
+            text-decoration: none;
+                color: var(--white);
+                font-family: var(--font-montserrat);
+            font-size: 12px;
+            font-weight: var(--font-weight-semibold);
+}
+
+.registerDesktop {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 44px;
+        padding: 0 16px;
+    border-radius: 8px;
+    background-color: var(--light-brown);
+    font-size: 16px;
+    
+    }
+
+.mobileMenu,
+.backdrop {
+    display: none;
+}
+
+.desktopUserSection {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    
+}
+
+.navDesktop {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    margin-left: auto;
+}
+
+.activeLink {
+    position: relative;
+    display: inline-block;
+}
+
+.activeLink::after {
+    content: "";
+
+    position: absolute;
+    left: 0;
+    bottom: -4px;
+
+    width: 100%;
+    height: 1px;
+
+    background-color: var(--white);
+    border-radius: 2px;
+}
+}
+
+
+
+@media screen and (min-width: 1440px) {
+    .container {
+        padding: 16px 108px;
+        
+    }
+}

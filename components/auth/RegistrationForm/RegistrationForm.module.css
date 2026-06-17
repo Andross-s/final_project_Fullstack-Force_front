@@ -1,0 +1,235 @@
+.formCard {
+    width: 100%;
+
+    padding: 32px 20px;
+
+    background-color: #f4eddc;
+    border-radius: 24px;
+}
+
+.formTitle {
+    margin-bottom: 20px;
+
+    text-align: center;
+
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 1.1;
+}
+
+.formSubTitle {
+    margin-bottom: 20px;
+
+    text-align: center;
+
+    font-size: 14px;
+    line-height: 1.5;
+
+    color: #3a3a3a;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.formGroup {
+    display: flex;
+    flex-direction: column;
+}
+
+.label {
+    margin-bottom: 6px;
+
+    font-size: 12px;
+    font-weight: 500;
+
+    color: #222;
+}
+
+.input {
+    width: 100%;
+    height: 44px;
+
+    padding: 0 14px;
+
+    border: 1px solid #d8d8d8;
+    border-radius: 10px;
+
+    background-color: #fff;
+
+    font-size: 14px;
+}
+
+.input::placeholder {
+    color: #9f9f9f;
+}
+
+.input:focus {
+    outline: none;
+    border-color: #9c6b3f;
+}
+
+.passwordWrapper {
+    position: relative;
+}
+
+.passwordInput {
+    padding-right: 44px;
+}
+
+.eyeButton {
+    position: absolute;
+    top: 50%;
+    right: 14px;
+
+    transform: translateY(-50%);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: none;
+    background: transparent;
+
+    cursor: pointer;
+}
+
+.eyeButton svg {
+    width: 18px;
+    height: 18px;
+}
+
+.isError {
+    margin-top: 4px;
+
+    font-size: 11px;
+    line-height: 1.3;
+
+    color: #dc2626;
+}
+
+.submitButton {
+    width: 100%;
+    height: 44px;
+
+    margin-top: 8px;
+
+    border: none;
+    border-radius: 10px;
+
+    background-color: #9b6c43;
+
+    color: #fff;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+.submitButton:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.redirectText {
+    margin-top: 20px;
+
+    text-align: center;
+
+    font-size: 14px;
+}
+
+.redirectLink {
+    margin-left: 4px;
+
+    font-weight: 600;
+    color: #222;
+
+    text-decoration: underline;
+}
+
+ /* ----------------------------- TABLET -----------------------------*/
+
+
+
+@media screen and (min-width: 768px) {
+    .formCard {
+        max-width: 522px;
+
+        padding: 48px 32px;
+
+        border-radius: 28px;
+    }
+
+    .formTitle {
+        font-size: 32px;
+    }
+
+    .formSubTitle {
+        margin-bottom: 20px;
+
+        font-size: 16px;
+    }
+
+    .label {
+        font-size: 14px;
+    }
+
+    .input {
+        height: 48px;
+
+        font-size: 16px;
+    }
+
+    .submitButton {
+        height: 48px;
+
+        font-size: 16px;
+    }
+
+    .redirectText {
+        font-size: 16px;
+    }
+}
+
+ /* ----------------------------- DESKTOP -----------------------------*/
+
+@media screen and (min-width: 1220px) {
+    .formCard {
+
+        padding: 48px 32px;
+
+        border-radius: 32px;
+    }
+
+    .formTitle {
+        margin-bottom: 16px;
+
+        font-size: 48px;
+    }
+
+    .formSubTitle {
+        margin-bottom: 32px;
+
+        font-size: 18px;
+    }
+
+    .form {
+        gap: 20px;
+    }
+
+    .input {
+        height: 48px;
+    }
+
+    .submitButton {
+        height: 48px;
+    }
+
+    .redirectText {
+        font-size: 18px;
+    }
+}
