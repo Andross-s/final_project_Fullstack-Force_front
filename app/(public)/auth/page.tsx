@@ -1,3 +1,9 @@
+import LoginForm from '../../../components/auth/LoginForm/LoginForm';
+
 export default function AuthPage() {
-  return <main className="page" />;
+  return (
+    <main>
+      <LoginForm />
+    </main>
+  );
 }
