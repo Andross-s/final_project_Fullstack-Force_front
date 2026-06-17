@@ -1,29 +1,37 @@
+import RecipeCard from "../RecipeCard/RecipeCard";
+import styles from "./RecipesList.module.css";
 
-import styles from './RecipesList.module.css';
-
-// Додаємо інтерфейс для пропсів
-interface RecipesListProps {
-  recipes: {
-    _id: string;
-    name: string;
-    description: string;
-    cookingTime: number;
-    calories: number;
-    recipeImage: string;
-  }[];
-  type: 'own' | 'favorites';
-}
-
-export const RecipesList = ({ recipes, type }: RecipesListProps) => {
-  if (!recipes || recipes.length === 0) {
-    return <div className={styles.empty}>Немає рецептів</div>;
-  }
-
-  // return (
-  //   <div className={styles.grid}>
-  //     {recipes.map((recipe) => (
-  //       <RecipeCard key={recipe._id} recipe={recipe} type={type} />
-  //     ))}
-  //   </div>
-  // );
+type Recipe = {
+  id: string;
+  title: string;
+  description: string;
+  time: string;
+  calories?: number;
+  image: string;
 };
+
+type RecipesListProps = {
+  recipes: Recipe[];
+};
+
+export default function RecipesList({ recipes }: RecipesListProps) {
+  return (
+    <div className={styles.wrapper}>
+      <div className={styles.grid}>
+        {recipes.map((recipe) => (
+          <RecipeCard
+            key={recipe.id}
+            title={recipe.title}
+            description={recipe.description}
+            time={recipe.time}
+            calories={recipe.calories}
+            image={recipe.image}
+          />
+        ))}
+      </div>
+
+    
+      <button className={styles.loadMore}>Load More</button>
+    </div>
+  );
+}
