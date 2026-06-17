@@ -1,5 +1,5 @@
-import { create } from "zustand";
-import { User } from "@/app/types/user";
+import { create } from 'zustand';
+import { User } from '../../types/user';
 
 type AuthStore = {
   user: User | null;
@@ -8,11 +8,11 @@ type AuthStore = {
   clearAuth: () => void;
 };
 
-export const useAuthStore = create<AuthStore>((set) => ({
+export const useAuthStore = create<AuthStore>(set => ({
   user: null,
   isAuthenticated: false,
 
-  setUser: (user) =>
+  setUser: user =>
     set({
       user,
       isAuthenticated: true,
