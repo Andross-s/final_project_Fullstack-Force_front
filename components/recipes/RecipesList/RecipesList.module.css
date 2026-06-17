@@ -8,44 +8,46 @@
 /* Сітка карток */
 .grid {
   display: grid;
-  gap: 24px;
+  gap: 32px;
 }
 
-/* Mobile: 1 колонка */
+/* Mobile */
 @media (max-width: 767px) {
   .grid {
     grid-template-columns: 1fr;
   }
 }
 
-/* Tablet: 2 колонки */
+/* Tablet */
 @media (min-width: 768px) and (max-width: 1439px) {
   .grid {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
-/* Desktop: 3 колонки */
+/* Desktop */
 @media (min-width: 1440px) {
   .grid {
     grid-template-columns: repeat(3, 1fr);
   }
 }
 
-/* Кнопка Load More */
+/* Кнопка Load More — у стилі Tasteorama */
 .loadMore {
   align-self: center;
-  padding: 12px 24px;
-  border-radius: 12px;
-  background: #ff7f50;
-  color: #fff;
-  border: none;
+  padding: 10px 24px;
+  border-radius: 8px;
+  background: var(--white);
+  border: 1px solid var(--light-brown);
+  color: var(--light-brown);
   cursor: pointer;
   font-size: 16px;
-  font-weight: 500;
-  transition: 0.2s;
+  font-weight: var(--font-weight-semibold);
+  transition: var(--transition-base);
 }
 
 .loadMore:hover {
-  background: #ff6a33;
+  background: var(--light-beige);
+  border-color: var(--brown);
+  color: var(--brown);
 }

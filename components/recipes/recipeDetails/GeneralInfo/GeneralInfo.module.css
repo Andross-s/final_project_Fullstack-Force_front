@@ -1,0 +1,6 @@
+.meta {
+  display: flex;
+  gap: 24px;
+  font-size: 18px;
+  color: var(--brown);
+}

@@ -1,12 +1,13 @@
 .card {
   display: flex;
   flex-direction: column;
-  background: #fff;
+  background: var(--white);
   border-radius: 16px;
   overflow: hidden;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
 }
 
+/* Обгортка для зображення */
 .imageWrapper {
   position: relative;
   width: 100%;
@@ -17,6 +18,7 @@
   object-fit: cover;
 }
 
+/* Контент */
 .content {
   padding: 16px;
   display: flex;
@@ -24,59 +26,75 @@
   gap: 12px;
 }
 
+/* Заголовок */
 .title {
-  font-size: 18px;
-  font-weight: 600;
-  color: #1a1a1a;
+  font-size: 20px;
+  font-weight: var(--font-weight-semibold);
+  color: var(--black);
 }
 
+/* Опис (обмеження у 2 рядки) */
 .description {
   font-size: 14px;
-  color: #555;
+  color: var(--gray-2);
   line-height: 1.4;
+
+  /* Обмеження тексту */
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* показуємо лише 2 рядки */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
+/* Інформаційний рядок */
 .infoRow {
   display: flex;
   justify-content: space-between;
   font-size: 14px;
-  color: #333;
+  font-weight: var(--font-weight-semibold);
+  color: var(--darck-brown);
 }
 
+/* Блок кнопок */
 .buttons {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
+/* Кнопка Learn More — варіант B */
 .learnMore {
   padding: 8px 16px;
   border-radius: 8px;
-  background: #ff7f50;
-  color: #fff;
-  border: none;
+  background: var(--white);
+  border: 1px solid var(--light-brown);
+  color: var(--light-brown);
   cursor: pointer;
-  font-weight: 500;
-  transition: 0.2s;
+  font-weight: var(--font-weight-semibold);
+  font-size: 16px;
+  transition: var(--transition-base);
 }
 
 .learnMore:hover {
-  background: #ff6a33;
+  background: var(--light-beige);
+  border-color: var(--brown);
+  color: var(--brown);
 }
 
+/* Кнопка обраного */
 .favoriteBtn {
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  border: 1px solid #ddd;
-  background: #fff;
+  border: 1px solid var(--light-gray);
+  background: var(--white);
   cursor: pointer;
   font-size: 18px;
-  transition: 0.2s;
+  transition: var(--transition-base);
 }
 
 .favoriteBtn:hover {
-  background: #ffe6e6;
+  background: var(--light-beige-2);
 }
 
 /* Tablet */
@@ -90,9 +108,5 @@
 @media (min-width: 1440px) {
   .imageWrapper {
     height: 260px;
-  }
-
-  .title {
-    font-size: 20px;
   }
 }
