@@ -1,12 +1,12 @@
 import { ReactNode } from "react";
 import styles from "./Layout.module.css";
-/* import { Header } from "@/components/layout/Header/Header"; */
+ import Header  from "../Header/Header"; 
 import { Footer } from "@/components/layout/Footer/Footer";
 
 export default function Layout({ children }: { children: ReactNode }) {
   return (
     <div className={styles.layout}>
-     {/* <Header />  */}
+     <Header /> 
       <main className={styles.main}>{children}</main>
       <Footer isUserAuthorized={false} />
     </div>
