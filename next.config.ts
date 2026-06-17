@@ -1,6 +1,6 @@
+import type { NextConfig } from 'next';
 
-
-const nextConfig = {
+const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       {
@@ -9,7 +9,21 @@ const nextConfig = {
       },
     ],
   },
+  turbopack: {
+    rules: {
+      '*.svg': {
+        loaders: [
+          {
+            loader: '@svgr/webpack',
+            options: {
+              dimensions: false,
+            },
+          },
+        ],
+        as: '*.js',
+      },
+    },
+  },
 };
-
 
 export default nextConfig;
