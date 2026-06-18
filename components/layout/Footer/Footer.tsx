@@ -1,10 +1,11 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 
 import styles from './Footer.module.css';
 import LogoIcon from '../../icon/logo.svg';
+import ModalAccount from '../../auth/ModalAccount/ModalAccount';
 
 type Props = {
   isUserAuthorized: boolean;
@@ -12,9 +13,12 @@ type Props = {
 
 export const Footer = ({ isUserAuthorized }: Props) => {
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const handleAccountClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     if (!isUserAuthorized) {
       e.preventDefault();
+      setIsModalOpen(true);
     }
   };
 
@@ -38,6 +42,10 @@ export const Footer = ({ isUserAuthorized }: Props) => {
           <Link className={styles['footer-nav-link']} href="/profile" onClick={handleAccountClick}>
             Account
           </Link>
+          {isModalOpen && (
+            <ModalAccount onClose={() => setIsModalOpen(false)} />
+          )}
+        
         </nav>
       </div>
     </footer>

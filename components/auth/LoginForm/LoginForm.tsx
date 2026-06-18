@@ -1,6 +1,7 @@
 'use client';
 import { ErrorMessage, Field, Form, Formik, FormikHelpers } from 'formik';
 import Link from 'next/link';
+import { Toaster } from 'react-hot-toast';
 import { useMutation } from '@tanstack/react-query';
 import { toast } from 'react-hot-toast';
 import { Oval } from 'react-loader-spinner';
@@ -9,8 +10,7 @@ import css from './LoginForm.module.css';
 import { useRouter } from 'next/navigation';
 import { login } from '../../../lib/api/client';
 import { useAuthStore } from '../../../stores/authStore';
-import EyeOnIcon from '@/components/icon/open-eye-icon.svg';
-import EyeOffIcon from '@/components/icon/close-eye-icon.svg';
+import Image from 'next/image';
 import { RegisterLoginData } from '@/types/user';
 import { validationLoginSchema } from '../LoginForm/LoginFormValidation';
 import { AxiosError } from 'axios';
@@ -33,8 +33,22 @@ const Login = () => {
         router.push('/');
       }
     },
-    onError: (error: AxiosError<{ error?: string }>) => {
-      const errorMessage = error.response?.data?.error ?? error.message ?? 'Oops... some error';
+    onError: (error: AxiosError<{ message?: string; error?: string }>) => {
+      const responseData = error.response?.data as Record<string, unknown> | undefined;
+      const responseDirect = error.response as unknown as Record<string, unknown> | undefined;
+
+      const serverMessage =
+        (responseData?.message as string) ??
+        (responseData?.error as string) ??
+        (responseDirect?.message as string) ??
+        '';
+
+      let errorMessage = 'Incorrect email or password';
+
+      if (error.response?.status !== 401 && !serverMessage.includes('credentials')) {
+        errorMessage = error.message ?? 'Something went wrong';
+      }
+
       toast.error(errorMessage);
     },
   });
@@ -91,7 +105,11 @@ const Login = () => {
                   aria-label={showPassword ? 'Hide password' : 'Show password'}
                   aria-pressed={showPassword}
                 >
-                  {showPassword ? <EyeOnIcon /> : <EyeOffIcon />}
+                  {showPassword ? (
+                    <Image src="/icons/open-eye-icon.svg" alt="eye on" width={24} height={24} />
+                  ) : (
+                    <Image src="/icons/close-eye-icon.svg" alt="eye off" width={24} height={24} />
+                  )}
                 </button>
               </div>
               <ErrorMessage name="password" component="span" className={css.error} />
@@ -116,6 +134,28 @@ const Login = () => {
           Register
         </Link>
       </p>
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          duration: 4000,
+          style: {
+            background: '#fff',
+            color: '#333',
+            padding: '16px 20px',
+            borderRadius: '12px',
+            fontSize: '15px',
+            fontWeight: '500',
+            boxShadow: '0px 10px 30px rgba(0, 0, 0, 0.08)',
+            border: '1px solid rgba(231, 76, 60, 0.2)',
+          },
+          error: {
+            iconTheme: {
+              primary: '#e74c3c',
+              secondary: '#fff',
+            },
+          },
+        }}
+      />
     </div>
   );
 };

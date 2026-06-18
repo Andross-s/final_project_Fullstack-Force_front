@@ -1,0 +1,13 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  padding: 32px 0;
+}
+
+.error {
+  color: red;
+  font-size: 20px;
+  text-align: center;
+  margin-top: 40px;
+}

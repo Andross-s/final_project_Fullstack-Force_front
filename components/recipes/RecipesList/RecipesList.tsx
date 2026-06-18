@@ -21,12 +21,13 @@ export default function RecipesList({ recipes }: RecipesListProps) {
         {recipes.map((recipe) => (
           <RecipeCard
             key={recipe._id}
+            id={recipe._id}
             title={recipe.title}
             description={recipe.description}
             time={String(recipe.time)}
             calories={recipe.calories ?? undefined}
             image={recipe.thumb}
-          />
+/>
         ))}
       </div>
 
