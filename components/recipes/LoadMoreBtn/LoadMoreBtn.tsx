@@ -3,8 +3,8 @@ import styles from './LoadMoreBtn.module.css';
 
 
 interface LoadMoreBtnProps {
-  onClick: () => void;      // ← функція без аргументів, нічого не повертає
-  isLoading?: boolean;      // ← необов'язковий булевий параметр
+  onClick: () => void;      
+  isLoading?: boolean;     
 }
 
 export const LoadMoreBtn = ({ onClick, isLoading = false }: LoadMoreBtnProps) => {

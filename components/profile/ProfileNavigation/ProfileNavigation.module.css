@@ -1,22 +1,21 @@
 .nav {
   display: flex;
   gap: 38px;
- 
   margin-bottom: 16px;
-
+  max-width: 100%;
+  flex-wrap: wrap;
 }
 
 .link {
       
-  height: 19px;              
-font-size: 18px;
+  font-size: 18px;
   font-weight: 600;
   color: #000;
-  /* text-decoration: none; */
   cursor: pointer;
- border-bottom: 1px solid transparent;  
+  border-bottom: 1px solid transparent;  
   transition: border-color 0.3s ease;
-
+  text-decoration: none;
+  white-space: nowrap;
 }
 
 
@@ -25,12 +24,13 @@ font-size: 18px;
   text-underline-offset: 4px;       
   text-decoration-color: #000;       
   text-decoration-thickness: 1px;
-
 }
 
 @media (min-width: 768px) {
+
+
   .link {
     font-size: 12px;        
   }
-
 }
+
