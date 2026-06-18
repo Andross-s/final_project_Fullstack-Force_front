@@ -4,7 +4,7 @@ import { nextServer } from './api';
 export type UserRegisterProps = {
   email: string;
   password: string;
-  username: string;
+  name: string;
 };
 
 type RegisterResponse = {
