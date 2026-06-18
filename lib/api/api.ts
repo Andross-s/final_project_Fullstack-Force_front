@@ -1,7 +1,10 @@
 import axios from 'axios';
 
+// axios.defaults.baseURL = 'https://final-project-fullstack-force-back-r48i.onrender.com';
+// axios.defaults.baseURL = 'http://localhost:3000';
+
 export const nextServer = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000',
+  baseURL: process.env.NEXT_PUBLIC_API_URL,
   withCredentials: true,
 });
 
@@ -35,5 +38,4 @@ if (process.env.NODE_ENV === 'development') {
 
 export interface CheckSession {
   success: boolean;
-
 }
