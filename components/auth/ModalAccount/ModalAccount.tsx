@@ -43,7 +43,7 @@ export default function ModalAccount({ onClose }: Props) {
             Register
           </Link>
 
-          <Link href="/auth" className={css.actionBtnSecondary} onClick={onClose}>
+          <Link href="/auth/login" className={css.actionBtnSecondary} onClick={onClose}>
             Log in
           </Link>
         </div>
