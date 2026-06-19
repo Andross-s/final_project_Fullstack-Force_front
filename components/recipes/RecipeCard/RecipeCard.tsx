@@ -1,26 +1,38 @@
 import Image from "next/image";
 import styles from "./RecipeCard.module.css";
 
+import { useAuthStore } from "@/stores/authStore";
+import { useFavoritesStore } from "@/stores/favoritesStore";
+
 type RecipeCardProps = {
+  id: string;
   title: string;
   description: string;
   time: string;
   calories?: number;
-  image: string;
+  thumb: string; 
 };
 
 export default function RecipeCard({
+  id,
   title,
   description,
   time,
   calories,
-  image,
+  thumb,
 }: RecipeCardProps) {
+  const user = useAuthStore(state => state.user);
+
+  const toggleFavorite = useFavoritesStore(state => state.toggleFavorite);
+  const isFavorite = useFavoritesStore(state => state.isFavorite);
+
+  const fav = isFavorite(id);
+
   return (
     <div className={styles.card}>
       <div className={styles.imageWrapper}>
         <Image
-          src={image}
+          src={thumb}
           alt={title}
           fill
           className={styles.image}
@@ -30,20 +42,25 @@ export default function RecipeCard({
 
       <div className={styles.content}>
         <h3 className={styles.title}>{title}</h3>
-
         <p className={styles.description}>{description}</p>
 
         <div className={styles.infoRow}>
-          <span className={styles.time}>{time}</span>
-          <span className={styles.calories}>
-            {calories ? `${calories} kcal` : "—"}
-          </span>
+          <span>{time}</span>
+          <span>{calories ? `${calories} kcal` : "—"}</span>
         </div>
 
         <div className={styles.buttons}>
           <button className={styles.learnMore}>Learn More</button>
-          <button className={styles.favoriteBtn}>
-            {/* Иконку добавим позже */}
+
+          <button
+            className={styles.favoriteBtn}
+            onClick={() => user && toggleFavorite(id, user._id)}
+            aria-label="Toggle favorite"
+            style={{
+              color: fav ? "var(--light-brown)" : "#999",
+              borderColor: fav ? "var(--light-brown)" : "var(--light-gray)",
+            }}
+          >
             ♥
           </button>
         </div>

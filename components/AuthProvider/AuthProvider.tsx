@@ -1,5 +1,4 @@
 'use client';
-
 import React, { useEffect } from 'react';
 import { refreshSession, getUserById } from '../../lib/api/client';
 import { useAuthStore } from '../../stores/authStore';
@@ -14,25 +13,24 @@ export default function AuthProvider({ children }: AuthProviderProps) {
 
   useEffect(() => {
     const restoreSession = async () => {
-      const savedUserId = localStorage.getItem('userId');
-
-      if (!savedUserId) {
-        clearIsAuthenticated();
-        return;
-      }
-
       try {
-        await refreshSession();
+        const refreshData = await refreshSession();
+        const userId = refreshData?.user?._id || refreshData?._id || localStorage.getItem('userId');
 
-        const userData = await getUserById(savedUserId);
+        if (userId) {
+          const userData = await getUserById(userId);
 
-        if (userData) {
-          setUser(userData);
-        } else {
-          clearIsAuthenticated();
+          if (userData) {
+            setUser(userData);
+            localStorage.setItem('userId', userId);
+            return;
+          }
         }
+
+        clearIsAuthenticated();
+        localStorage.removeItem('userId');
       } catch (error) {
-        console.error('Auth restore error:', error);
+        console.warn('[Auth] session refresh failed', error);
         localStorage.removeItem('userId');
         clearIsAuthenticated();
       }
@@ -41,5 +39,5 @@ export default function AuthProvider({ children }: AuthProviderProps) {
     void restoreSession();
   }, [setUser, clearIsAuthenticated]);
 
-  return children;
+  return <>{children}</>;
 }

@@ -1,0 +1,13 @@
+.button {
+  padding: 10px 20px;
+  border-radius: 8px;
+  background: var(--white);
+  border: 1px solid var(--light-gray);
+  cursor: pointer;
+  font-size: 16px;
+  transition: var(--transition-base);
+}
+
+.button:hover {
+  background: var(--light-beige);
+}

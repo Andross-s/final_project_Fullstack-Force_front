@@ -4,7 +4,7 @@ import { nextServer } from './api';
 export type UserRegisterProps = {
   email: string;
   password: string;
-  username: string;
+  name: string;
 };
 
 type RegisterResponse = {
@@ -12,7 +12,7 @@ type RegisterResponse = {
 };
 
 export const register = async (data: UserRegisterProps): Promise<RegisterResponse> => {
-  const res = await nextServer.post('/auth/register', data);
+  const res = await nextServer.post('/api/auth/register', data);
   return res.data;
 };
 

@@ -1,4 +1,3 @@
-/* ------- МОБ.------- */
 .footer-container {
   background-color: #3D2218;
   color: #ffffff;
@@ -11,22 +10,23 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
-  gap: 32px; 
+  gap: 32px;
   margin: 0 auto;
   width: 100%;
 }
+
 .footer-logo {
   display: flex;
-  align-items: center; 
-  justify-content: center;
-  gap: 4.97px;
-  margin: 0 auto;
+  align-items: center;
+  gap: 6px;
+  width: 165px;
+  height: 46px;
 }
 
 .footer-logo-icon {
-  width: 31.50px;
-  height: auto;       
-  display: block;
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
 }
 
 .brand-text {
@@ -60,8 +60,6 @@
   color: rgba(255, 255, 255, 0.7);
 }
 
-
-/* ------- ПЛАНШЕТ ------ */
 @media (min-width: 768px) {
   .footer-container {
     padding: 48px 24px;
@@ -73,21 +71,13 @@
     justify-content: center;
   }
 
- .footer-logo {
-    margin: 0 auto;
-    display: flex;
-    align-items: center;
-  }
-
   .footer-nav {
-    flex-direction: row; 
+    flex-direction: row;
     justify-content: center;
     gap: 32px;
   }
 }
 
-
-/* ------- ДЕКСКТОП ------- */
 @media (min-width: 1440px) {
   .footer-container {
     padding: 40px 108px;

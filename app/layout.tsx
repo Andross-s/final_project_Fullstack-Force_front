@@ -1,9 +1,10 @@
 import type { Metadata } from 'next';
+import { Toaster } from 'react-hot-toast';
 import { DM_Sans, Montserrat } from 'next/font/google';
 import './globals.css';
 import Layout from '@/components/layout/Layout/Layout';
-import TanStackProvider from '../components/TanStackProvider/TanStackProvider';
-import AuthProvider from '@/components/AuthProvider/AuthProvider';
+import QueryProvider from '../providers/TanStackProvider';
+// import AuthProvider from '@/components/AuthProvider/AuthProvider';
 
 const montserrat = Montserrat({
   variable: '--font-montserrat',
@@ -32,11 +33,12 @@ export default function RootLayout({
   return (
     <html lang="uk">
       <body className={`${montserrat.variable} ${dmSans.variable}`}>
-        <TanStackProvider>
-          <AuthProvider>
-            <Layout>{children}</Layout>
-          </AuthProvider>
-        </TanStackProvider>
+        <QueryProvider>
+          {/* <AuthProvider> */}
+          <Layout>{children}</Layout>
+          <Toaster position="top-right" />
+          {/* </AuthProvider> */}
+        </QueryProvider>
       </body>
     </html>
   );
