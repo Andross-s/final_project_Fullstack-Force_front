@@ -1,4 +1,9 @@
+.pageWrapper {
+  padding-top: 74px;
+}
+
 .formContainer {
+  box-sizing: border-box;
   padding: 48px 32px;
   margin: 91px auto;
   border-radius: 32px;
@@ -8,8 +13,21 @@
   gap: 20px;
   justify-content: center;
   max-width: 362px;
-  max-height: 399px;
   width: 100%;
+}
+
+@media (min-width: 768px) {
+  .formContainer {
+    max-width: 522px;
+    margin: 262px auto;
+  }
+}
+
+@media (min-width: 1440px) {
+  .formContainer {
+    max-width: 420px;
+    margin: 176px auto 156px auto;
+  }
 }
 
 .title {
@@ -110,6 +128,8 @@
   position: absolute;
   top: 50%;
   right: 14px;
+  width: 28px;
+  height: 28px;
   transform: translateY(-50%);
   display: flex;
   align-items: center;
@@ -134,18 +154,4 @@
 .registerwrapp_link {
   font-weight: var(--font-weight-semibold);
   text-decoration: underline;
-}
-
-@media (min-width: 768px) {
-  .formContainer {
-    max-width: 522px;
-    margin: 262px auto;
-  }
-}
-
-@media (min-width: 1440px) {
-  .formContainer {
-    max-width: 420px;
-    margin: 176px auto 156px auto;
-  }
 }

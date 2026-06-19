@@ -22,6 +22,12 @@ if (process.env.NODE_ENV === 'development') {
       return res;
     },
     err => {
+      const status = err?.response?.status;
+      const url = err?.config?.url;
+      if (status === 401 && url?.includes('/api/auth/refresh')) {
+        console.warn('[API] No active session found (401 Refresh skipped)');
+        return Promise.reject(err);
+      }
       console.error(
         '[API] Error:',
         err?.response?.status,
