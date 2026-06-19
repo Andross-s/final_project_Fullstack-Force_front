@@ -1,17 +1,18 @@
-import ProfileNavigation from "@/components/profile/ProfileNavigation/ProfileNavigation";
-import Filters from "@/components/recipes/Filters/Filters";
+import { ProfileNavigation } from "@/components/profile/ProfileNavigation/ProfileNavigation";
 import RecipesList from "@/components/recipes/RecipesList/RecipesList";
-import LoadMoreBtn from "@/components/recipes/LoadMoreBtn/LoadMoreBtn";
+import { LoadMoreBtn } from "@/components/recipes/LoadMoreBtn/LoadMoreBtn";
 import styles from "./page.module.css";
+
+export const dynamic = "force-dynamic";
 
 const recipes = [
   {
-    id: "1",
+    _id: "1",
     title: "Test recipe",
     description: "Recipe description",
-    time: "30 min",
+    time: 30,
     calories: 250,
-    image: "/default-image-desktop.jpg",
+    thumb: "/default-image-desktop.jpg",
   },
 ];
 
@@ -22,11 +23,9 @@ export default function ProfilePage() {
 
       <ProfileNavigation />
 
-      <Filters />
-
       <RecipesList recipes={recipes} />
 
-      <LoadMoreBtn />
+      <LoadMoreBtn onClick={() => {}} isLoading={false} />
     </main>
   );
 }
