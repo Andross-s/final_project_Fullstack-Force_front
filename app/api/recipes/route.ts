@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 const BACKEND_URL =
   "https://final-project-fullstack-force-back-r48i.onrender.com/api";
+
 const BACKEND_PAGE_SIZE = 10;
 
 type RecipesResponse = {
@@ -32,6 +33,7 @@ const createBackendUrl = (searchParams: URLSearchParams, page: number) => {
 
   ["category", "ingredient"].forEach((key) => {
     const value = searchParams.get(key);
+
     if (value) {
       backendUrl.searchParams.set(key, value);
     }
@@ -44,11 +46,13 @@ const createBackendUrl = (searchParams: URLSearchParams, page: number) => {
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
+
   const page = Number(searchParams.get("page") || 1);
   const pageSize = Number(searchParams.get("pageSize") || BACKEND_PAGE_SIZE);
 
   const startIndex = (page - 1) * pageSize;
   const endIndex = startIndex + pageSize;
+
   const firstBackendPage = Math.floor(startIndex / BACKEND_PAGE_SIZE) + 1;
   const lastBackendPage = Math.floor((endIndex - 1) / BACKEND_PAGE_SIZE) + 1;
 
@@ -61,17 +65,15 @@ export async function GET(request: NextRequest) {
         createBackendUrl(searchParams, backendPage).toString(),
         { cache: "no-store" }
       );
-      const data = await response.json();
 
-      if (!response.ok) {
-        return { response, data };
-      }
+      const data = await response.json();
 
       return { response, data };
     })
   );
 
   const failedPage = backendPages.find(({ response }) => !response.ok);
+
   if (failedPage) {
     return NextResponse.json(failedPage.data, {
       status: failedPage.response.status,
@@ -81,9 +83,14 @@ export async function GET(request: NextRequest) {
   const recipes = backendPages.flatMap(({ data }) =>
     getRecipes(data as RecipesResponse)
   );
+
   const offset = startIndex - (firstBackendPage - 1) * BACKEND_PAGE_SIZE;
   const pagedRecipes = recipes.slice(offset, offset + pageSize);
-  const totalRecipes = getTotal(backendPages[0].data as RecipesResponse, 0);
+
+  const totalRecipes = getTotal(
+    backendPages[0].data as RecipesResponse,
+    recipes.length
+  );
 
   return NextResponse.json({
     recipes: pagedRecipes,
