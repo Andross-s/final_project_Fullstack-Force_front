@@ -1,11 +1,133 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+
+
 .error {
-  background-color: #3d2218;
-  color: #fff5f5;
-  
+    min-height: 15px;
+  margin-top: 4px;
+  margin-left: 15px;
+  color: #c80000;
+  font-size: 12px;
+  line-height: 1;
+  font-weight: 400;
+  min-height: 16px;
+}
+
+.inputWrapper {
+  display: flex;
+  gap : 6px;
+}
+
+.input {
+  height: 46px;
+    border: 1px solid transparent;
   border-radius: 8px;
   padding: 12px 16px;
-  margin-bottom: 12px;
-  font-size: 14px;
-  font-weight: 500;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  font-size: 16px;
+  outline: none;
+}
+
+.inputError {
+  border: 1px solid #c80000 !important;
+}
+
+
+
+.input::placeholder {
+  color: #9f9f9f;
+}
+
+.inputError::placeholder {
+  color: #c80000;
+}
+
+.button {
+  height: 46px;
+  border: none;
+  border-radius: 8px;
+  background-color: #9b6c43;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.button:hover {
+    background-color: #6D554B;
+  
+}
+
+/* Mobile 393px */
+@media screen and (max-width: 767px) {
+  .inputWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .input {
+    width: 100%;
+  }
+
+  .error {
+    order: 2;
+    margin-top: 4px;
+    margin-bottom: 4px;
+  }
+
+  .button {
+    order: 3;
+    width: 100%;
+  }
+}
+
+/* Tablet 768px */
+@media screen and (min-width: 768px) and (max-width: 1439px) {
+  .form {
+    width: 657px;
+    min-width: 657px;
+  }
+
+  .inputWrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 24px;
+    flex-wrap: nowrap;
+    width: 657px;
+  }
+
+  .input {
+    width: 471px;
+    min-width: 471px;
+  }
+
+  .button {
+    width: 176px;
+    min-width: 176px;
+    flex-shrink: 0;
+  }
+}
+
+/* Desktop 1440px */
+@media screen and (min-width: 1440px) {
+  .inputWrapper {
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .input {
+    width: 459px;
+  }
+
+  .button {
+    width: 190px;
+    flex-shrink: 0;
+  }
 }
