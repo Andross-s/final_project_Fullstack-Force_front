@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
 import RecipesSection, {
   FetchRecipesParams,
   FetchRecipesResult,
-} from '@/components/recipes/RecipesSection/RecipesSection';
-import { RecipeListItem } from '@/components/recipes/RecipesList/RecipesList';
+} from "@/components/recipes/RecipesSection/RecipesSection";
+import { RecipeListItem } from "@/components/recipes/RecipesList/RecipesList";
 
 type RecipesResponse = {
   recipes?: RecipeListItem[];
@@ -21,23 +21,32 @@ const normalizeRecipesResponse = (data: RecipesResponse): FetchRecipesResult => 
       ? data.data
       : data.data?.recipes || [];
 
-  const total = data.totalRecipes ?? data.total ?? data.totalCount ?? recipes.length;
+  const total =
+    data.totalRecipes ?? data.total ?? data.totalCount ?? recipes.length;
 
   return { recipes, total };
 };
 
-const fetchHomeRecipes = async ({ page, pageSize, query }: FetchRecipesParams) => {
+const fetchHomeRecipes = async ({
+  page,
+  pageSize,
+  query,
+  category,
+  ingredient,
+}: FetchRecipesParams) => {
   const params = new URLSearchParams({
     page: String(page),
     pageSize: String(pageSize),
   });
 
-  if (query) params.set('query', query);
+  if (query) params.set("query", query);
+  if (category) params.set("category", category);
+  if (ingredient) params.set("ingredient", ingredient);
 
   const response = await fetch(`/api/recipes?${params.toString()}`);
 
   if (!response.ok) {
-    throw new Error('Failed to fetch recipes');
+    throw new Error("Failed to fetch recipes");
   }
 
   return normalizeRecipesResponse(await response.json());

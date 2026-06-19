@@ -33,25 +33,29 @@ export default function SearchBox({ onSearch }: SearchBoxProps) {
 
   return (
     <form className={styles.form} onSubmit={handleSubmit}>
-      {error && <p className={styles.error}>{error}</p>}
+  <div className={styles.inputWrapper}>
+    <input
+      className={`${styles.input} ${error ? styles.inputError : ""}`}
+      type="text"
+      value={searchQuery}
+      onChange={(event) => {
+        setSearchQuery(event.target.value);
 
-      <input
-        className={styles.input}
-        type="text"
-        value={searchQuery}
-        onChange={(event) => {
-          setSearchQuery(event.target.value);
+        if (error) {
+          setError("");
+        }
+      }}
+      placeholder="Search recipes"
+    />
 
-          if (error) {
-            setError("");
-          }
-        }}
-        placeholder="Search recipes"
-      />
+    <button className={styles.button} type="submit">
+      Search
+    </button>
+  </div>
 
-      <button className={styles.button} type="submit">
-        Search
-      </button>
-    </form>
+  <p className={styles.error}>
+    {error || "\u00A0"}
+  </p>
+</form>
   );
 }

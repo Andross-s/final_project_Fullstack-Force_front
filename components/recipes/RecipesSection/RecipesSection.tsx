@@ -14,7 +14,9 @@ const PAGE_SIZE = 12;
 export type FetchRecipesParams = {
   page: number;
   pageSize: number;
-  query: string;
+  query?: string;
+  category?: string;
+  ingredient?: string;
 };
 
 export type FetchRecipesResult = {
@@ -30,27 +32,43 @@ type RecipesSectionProps = {
 
 export default function RecipesSection({ title, fetchRecipes, listType }: RecipesSectionProps) {
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('');
+  const [selectedIngredient, setSelectedIngredient] = useState('');
 
-  const { data, fetchNextPage, hasNextPage, isError, isFetching, isFetchingNextPage, isLoading } =
-    useInfiniteQuery({
-      queryKey: ['recipes', title, searchQuery],
-      queryFn: ({ pageParam }) =>
-        fetchRecipes({
-          page: pageParam,
-          pageSize: PAGE_SIZE,
-          query: searchQuery,
-        }),
-      initialPageParam: 1,
-      getNextPageParam: (lastPage, allPages) => {
-        const loaded = allPages.reduce((sum, page) => sum + page.recipes.length, 0);
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isError,
+    isFetching,
+    isFetchingNextPage,
+    isLoading,
+  } = useInfiniteQuery({
+    queryKey: ['recipes', title, searchQuery, selectedCategory, selectedIngredient],
+    queryFn: ({ pageParam }) =>
+      fetchRecipes({
+        page: pageParam,
+        pageSize: PAGE_SIZE,
+        query: searchQuery,
+        category: selectedCategory,
+        ingredient: selectedIngredient,
+      }),
+    initialPageParam: 1,
+    getNextPageParam: (lastPage, allPages) => {
+      const loaded = allPages.reduce((sum, page) => sum + page.recipes.length, 0);
 
-        return loaded < lastPage.total ? allPages.length + 1 : undefined;
-      },
-    });
+      return loaded < lastPage.total ? allPages.length + 1 : undefined;
+    },
+  });
 
   const recipes = useMemo(() => data?.pages.flatMap(page => page.recipes) || [], [data]);
 
   const totalRecipes = data?.pages[0]?.total ?? 0;
+
+  const handleResetFilters = () => {
+    setSelectedCategory('');
+    setSelectedIngredient('');
+  };
 
   useEffect(() => {
     if (!searchQuery || isLoading || isFetching || recipes.length > 0) return;
@@ -70,8 +88,14 @@ export default function RecipesSection({ title, fetchRecipes, listType }: Recipe
         </div>
 
         <div className={styles.filtersRow}>
-          <p className={styles.count}>{totalRecipes} recipes</p>
-          <Filters />
+          <Filters
+            recipesCount={totalRecipes}
+            selectedCategory={selectedCategory}
+            selectedIngredient={selectedIngredient}
+            onCategoryChange={setSelectedCategory}
+            onIngredientChange={setSelectedIngredient}
+            onResetFilters={handleResetFilters}
+          />
         </div>
 
         {isError ? (
