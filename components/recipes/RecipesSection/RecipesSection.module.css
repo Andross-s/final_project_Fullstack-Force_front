@@ -13,7 +13,7 @@
 .header {
   display: grid;
   gap: 16px;
-  margin-bottom: 24px;
+  margin-bottom: 16px;
 }
 
 .title {
@@ -23,8 +23,14 @@
   font-weight: var(--font-weight-bold);
 }
 
+.filtersRow {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
 .count {
-  margin-top: 8px;
   color: var(--darck-brown);
   font-size: 14px;
   font-weight: var(--font-weight-semibold);
@@ -53,6 +59,12 @@
   .header {
     grid-template-columns: 1fr auto;
     align-items: end;
+  }
+
+  .filtersRow {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
   }
 
   .search {
