@@ -3,7 +3,8 @@ import { Toaster } from 'react-hot-toast';
 import { DM_Sans, Montserrat } from 'next/font/google';
 import './globals.css';
 import Layout from '@/components/layout/Layout/Layout';
-import QueryProvider from "../providers/TanStackProvider";
+import QueryProvider from '../providers/TanStackProvider';
+// import AuthProvider from '@/components/AuthProvider/AuthProvider';
 
 const montserrat = Montserrat({
   variable: '--font-montserrat',
@@ -33,8 +34,10 @@ export default function RootLayout({
     <html lang="uk">
       <body className={`${montserrat.variable} ${dmSans.variable}`}>
         <QueryProvider>
+          {/* <AuthProvider> */}
           <Layout>{children}</Layout>
           <Toaster position="top-right" />
+          {/* </AuthProvider> */}
         </QueryProvider>
       </body>
     </html>

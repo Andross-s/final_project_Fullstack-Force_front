@@ -8,12 +8,12 @@ import { useFavoritesStore } from '@/stores/favoritesStore';
 import styles from './RecipeCard.module.css';
 
 type RecipeCardProps = {
-  id: string; // ← додано, щоб працювало обране
+  id: string;
   title: string;
   description: string;
   time: string;
   calories?: number;
-  image: string;
+  thumb: string;
 };
 
 export default function RecipeCard({
@@ -22,22 +22,20 @@ export default function RecipeCard({
   description,
   time,
   calories,
-  image,
+  thumb,
 }: RecipeCardProps) {
-  // Отримуємо користувача зі стору авторизації
-
   const user = useAuthStore(state => state.user);
-  // Методи роботи з обраним
+
   const toggleFavorite = useFavoritesStore(state => state.toggleFavorite);
   const isFavorite = useFavoritesStore(state => state.isFavorite);
-  // Перевіряємо, чи рецепт у списку обраних
+
   const fav = isFavorite(id);
 
   return (
-    <article className={styles.card}>
+    <div className={styles.card}>
       <div className={styles.imageWrapper}>
         <Image
-          src={image || '/images/not-found-plate.jpg'}
+          src={thumb}
           alt={title}
           fill
           className={styles.image}
@@ -46,30 +44,30 @@ export default function RecipeCard({
       </div>
 
       <div className={styles.content}>
-        <div className={styles.titleRow}>
-          <h3 className={styles.title}>{title}</h3>
-          {time && <span className={styles.time}>~{time}</span>}
+        <h3 className={styles.title}>{title}</h3>
+        <p className={styles.description}>{description}</p>
+
+        <div className={styles.infoRow}>
+          <span>{time}</span>
+          <span>{calories ? `${calories} kcal` : '—'}</span>
         </div>
 
-        <p className={styles.description}>{description}</p>
-        <p className={styles.calories}>{calories ? `${calories} kcal` : '-'}</p>
-
         <div className={styles.buttons}>
-          <Link className={styles.learnMore} href={`/recipes/${id}`}>
-            Learn more
-          </Link>
+          <button className={styles.learnMore}>Learn More</button>
 
           <button
             className={styles.favoriteBtn}
             onClick={() => user && toggleFavorite(id, user._id)}
             aria-label="Toggle favorite"
-            data-active={fav}
-            type="button"
+            style={{
+              color: fav ? 'var(--light-brown)' : '#999',
+              borderColor: fav ? 'var(--light-brown)' : 'var(--light-gray)',
+            }}
           >
             <BookmarkIcon aria-hidden="true" />
           </button>
         </div>
       </div>
-    </article>
+    </div>
   );
 }

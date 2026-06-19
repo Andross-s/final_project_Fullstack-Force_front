@@ -3,13 +3,14 @@ import { cookies } from 'next/headers';
 import { api } from '../../api';
 import { parse } from 'cookie';
 import { isAxiosError } from 'axios';
+import { logErrorResponse } from '../../_utils/utils';
 
 export async function POST() {
   try {
     const cookieStore = await cookies();
 
     const apiRes = await api.post(
-      '/auth/refresh',
+      '/api/auth/refresh',
       {},
       {
         headers: {
@@ -40,11 +41,23 @@ export async function POST() {
     return NextResponse.json({ success: true }, { status: 200 });
   } catch (error) {
     if (isAxiosError(error)) {
+      const serverStatus = error.response?.status;
+      const serverData = error.response?.data;
+
+      logErrorResponse(serverData);
       return NextResponse.json(
-        { error: error.message, response: error.response?.data },
-        { status: error.response?.status || 401 }
+        {
+          error: error.message,
+          response: serverData,
+        },
+        { status: serverStatus || 500 }
       );
     }
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+
+    logErrorResponse({ message: (error as Error).message });
+    return NextResponse.json(
+      { error: (error as Error).message || 'Internal Server Error' },
+      { status: 500 }
+    );
   }
 }

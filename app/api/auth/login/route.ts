@@ -6,7 +6,6 @@ import { isAxiosError } from 'axios';
 import { logErrorResponse } from '../../_utils/utils';
 
 export async function POST(req: NextRequest) {
-  console.log('LOGIN ROUTE');
   try {
     const body = await req.json();
     const apiRes = await api.post('/api/auth/login', body);
@@ -33,13 +32,23 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   } catch (error) {
     if (isAxiosError(error)) {
-      logErrorResponse(error.response?.data);
+      const serverStatus = error.response?.status;
+      const serverData = error.response?.data;
+
+      logErrorResponse(serverData);
       return NextResponse.json(
-        { error: error.message, response: error.response?.data },
-        { status: error.status }
+        {
+          error: error.message,
+          response: serverData,
+        },
+        { status: serverStatus || 500 }
       );
     }
+
     logErrorResponse({ message: (error as Error).message });
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    return NextResponse.json(
+      { error: (error as Error).message || 'Internal Server Error' },
+      { status: 500 }
+    );
   }
 }

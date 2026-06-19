@@ -33,22 +33,8 @@ const Login = () => {
         router.push('/');
       }
     },
-    onError: (error: AxiosError<{ message?: string; error?: string }>) => {
-      const responseData = error.response?.data as Record<string, unknown> | undefined;
-      const responseDirect = error.response as unknown as Record<string, unknown> | undefined;
-
-      const serverMessage =
-        (responseData?.message as string) ??
-        (responseData?.error as string) ??
-        (responseDirect?.message as string) ??
-        '';
-
-      let errorMessage = 'Incorrect email or password';
-
-      if (error.response?.status !== 401 && !serverMessage.includes('credentials')) {
-        errorMessage = error.message ?? 'Something went wrong';
-      }
-
+    onError: (error: AxiosError<{ error?: string }>) => {
+      const errorMessage = error.response?.data?.error ?? error.message ?? 'Oops... some error';
       toast.error(errorMessage);
     },
   });

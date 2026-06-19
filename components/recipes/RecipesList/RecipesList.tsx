@@ -31,8 +31,8 @@ export function RecipesList({ recipes }: RecipesListProps) {
             title={recipe.title || recipe.name || ''}
             description={recipe.description || recipe.descr || ''}
             time={String(recipe.time || recipe.cookingTime || '')}
-            calories={Number(recipe.calories ?? recipe.cals) || undefined}
-            image={recipe.thumb || recipe.recipeImage || ''}
+            calories={typeof recipe.calories === 'number' ? recipe.calories : undefined}
+            thumb={recipe.thumb || recipe.recipeImage || ''}
           />
         ))}
       </div>
