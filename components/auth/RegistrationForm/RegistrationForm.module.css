@@ -1,9 +1,10 @@
 .formCard {
-    width: 100%;
-
+    
+    max-width: 362px;
+    margin: 176px auto 156px;
     padding: 32px 20px;
 
-    background-color: #f4eddc;
+    background-color: var(--light-beige);;
     border-radius: 24px;
 }
 
@@ -12,9 +13,10 @@
 
     text-align: center;
 
+    font-weight: var(--font-weight-semibold);
     font-size: 32px;
-    font-weight: 700;
-    line-height: 1.1;
+    text-align: center;
+    color: var(--black);
 }
 
 .formSubTitle {
@@ -75,14 +77,15 @@
     position: relative;
 }
 
-.passwordInput {
-    padding-right: 44px;
-}
+
 
 .eyeButton {
     position: absolute;
     top: 50%;
     right: 14px;
+
+    width: 28px;
+    height: 28px;
 
     transform: translateY(-50%);
 
@@ -96,10 +99,7 @@
     cursor: pointer;
 }
 
-.eyeButton svg {
-    width: 18px;
-    height: 18px;
-}
+
 
 .isError {
     margin-top: 4px;
@@ -130,8 +130,10 @@
 }
 
 .submitButton:disabled {
-    opacity: 0.6;
+    opacity: 0.3;
     cursor: not-allowed;
+    background-color: var(--light-brown);;
+    box-shadow: 0 0 0 6px #4e46b41f, 0 0 0 2px var(--white);
 }
 
 .redirectText {
@@ -158,7 +160,7 @@
 @media screen and (min-width: 768px) {
     .formCard {
         max-width: 522px;
-
+        
         padding: 48px 32px;
 
         border-radius: 28px;
