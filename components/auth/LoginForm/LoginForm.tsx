@@ -92,7 +92,13 @@ const Login = () => {
                   aria-pressed={showPassword}
                 >
                   {showPassword ? (
-                    <Image src="/icons/open-eye-icon.svg" alt="eye on" width={24} height={24} />
+                    <Image
+                      className={css.eyeButton}
+                      src="/icons/open-eye-icon.svg"
+                      alt="eye on"
+                      width={24}
+                      height={24}
+                    />
                   ) : (
                     <Image src="/icons/close-eye-icon.svg" alt="eye off" width={24} height={24} />
                   )}
