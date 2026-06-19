@@ -1,8 +1,11 @@
-import Image from "next/image";
-import styles from "./RecipeCard.module.css";
+'use client';
 
-import { useAuthStore } from "@/stores/authStore";
-import { useFavoritesStore } from "@/stores/favoritesStore";
+import Image from 'next/image';
+import Link from 'next/link';
+import BookmarkIcon from '@/components/icon/bookmark-alternative.svg';
+import { useAuthStore } from '@/stores/authStore';
+import { useFavoritesStore } from '@/stores/favoritesStore';
+import styles from './RecipeCard.module.css';
 
 type RecipeCardProps = {
   id: string;
@@ -10,7 +13,7 @@ type RecipeCardProps = {
   description: string;
   time: string;
   calories?: number;
-  thumb: string; 
+  thumb: string;
 };
 
 export default function RecipeCard({
@@ -36,7 +39,7 @@ export default function RecipeCard({
           alt={title}
           fill
           className={styles.image}
-          sizes="(max-width: 768px) 100vw, 33vw"
+          sizes="(max-width: 767px) 100vw, (max-width: 1439px) 50vw, 25vw"
         />
       </div>
 
@@ -46,7 +49,7 @@ export default function RecipeCard({
 
         <div className={styles.infoRow}>
           <span>{time}</span>
-          <span>{calories ? `${calories} kcal` : "—"}</span>
+          <span>{calories ? `${calories} kcal` : '—'}</span>
         </div>
 
         <div className={styles.buttons}>
@@ -57,11 +60,11 @@ export default function RecipeCard({
             onClick={() => user && toggleFavorite(id, user._id)}
             aria-label="Toggle favorite"
             style={{
-              color: fav ? "var(--light-brown)" : "#999",
-              borderColor: fav ? "var(--light-brown)" : "var(--light-gray)",
+              color: fav ? 'var(--light-brown)' : '#999',
+              borderColor: fav ? 'var(--light-brown)' : 'var(--light-gray)',
             }}
           >
-            ♥
+            <BookmarkIcon aria-hidden="true" />
           </button>
         </div>
       </div>

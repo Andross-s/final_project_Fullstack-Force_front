@@ -1,57 +1,44 @@
-
 .container {
-  display: flex;             
-  justify-content: center; 
- 
- 
-    width: 100%; 
-     padding: 20px 0;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  padding: 32px 0 0;
 }
 
 .button {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: #9b6c43;      
-  color: #fff;
-  font-weight: 600;
-  font-size: 18px;        
+  width: 220px;
+  height: 42px;
   border: none;
-  border-radius: 8px;       
-  padding: 16px; 
-        max-width: 100%;      
- width: 372px;            
-  height: 54px;            
+  border-radius: 6px;
+  background: var(--light-brown);
+  color: var(--white);
   cursor: pointer;
-  transition: all 0.3s ease;
-
-
+  font-size: 14px;
+  font-weight: var(--font-weight-semibold);
+  transition: background-color var(--transition-base), opacity var(--transition-base);
 }
 
-.button:hover {
-  background-color:  #6d554b;
+.button:hover,
+.button:focus {
+  background: var(--brown);
 }
 
 .button:active {
-box-shadow: 0 0 0 6px rgba(78, 70, 180, 0.12), 0 0 0 2px #fff;
-background: #9b6c43;
-opacity: 0.3;
+  box-shadow:
+    0 0 0 6px rgba(78, 70, 180, 0.12),
+    0 0 0 2px var(--white);
 }
-
 
 .button:disabled {
   opacity: 0.6;
-   cursor: not-allowed; 
+  cursor: not-allowed;
 }
 
-@media screen and (min-width: 768px) {
+@media (min-width: 1440px) {
   .button {
-    width: 340px;
-  }
-  }
-
- @media screen and (min-width: 1440px) {
- .button {
-   width: 289px;
+    width: 289px;
   }
 }
