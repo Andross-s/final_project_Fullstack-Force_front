@@ -30,7 +30,7 @@ export function RecipesList({ recipes }: RecipesListProps) {
             description={recipe.description}
             time={String(recipe.time || recipe.cookingTime || "")}
             calories={recipe.calories ?? undefined}
-            thumb={recipe.thumb || recipe.recipeImage || ""}  
+            thumb={recipe.thumb || recipe.recipeImage || ""}
           />
         ))}
       </div>
