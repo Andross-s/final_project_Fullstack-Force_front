@@ -1,0 +1,73 @@
+/*  Контейнер */
+.wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 260px;
+  font-family: system-ui, sans-serif;
+}
+
+/*  Кнопка відкриття */
+.selectBtn {
+  padding: 14px 18px;
+  background: #f5f1eb;
+  border-radius: 14px;
+  border: 1px solid #d8cfc4;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  color: #4a3b2f;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: 0.25s ease;
+}
+
+.selectBtn:hover {
+  background: #e8dfd4;
+}
+
+/* Стрілка */
+.arrow {
+  font-size: 12px;
+  opacity: 0.7;
+}
+
+/*  Список опцій */
+.options {
+  margin-top: 8px;
+  background: #fff;
+  border-radius: 14px;
+  border: 1px solid #d8cfc4;
+  overflow: hidden;
+  animation: fadeIn 0.25s ease;
+  position: absolute;
+  width: 100%;
+  z-index: 20;
+}
+
+/*  Окрема опція */
+.option {
+  padding: 14px 18px;
+  cursor: pointer;
+  transition: 0.25s ease;
+  font-weight: 600;
+  color: #4a3b2f;
+  background: #faf7f2;
+}
+
+.option:hover {
+  background: #e8dfd4;
+  transform: translateX(4px);
+}
+
+/*  Анімація */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

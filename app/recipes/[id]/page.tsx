@@ -30,9 +30,7 @@ export default function RecipeDetailsPage() {
 
   const [similar, setSimilar] = useState([]);
 
-  // ============================================================
-  // 📌 Загружаем похожие рецепты
-  // ============================================================
+  //  Завантаження схожих рецептів
   useEffect(() => {
     if (!data?.recipe?.category?._id) return;
 
@@ -46,7 +44,6 @@ export default function RecipeDetailsPage() {
 
         const json = await res.json();
 
-        // исключаем текущий рецепт
         const filtered = (json.recipes || []).filter(
           (r: any) => r._id !== data.recipe._id
         );
@@ -67,40 +64,48 @@ export default function RecipeDetailsPage() {
 
   return (
     <div className={styles.wrapper}>
-      {/* 🔙 Кнопка назад */}
+      {/*  Кнопка повернення */}
       <button className={styles.backButton} onClick={() => router.back()}>
         ← Назад
       </button>
 
-      {/* 🖼 Фото рецепта */}
-      <RecipeImage src={recipe.thumb} alt={recipe.title} />
+      {/* Головне фото + кнопка збереження */}
+      <div className={styles.hero}>
+        <RecipeImage src={recipe.thumb} alt={recipe.title} />
 
-      {/* 📝 Заголовок */}
-      <RecipeTitle title={recipe.title} />
+        <div className={styles.saveWrapper}>
+          <SaveButton recipeId={recipe._id} />
+        </div>
+      </div>
 
-      {/* ⏱ Інформація про час та калорії */}
-      <GeneralInfo time={recipe.time} calories={recipe.calories} />
+      {/*  Заголовок + загальна інформація */}
+      <div className={styles.headerBlock}>
+        <RecipeTitle title={recipe.title} />
 
-      {/* ❤️ Кнопка "Зберегти" */}
-      <SaveButton recipeId={recipe._id} />
+        <GeneralInfo
+          time={recipe.time}
+          calories={recipe.calories}
+        />
+      </div>
 
-      {/* 🧂 Інгредієнти */}
+      {/*  Інгредієнти */}
       <RecipeSection title="Ingredients">
         <ul className={styles.ingredientsList}>
           {recipe.ingredients.map((item: IngredientItem) => (
             <li key={item._id}>
-              {item.name} — {item.amount}
+              <span className={styles.ingName}>{item.name}</span>
+              <span className={styles.ingAmount}>{item.amount}</span>
             </li>
           ))}
         </ul>
       </RecipeSection>
 
-      {/* 📖 Інструкція */}
+      {/*  Інструкція */}
       <RecipeSection title="Instructions">
         <p className={styles.instructions}>{recipe.instructions}</p>
       </RecipeSection>
 
-      {/* 🍽 Схожі рецепти */}
+      {/*  Схожі рецепти */}
       {similar.length > 0 && (
         <div className={styles.similarWrapper}>
           <h2 className={styles.sectionTitle}>Similar recipes</h2>

@@ -37,8 +37,28 @@ export default function HomePage() {
 
   const [searchQuery, setSearchQuery] = useState("");
 
+  // 🧩 Категорії
+  const [categories, setCategories] = useState([]);
+
   // ============================================================
-  // 📌 1. ЧИТАЄМО ФІЛЬТРИ З URL ПРИ ЗАВАНТАЖЕННІ
+  // 📌 1. Завантажуємо категорії
+  // ============================================================
+  useEffect(() => {
+    const loadCategories = async () => {
+      try {
+        const res = await fetch("/api/categories");
+        const data = await res.json();
+        setCategories(data || []);
+      } catch (err) {
+        console.error("Categories fetch error:", err);
+      }
+    };
+
+    loadCategories();
+  }, []);
+
+  // ============================================================
+  // 📌 2. ЧИТАЄМО ФІЛЬТРИ З URL ПРИ ЗАВАНТАЖЕННІ
   // ============================================================
   useEffect(() => {
     const initialFilters: FiltersState = {
@@ -57,7 +77,7 @@ export default function HomePage() {
   }, []);
 
   // ============================================================
-  // 📌 2. ОНОВЛЮЄМО URL ПРИ ЗМІНІ ФІЛЬТРІВ
+  // 📌 3. ОНОВЛЮЄМО URL ПРИ ЗМІНІ ФІЛЬТРІВ
   // ============================================================
   const updateURL = (
     pageValue: number,
@@ -78,7 +98,7 @@ export default function HomePage() {
   };
 
   // ============================================================
-  // 📌 3. ЗАПИТ НА БЕКЕНД
+  // 📌 4. ЗАПИТ НА БЕКЕНД
   // ============================================================
   const fetchRecipes = async (
     pageValue: number,
@@ -124,7 +144,7 @@ export default function HomePage() {
   };
 
   // ============================================================
-  // 📌 4. Пошук
+  // 📌 5. Пошук
   // ============================================================
   const handleSearch = async (value: string) => {
     setSearchQuery(value);
@@ -133,7 +153,7 @@ export default function HomePage() {
   };
 
   // ============================================================
-  // 📌 5. Зміна фільтрів
+  // 📌 6. Зміна фільтрів
   // ============================================================
   const handleFiltersChange = (next: FiltersState) => {
     setFilters(next);
@@ -145,7 +165,7 @@ export default function HomePage() {
   };
 
   // ============================================================
-  // 📌 6. Load More
+  // 📌 7. Load More
   // ============================================================
   const loadMore = () => {
     const nextPage = page + 1;
@@ -158,7 +178,10 @@ export default function HomePage() {
       <section className={styles.searchSection}>
         <SearchBox onSearch={handleSearch} />
 
-        <Filters onChange={handleFiltersChange} />
+        <Filters
+          categories={categories}
+          onChange={handleFiltersChange}
+        />
 
         <button
           className={styles.applyButton}
