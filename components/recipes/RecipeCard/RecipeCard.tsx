@@ -1,68 +1,64 @@
-import Image from "next/image";
+import Link from "next/link";
+import { useFavoritesStore } from "@/stores/favoritesStore";
+import { useAuthStore } from "@/stores/authStore";
 import styles from "./RecipeCard.module.css";
 
-import { useAuthStore } from "@/stores/authStore";
-import { useFavoritesStore } from "@/stores/favoritesStore";
-
-type RecipeCardProps = {
+type Props = {
   id: string;
   title: string;
   description: string;
-  time: string;
-  calories?: number;
-  thumb: string; 
+  image: string;
 };
 
-export default function RecipeCard({
-  id,
-  title,
-  description,
-  time,
-  calories,
-  thumb,
-}: RecipeCardProps) {
-  const user = useAuthStore(state => state.user);
+export default function RecipeCard({ id, title, description, image }: Props) {
+  const user = useAuthStore((s) => s.user);
+  const toggleFavorite = useFavoritesStore((s) => s.toggleFavorite);
+  const isFavorite = useFavoritesStore((s) => s.isFavorite);
 
-  const toggleFavorite = useFavoritesStore(state => state.toggleFavorite);
-  const isFavorite = useFavoritesStore(state => state.isFavorite);
+  const active = isFavorite(id);
 
-  const fav = isFavorite(id);
+  const handleFavorite = () => {
+    if (!user) {
+      console.warn("User not logged in");
+      return;
+    }
+    toggleFavorite(id, user._id);
+  };
 
   return (
     <div className={styles.card}>
-      <div className={styles.imageWrapper}>
-        <Image
-          src={thumb}
-          alt={title}
-          fill
-          className={styles.image}
-          sizes="(max-width: 768px) 100vw, 33vw"
-        />
-      </div>
+      <img src={image} alt={title} />
 
       <div className={styles.content}>
-        <h3 className={styles.title}>{title}</h3>
-        <p className={styles.description}>{description}</p>
+        <div className={styles.title}>{title}</div>
+        <div className={styles.desc}>{description}</div>
 
-        <div className={styles.infoRow}>
-          <span>{time}</span>
-          <span>{calories ? `${calories} kcal` : "—"}</span>
-        </div>
+        <div className={styles.bottomRow}>
+          <Link href={`/recipes/${id}`} className={styles.learnMore}>
+            Learn More
+          </Link>
 
-        <div className={styles.buttons}>
-          <button className={styles.learnMore}>Learn More</button>
-
-          <button
-            className={styles.favoriteBtn}
-            onClick={() => user && toggleFavorite(id, user._id)}
-            aria-label="Toggle favorite"
-            style={{
-              color: fav ? "var(--light-brown)" : "#999",
-              borderColor: fav ? "var(--light-brown)" : "var(--light-gray)",
-            }}
+          <div
+            className={`${styles.favorite} ${active ? styles.active : ""}`}
+            onClick={handleFavorite}
           >
-            ♥
-          </button>
+            <svg viewBox="0 0 24 24">
+              <path
+                className={styles.fill}
+                d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5
+                2 5.42 4.42 3 7.5 3c1.74 0 3.41 0.81 4.5 2.09
+                C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5
+                c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+              />
+              <path
+                className={styles.stroke}
+                d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5
+                2 5.42 4.42 3 7.5 3c1.74 0 3.41 0.81 4.5 2.09
+                C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5
+                c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+              />
+            </svg>
+          </div>
         </div>
       </div>
     </div>

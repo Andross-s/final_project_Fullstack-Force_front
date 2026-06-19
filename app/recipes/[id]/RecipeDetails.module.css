@@ -5,6 +5,86 @@
   padding: 32px 0;
 }
 
+/* Кнопка "Назад" */
+.backButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  width: fit-content;
+  padding: 8px 14px;
+  border-radius: 8px;
+  background: var(--light-beige);
+  color: var(--brown);
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition-base);
+}
+
+.backButton:hover {
+  background: var(--light-brown);
+  color: white;
+}
+
+/* Заголовок */
+.title {
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+/* Інформация (час, калорії) */
+.infoRow {
+  display: flex;
+  gap: 24px;
+  font-size: 16px;
+  color: var(--brown);
+}
+
+/* Секція */
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.sectionTitle {
+  font-size: 24px;
+  font-weight: 700;
+}
+
+/* Інгредієнти */
+.ingredientsList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ingredientsList li {
+  font-size: 16px;
+  padding: 8px 12px;
+  background: var(--light-beige);
+  border-radius: 8px;
+}
+
+/* Інструкція */
+.instructions {
+  white-space: pre-line;
+  line-height: 1.6;
+  font-size: 16px;
+}
+
+/* Похожие рецепты */
+.similarWrapper {
+  margin-top: 32px;
+}
+
+.similarGrid {
+  display: grid;
+  gap: 24px;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+}
+
+/* Помилка */
 .error {
   color: red;
   font-size: 20px;

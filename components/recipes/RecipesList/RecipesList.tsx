@@ -1,43 +1,63 @@
-import RecipeCard from "../RecipeCard/RecipeCard";
+"use client";
+
+import Link from "next/link";
 import styles from "./RecipesList.module.css";
+import RecipeCard from "../RecipeCard/RecipeCard";
 
 type Recipe = {
   _id: string;
-  title?: string;
-  name?: string;
+  title: string;
   description: string;
-  time?: number;
-  cookingTime?: number;
-  calories?: number | null;
-  thumb?: string;
-  recipeImage?: string;
+  thumb: string;
+  time: number;
+  category?: { _id: string; name: string };
+  ingredients?: { ingredient: { _id: string; name: string }; measure: string }[];
 };
 
-type RecipesListProps = {
-  recipes: Recipe[];
-  type?: string;
-};
+export default function RecipesList({ recipes }: { recipes: Recipe[] }) {
+  if (!recipes || recipes.length === 0) {
+    return <p className={styles.empty}>No recipes found</p>;
+  }
 
-export function RecipesList({ recipes }: RecipesListProps) {
   return (
-    <div className={styles.wrapper}>
-      <div className={styles.grid}>
-        {recipes.map((recipe) => (
+    <ul className={styles.list}>
+      {recipes.map((recipe) => (
+        <li key={recipe._id} className={styles.item}>
           <RecipeCard
-            key={recipe._id}
-            id={recipe._id}
-            title={recipe.title || recipe.name || ""}
+            recipe={recipe}
+            image={recipe.thumb}
+            title={recipe.title}
             description={recipe.description}
-            time={String(recipe.time || recipe.cookingTime || "")}
-            calories={recipe.calories ?? undefined}
-            thumb={recipe.thumb || recipe.recipeImage || ""}
+            time={recipe.time}
+            id={recipe._id}
           />
-        ))}
-      </div>
 
-      <button className={styles.loadMore}>Load More</button>
-    </div>
+          {/* CATEGORY LINK */}
+          {recipe.category && (
+            <Link
+              href={`/categories/${recipe.category._id}`}
+              className={styles.category}
+            >
+              {recipe.category.name}
+            </Link>
+          )}
+
+          {/* INGREDIENT LINKS */}
+          {recipe.ingredients && (
+            <div className={styles.ingredients}>
+              {recipe.ingredients.map((ing) => (
+                <Link
+                  key={ing.ingredient._id}
+                  href={`/ingredients/${ing.ingredient.name}`}
+                  className={styles.ingredient}
+                >
+                  {ing.ingredient.name}
+                </Link>
+              ))}
+            </div>
+          )}
+        </li>
+      ))}
+    </ul>
   );
 }
-
-export default RecipesList;

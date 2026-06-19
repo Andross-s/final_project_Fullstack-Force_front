@@ -1,0 +1,27 @@
+.page {
+  padding: 20px;
+}
+
+.title {
+  font-size: 32px;
+  margin-bottom: 20px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 16px;
+}
+
+.card {
+  padding: 16px;
+  border-radius: 12px;
+  background: #fafafa;
+  border: 1px solid #eee;
+  text-align: center;
+  transition: 0.2s;
+}
+
+.card:hover {
+  background: #f0f0f0;
+}

@@ -1,14 +1,14 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 
-import SearchBox from "../components/recipes/SearchBox/SearchBox";
-import Filters from "../components/recipes/Filters/Filters";
-import RecipesList from "../components/recipes/RecipesList/RecipesList";
+import Filters from "../../../components/recipes/Filters/Filters";
+import RecipesList from "../../../components/recipes/RecipesList/RecipesList";
+import SearchBox from "../../../components/recipes/SearchBox/SearchBox";
 
-import styles from "./page.module.css";
 import toast from "react-hot-toast";
+import styles from "./page.module.css";
 
 type FiltersState = {
   category: string;
@@ -17,7 +17,8 @@ type FiltersState = {
   maxCalories: string;
 };
 
-export default function HomePage() {
+export default function CategoryPage() {
+  const { id } = useParams();
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -27,7 +28,6 @@ export default function HomePage() {
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(false);
 
-  // 🧩 Локальні фільтри
   const [filters, setFilters] = useState<FiltersState>({
     category: "",
     ingredient: "",
@@ -37,12 +37,9 @@ export default function HomePage() {
 
   const [searchQuery, setSearchQuery] = useState("");
 
-  // ============================================================
-  // 📌 1. ЧИТАЄМО ФІЛЬТРИ З URL ПРИ ЗАВАНТАЖЕННІ
-  // ============================================================
   useEffect(() => {
     const initialFilters: FiltersState = {
-      category: searchParams.get("category") || "",
+      category: id as string,
       ingredient: searchParams.get("ingredient") || "",
       maxTime: searchParams.get("maxTime") || "",
       maxCalories: searchParams.get("maxCalories") || "",
@@ -54,11 +51,8 @@ export default function HomePage() {
     setSearchQuery(initialSearch);
 
     fetchRecipes(1, initialFilters, initialSearch);
-  }, []);
+  }, [id]);
 
-  // ============================================================
-  // 📌 2. ОНОВЛЮЄМО URL ПРИ ЗМІНІ ФІЛЬТРІВ
-  // ============================================================
   const updateURL = (
     pageValue: number,
     filters: FiltersState,
@@ -67,19 +61,15 @@ export default function HomePage() {
     const params = new URLSearchParams();
 
     if (search) params.set("search", search);
-    if (filters.category) params.set("category", filters.category);
     if (filters.ingredient) params.set("ingredient", filters.ingredient);
     if (filters.maxTime) params.set("maxTime", filters.maxTime);
     if (filters.maxCalories) params.set("maxCalories", filters.maxCalories);
 
     params.set("page", String(pageValue));
 
-    router.replace(`/?${params.toString()}`);
+    router.replace(`/categories/${id}?${params.toString()}`);
   };
 
-  // ============================================================
-  // 📌 3. ЗАПИТ НА БЕКЕНД
-  // ============================================================
   const fetchRecipes = async (
     pageValue: number,
     filtersValue: FiltersState,
@@ -90,8 +80,9 @@ export default function HomePage() {
 
       const params = new URLSearchParams();
 
+      params.set("category", id as string);
+
       if (searchValue) params.set("search", searchValue);
-      if (filtersValue.category) params.set("category", filtersValue.category);
       if (filtersValue.ingredient)
         params.set("ingredient", filtersValue.ingredient);
       if (filtersValue.maxTime) params.set("maxTime", filtersValue.maxTime);
@@ -123,18 +114,12 @@ export default function HomePage() {
     }
   };
 
-  // ============================================================
-  // 📌 4. Пошук
-  // ============================================================
-  const handleSearch = async (value: string) => {
+  const handleSearch = (value: string) => {
     setSearchQuery(value);
     updateURL(1, filters, value);
     fetchRecipes(1, filters, value);
   };
 
-  // ============================================================
-  // 📌 5. Зміна фільтрів
-  // ============================================================
   const handleFiltersChange = (next: FiltersState) => {
     setFilters(next);
   };
@@ -144,9 +129,6 @@ export default function HomePage() {
     fetchRecipes(1, filters, searchQuery);
   };
 
-  // ============================================================
-  // 📌 6. Load More
-  // ============================================================
   const loadMore = () => {
     const nextPage = page + 1;
     updateURL(nextPage, filters, searchQuery);
@@ -155,35 +137,34 @@ export default function HomePage() {
 
   return (
     <main className={styles.page}>
-      <section className={styles.searchSection}>
-        <SearchBox onSearch={handleSearch} />
+      <h1 className={styles.title}>Category</h1>
 
-        <Filters onChange={handleFiltersChange} />
+      <SearchBox onSearch={handleSearch} />
+      <Filters onChange={handleFiltersChange} />
 
-        <button
-          className={styles.applyButton}
-          onClick={applyFilters}
-          disabled={isLoading}
-        >
-          {isLoading ? "Loading..." : "Apply filters"}
-        </button>
+      <button
+        className={styles.applyButton}
+        onClick={applyFilters}
+        disabled={isLoading}
+      >
+        {isLoading ? "Loading..." : "Apply filters"}
+      </button>
 
-        {recipes.length > 0 && (
-          <>
-            <RecipesList recipes={recipes} />
+      {recipes.length > 0 && (
+        <>
+          <RecipesList recipes={recipes} />
 
-            {hasMore && (
-              <button
-                className={styles.loadMore}
-                onClick={loadMore}
-                disabled={isLoading}
-              >
-                {isLoading ? "Loading..." : "Load more"}
-              </button>
-            )}
-          </>
-        )}
-      </section>
+          {hasMore && (
+            <button
+              className={styles.loadMore}
+              onClick={loadMore}
+              disabled={isLoading}
+            >
+              {isLoading ? "Loading..." : "Load more"}
+            </button>
+          )}
+        </>
+      )}
     </main>
   );
 }

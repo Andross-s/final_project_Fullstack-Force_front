@@ -1,14 +1,14 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 
-import SearchBox from "../components/recipes/SearchBox/SearchBox";
-import Filters from "../components/recipes/Filters/Filters";
-import RecipesList from "../components/recipes/RecipesList/RecipesList";
+import Filters from "../../../components/recipes/Filters/Filters";
+import RecipesList from "../../../components/recipes/RecipesList/RecipesList";
+import SearchBox from "../../../components/recipes/SearchBox/SearchBox";
 
-import styles from "./page.module.css";
 import toast from "react-hot-toast";
+import styles from "./page.module.css";
 
 type FiltersState = {
   category: string;
@@ -17,7 +17,8 @@ type FiltersState = {
   maxCalories: string;
 };
 
-export default function HomePage() {
+export default function IngredientPage() {
+  const { name } = useParams();
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -27,7 +28,6 @@ export default function HomePage() {
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(false);
 
-  // 🧩 Локальні фільтри
   const [filters, setFilters] = useState<FiltersState>({
     category: "",
     ingredient: "",
@@ -38,12 +38,12 @@ export default function HomePage() {
   const [searchQuery, setSearchQuery] = useState("");
 
   // ============================================================
-  // 📌 1. ЧИТАЄМО ФІЛЬТРИ З URL ПРИ ЗАВАНТАЖЕННІ
+  // 📌 1. Читаем фильтры из URL при загрузке
   // ============================================================
   useEffect(() => {
     const initialFilters: FiltersState = {
-      category: searchParams.get("category") || "",
-      ingredient: searchParams.get("ingredient") || "",
+      category: "",
+      ingredient: name as string, // ингредиент берём из URL
       maxTime: searchParams.get("maxTime") || "",
       maxCalories: searchParams.get("maxCalories") || "",
     };
@@ -54,10 +54,10 @@ export default function HomePage() {
     setSearchQuery(initialSearch);
 
     fetchRecipes(1, initialFilters, initialSearch);
-  }, []);
+  }, [name]);
 
   // ============================================================
-  // 📌 2. ОНОВЛЮЄМО URL ПРИ ЗМІНІ ФІЛЬТРІВ
+  // 📌 2. Обновляем URL
   // ============================================================
   const updateURL = (
     pageValue: number,
@@ -67,18 +67,16 @@ export default function HomePage() {
     const params = new URLSearchParams();
 
     if (search) params.set("search", search);
-    if (filters.category) params.set("category", filters.category);
-    if (filters.ingredient) params.set("ingredient", filters.ingredient);
     if (filters.maxTime) params.set("maxTime", filters.maxTime);
     if (filters.maxCalories) params.set("maxCalories", filters.maxCalories);
 
     params.set("page", String(pageValue));
 
-    router.replace(`/?${params.toString()}`);
+    router.replace(`/ingredients/${name}?${params.toString()}`);
   };
 
   // ============================================================
-  // 📌 3. ЗАПИТ НА БЕКЕНД
+  // 📌 3. Запрос на backend
   // ============================================================
   const fetchRecipes = async (
     pageValue: number,
@@ -90,10 +88,9 @@ export default function HomePage() {
 
       const params = new URLSearchParams();
 
+      params.set("ingredient", name as string);
+
       if (searchValue) params.set("search", searchValue);
-      if (filtersValue.category) params.set("category", filtersValue.category);
-      if (filtersValue.ingredient)
-        params.set("ingredient", filtersValue.ingredient);
       if (filtersValue.maxTime) params.set("maxTime", filtersValue.maxTime);
       if (filtersValue.maxCalories)
         params.set("maxCalories", filtersValue.maxCalories);
@@ -124,16 +121,16 @@ export default function HomePage() {
   };
 
   // ============================================================
-  // 📌 4. Пошук
+  // 📌 4. Поиск
   // ============================================================
-  const handleSearch = async (value: string) => {
+  const handleSearch = (value: string) => {
     setSearchQuery(value);
     updateURL(1, filters, value);
     fetchRecipes(1, filters, value);
   };
 
   // ============================================================
-  // 📌 5. Зміна фільтрів
+  // 📌 5. Фильтры
   // ============================================================
   const handleFiltersChange = (next: FiltersState) => {
     setFilters(next);
@@ -155,35 +152,34 @@ export default function HomePage() {
 
   return (
     <main className={styles.page}>
-      <section className={styles.searchSection}>
-        <SearchBox onSearch={handleSearch} />
+      <h1 className={styles.title}>Ingredient: {name}</h1>
 
-        <Filters onChange={handleFiltersChange} />
+      <SearchBox onSearch={handleSearch} />
+      <Filters onChange={handleFiltersChange} />
 
-        <button
-          className={styles.applyButton}
-          onClick={applyFilters}
-          disabled={isLoading}
-        >
-          {isLoading ? "Loading..." : "Apply filters"}
-        </button>
+      <button
+        className={styles.applyButton}
+        onClick={applyFilters}
+        disabled={isLoading}
+      >
+        {isLoading ? "Loading..." : "Apply filters"}
+      </button>
 
-        {recipes.length > 0 && (
-          <>
-            <RecipesList recipes={recipes} />
+      {recipes.length > 0 && (
+        <>
+          <RecipesList recipes={recipes} />
 
-            {hasMore && (
-              <button
-                className={styles.loadMore}
-                onClick={loadMore}
-                disabled={isLoading}
-              >
-                {isLoading ? "Loading..." : "Load more"}
-              </button>
-            )}
-          </>
-        )}
-      </section>
+          {hasMore && (
+            <button
+              className={styles.loadMore}
+              onClick={loadMore}
+              disabled={isLoading}
+            >
+              {isLoading ? "Loading..." : "Load more"}
+            </button>
+          )}
+        </>
+      )}
     </main>
   );
 }
