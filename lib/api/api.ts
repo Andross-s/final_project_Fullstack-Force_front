@@ -7,12 +7,22 @@ export const nextServer = axios.create({
 
 if (process.env.NODE_ENV === 'development') {
   nextServer.interceptors.request.use(config => {
+    let logData = config.data;
+
+    if (logData && typeof logData === 'object') {
+      logData = { ...logData };
+      if ('password' in logData) {
+        logData.password = '********';
+      }
+    }
+
     console.log(
       '[API] Request:',
       config.method,
       `${config.baseURL ?? ''}${config.url ?? ''}`,
-      config.data ?? ''
+      logData ?? ''
     );
+
     return config;
   });
 
