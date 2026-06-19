@@ -4,45 +4,41 @@
   width: 100%;
 }
 
-
-
 .error {
-    min-height: 15px;
+  min-height: 16px;
   margin-top: 4px;
   margin-left: 15px;
   color: #c80000;
   font-size: 12px;
   line-height: 1;
   font-weight: 400;
-  min-height: 16px;
 }
 
 .inputWrapper {
   display: flex;
-  gap : 6px;
+  gap: 6px;
 }
 
 .input {
   height: 46px;
-    border: 1px solid transparent;
+  border: 1px solid transparent;
   border-radius: 8px;
   padding: 12px 16px;
   font-size: 16px;
   outline: none;
 }
 
-.inputError {
-  border: 1px solid #c80000 !important;
-}
-
-
-
 .input::placeholder {
   color: #9f9f9f;
 }
 
+.inputError {
+  border: 1px solid #c80000 !important;
+}
+
 .inputError::placeholder {
-  color: #c80000;
+  color: #c80000 !important;
+  opacity: 1;
 }
 
 .button {
@@ -54,18 +50,16 @@
   font-size: 16px;
   font-weight: 600;
   cursor: pointer;
-  transition: opacity 0.2s ease;
+  transition: background-color 0.2s ease;
 }
 
-.button:hover {
-    background-color: #6D554B;
-  
+.button:hover,
+.button:focus {
+  background-color: #6d554b;
 }
 
-/* Mobile 393px */
 @media screen and (max-width: 767px) {
   .inputWrapper {
-    display: flex;
     flex-direction: column;
     gap: 24px;
   }
@@ -74,19 +68,11 @@
     width: 100%;
   }
 
-  .error {
-    order: 2;
-    margin-top: 4px;
-    margin-bottom: 4px;
-  }
-
   .button {
-    order: 3;
     width: 100%;
   }
 }
 
-/* Tablet 768px */
 @media screen and (min-width: 768px) and (max-width: 1439px) {
   .form {
     width: 657px;
@@ -94,7 +80,6 @@
   }
 
   .inputWrapper {
-    display: flex;
     flex-direction: row;
     align-items: center;
     gap: 24px;
@@ -114,7 +99,6 @@
   }
 }
 
-/* Desktop 1440px */
 @media screen and (min-width: 1440px) {
   .inputWrapper {
     flex-direction: row;
