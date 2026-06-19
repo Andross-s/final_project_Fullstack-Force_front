@@ -1,0 +1,167 @@
+.wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 40px;
+  margin-bottom: 32px;
+}
+
+.count {
+  color: #000000;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.icon {
+  display: block;
+  flex-shrink: 0;
+}
+
+.filterIcon {
+  width: 13.5px;
+  height: 13.5px;
+}
+
+.closeIcon {
+  width: 24px;
+  height: 24px;
+}
+
+.mobileButton,
+.mobileHeader,
+.closeButton {
+  display: none;
+}
+
+.resetButton {
+  border: none;
+  background: transparent;
+
+  color: #000;
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 6px;
+}
+
+.resetButton:hover {
+  color: #9b6c43;
+}
+
+.input {
+  width: 179px;
+  height: 38px;
+  border: 1px solid #d9d9d9;
+  border-radius: 8px;
+  padding: 0 12px;
+  background-color: #ffffff;
+  color: #3d2218;
+  font-size: 14px;
+  outline: none;
+  cursor: pointer;
+}
+
+.input:focus {
+  border-color: #9b6c43;
+}
+
+/* Mobile + Tablet */
+@media screen and (max-width: 1439px) {
+  .wrapper {
+    margin-top: 24px;
+    margin-bottom: 20px;
+  }
+
+  .count {
+    font-size: 16px;
+  }
+
+  .mobileButton {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    border: none;
+    background: transparent;
+    color: #000000;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .controls {
+    display: none;
+  }
+
+  .controls.open {
+    position: absolute;
+    top: 28px;
+    right: 0;
+    z-index: 20;
+
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+
+    width: 260px;
+    padding: 16px;
+
+    border-radius: 8px;
+    background-color: #ffffff;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  }
+
+  .mobileHeader {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 6px;
+
+    color: #000000;
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  .closeButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: none;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  .input {
+    width: 100%;
+    height: 38px;
+  }
+
+  .resetButton {
+    order: 10;
+    align-self: flex-start;
+    color: #000000;
+    font-size: 12px;
+  }
+}
+
+/* Mobile 393px */
+@media screen and (max-width: 767px) {
+  .controls.open {
+    width: 100%;
+    max-width: 344px;
+  }
+}
