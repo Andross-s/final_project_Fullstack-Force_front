@@ -4,7 +4,7 @@ import Link from "next/link";
 import styles from "./RecipesList.module.css";
 import RecipeCard from "../RecipeCard/RecipeCard";
 
-type Recipe = {
+export type RecipeListItem = {
   _id: string;
   title: string;
   description: string;
@@ -14,7 +14,7 @@ type Recipe = {
   ingredients?: { ingredient: { _id: string; name: string }; measure: string }[];
 };
 
-export default function RecipesList({ recipes }: { recipes: Recipe[] }) {
+export default function RecipesList({ recipes }: { recipes: RecipeListItem[] }) {
   if (!recipes || recipes.length === 0) {
     return <p className={styles.empty}>No recipes found</p>;
   }
@@ -24,12 +24,10 @@ export default function RecipesList({ recipes }: { recipes: Recipe[] }) {
       {recipes.map((recipe) => (
         <li key={recipe._id} className={styles.item}>
           <RecipeCard
-            recipe={recipe}
-            image={recipe.thumb}
+            id={recipe._id}
             title={recipe.title}
             description={recipe.description}
-            time={recipe.time}
-            id={recipe._id}
+            image={recipe.thumb}
           />
 
           {/* CATEGORY LINK */}

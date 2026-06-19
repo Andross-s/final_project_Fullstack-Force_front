@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import { useFavoritesStore } from "@/stores/favoritesStore";
 import { useAuthStore } from "@/stores/authStore";
@@ -27,7 +29,7 @@ export default function RecipeCard({ id, title, description, image }: Props) {
 
   return (
     <div className={styles.card}>
-      <img src={image} alt={title} />
+      <img src={image} alt={title} className={styles.image} />
 
       <div className={styles.content}>
         <div className={styles.title}>{title}</div>
