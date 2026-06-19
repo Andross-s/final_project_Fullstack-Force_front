@@ -25,7 +25,6 @@ const getTotal = (data: RecipesResponse, fallback: number) => {
 
 const createBackendUrl = (searchParams: URLSearchParams, page: number) => {
   const backendUrl = new URL(`${BACKEND_URL}/recipes`);
-
   const query = searchParams.get("query") || searchParams.get("search") || "";
 
   if (query) {
