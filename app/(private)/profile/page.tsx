@@ -23,8 +23,6 @@ export default function ProfilePage() {
 
       <ProfileNavigation />
 
-      
-
       <RecipesList recipes={recipes} />
 
       <LoadMoreBtn onClick={() => {}} isLoading={false} />

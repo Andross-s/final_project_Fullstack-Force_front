@@ -41,9 +41,9 @@ export default function Filters({
         onClick={() => setIsOpen(true)}
       >
         Filters
-       <FilterIcon
-  className={`${styles.icon} ${styles.filterIcon}`}
-/>
+        <FilterIcon
+          className={`${styles.icon} ${styles.filterIcon}`}
+        />
       </button>
 
       <div className={`${styles.controls} ${isOpen ? styles.open : ""}`}>
@@ -56,8 +56,8 @@ export default function Filters({
             onClick={() => setIsOpen(false)}
           >
             <CloseIcon
-  className={`${styles.icon} ${styles.closeIcon}`}
-/>
+              className={`${styles.icon} ${styles.closeIcon}`}
+            />
           </button>
         </div>
 

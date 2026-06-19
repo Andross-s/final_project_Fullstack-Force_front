@@ -41,33 +41,25 @@ export default function HomePage() {
 
       const params = new URLSearchParams();
 
-      if (query) {
-        params.set("query", query);
+      if (query) params.set("query", query);
+      if (category) params.set("category", category);
+      if (ingredient) params.set("ingredient", ingredient);
+
+      const response = await fetch(`/api/recipes?${params.toString()}`);
+      const data = await response.json();
+
+      if (!response.ok) {
+        setRecipes([]);
+        setTotalRecipes(0);
+        toast.error(data.message || "Failed to load recipes");
+        return;
       }
 
-      if (category) {
-        params.set("category", category);
-      }
+      const receivedRecipes = data.recipes || [];
 
-      if (ingredient) {
-        params.set("ingredient", ingredient);
-      }
-
-     const response = await fetch(`/api/recipes?${params.toString()}`);
-const data = await response.json();
-
-if (!response.ok) {
-  setRecipes([]);
-  setTotalRecipes(0);
-  toast.error(data.message || "Failed to load recipes");
-  return;
-}
-
-const receivedRecipes = data.recipes || [];
-
-setRecipes(receivedRecipes);
-setTotalRecipes(data.totalRecipes || 0);
-setHasSearched(true);
+      setRecipes(receivedRecipes);
+      setTotalRecipes(data.totalRecipes || 0);
+      setHasSearched(true);
 
       if (data.totalRecipes === 0) {
         toast.error("No recipes found");
@@ -82,38 +74,29 @@ setHasSearched(true);
 
   const handleSearch = async (value: string) => {
     setSearchQuery(value);
-
-    await fetchRecipes({
-      query: value,
-    });
+    await fetchRecipes({ query: value });
   };
 
   const handleCategoryChange = async (value: string) => {
     setSelectedCategory(value);
-
-    await fetchRecipes({
-      category: value,
-    });
+    await fetchRecipes({ category: value });
   };
 
   const handleIngredientChange = async (value: string) => {
     setSelectedIngredient(value);
-
-    await fetchRecipes({
-      ingredient: value,
-    });
+    await fetchRecipes({ ingredient: value });
   };
 
- const handleResetFilters = async () => {
-  setSelectedCategory("");
-  setSelectedIngredient("");
+  const handleResetFilters = async () => {
+    setSelectedCategory("");
+    setSelectedIngredient("");
 
-  await fetchRecipes({
-    query: searchQuery,
-    category: "",
-    ingredient: "",
-  });
-};
+    await fetchRecipes({
+      query: searchQuery,
+      category: "",
+      ingredient: "",
+    });
+  };
 
   const shouldShowNoMatch = !isLoading && hasSearched && recipes.length === 0;
 
@@ -133,11 +116,11 @@ setHasSearched(true);
 
         {isLoading && <p>Loading...</p>}
 
-{shouldShowNoMatch && <p>No recipes found</p>}
+        {shouldShowNoMatch && <p>No recipes found</p>}
 
-{!isLoading && recipes.length > 0 && (
-  <RecipesList recipes={recipes} />
-)}
+        {!isLoading && recipes.length > 0 && (
+          <RecipesList recipes={recipes} />
+        )}
       </section>
     </main>
   );
