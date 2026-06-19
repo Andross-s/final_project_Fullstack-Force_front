@@ -7,12 +7,22 @@ export const nextServer = axios.create({
 
 if (process.env.NODE_ENV === 'development') {
   nextServer.interceptors.request.use(config => {
+    let logData = config.data;
+
+    if (logData && typeof logData === 'object') {
+      logData = { ...logData };
+      if ('password' in logData) {
+        logData.password = '********';
+      }
+    }
+
     console.log(
       '[API] Request:',
       config.method,
       `${config.baseURL ?? ''}${config.url ?? ''}`,
-      config.data ?? ''
+      logData ?? ''
     );
+
     return config;
   });
 
@@ -22,6 +32,12 @@ if (process.env.NODE_ENV === 'development') {
       return res;
     },
     err => {
+      const status = err?.response?.status;
+      const url = err?.config?.url;
+      if (status === 401 && url?.includes('/api/auth/refresh')) {
+        console.warn('[API] No active session found (401 Refresh skipped)');
+        return Promise.reject(err);
+      }
       console.error(
         '[API] Error:',
         err?.response?.status,

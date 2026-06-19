@@ -1,18 +1,18 @@
-import { ProfileNavigation } from "@/components/profile/ProfileNavigation/ProfileNavigation";
-import RecipesList from "@/components/recipes/RecipesList/RecipesList";
-import { LoadMoreBtn } from "@/components/recipes/LoadMoreBtn/LoadMoreBtn";
-import styles from "./page.module.css";
+import { ProfileNavigation } from '@/components/profile/ProfileNavigation/ProfileNavigation';
+import RecipesList from '@/components/recipes/RecipesList/RecipesList';
+import { LoadMoreBtn } from '@/components/recipes/LoadMoreBtn/LoadMoreBtn';
+import styles from './page.module.css';
 
-export const dynamic = "force-dynamic";
+export const dynamic = 'force-dynamic';
 
 const recipes = [
   {
-    _id: "1",
-    title: "Test recipe",
-    description: "Recipe description",
+    _id: '1',
+    title: 'Test recipe',
+    description: 'Recipe description',
     time: 30,
     calories: 250,
-    thumb: "/default-image-desktop.jpg",
+    thumb: '/default-image-desktop.jpg',
   },
 ];
 

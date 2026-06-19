@@ -13,6 +13,11 @@ export default function AuthProvider({ children }: AuthProviderProps) {
 
   useEffect(() => {
     const restoreSession = async () => {
+      const storedUserId = localStorage.getItem('userId');
+      if (!storedUserId) {
+        clearIsAuthenticated();
+        return;
+      }
       try {
         const refreshData = await refreshSession();
         const userId = refreshData?.user?._id || refreshData?._id || localStorage.getItem('userId');
