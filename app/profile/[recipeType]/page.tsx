@@ -1,14 +1,13 @@
-
 'use client'
-import styles from './page.module.css'
- 
+
 import { ProfileNavigation } from '@/components/profile/ProfileNavigation/ProfileNavigation';
 import { RecipesList } from '@/components/recipes/RecipesList/RecipesList';
 import { LoadMoreBtn } from '@/components/recipes/LoadMoreBtn/LoadMoreBtn';
 
+import styles from './page.module.css'
 
 const mockRecipes = [
-   {
+  {
     _id: '1',
     name: 'Classic French Omelette',
     description: 'A soft, creamy classic with butter and eggs.',
@@ -108,43 +107,25 @@ const mockRecipes = [
 
 export default function ProfilePage() {
   return (
+    <main className={styles.container}>
+      <h1 className={styles.profileTitle}>My profile</h1>
 
-<div className={styles.container}>
-     <h1 className={styles.profileTitle}>My profile</h1>
-          
-<ProfileNavigation />
+      <ProfileNavigation />
 
-  <div className={styles.profileInfo}>         
-   
-    <p className={styles.ProfilePage}>96 recipes</p>
-{/* <div className={styles.filters}>
-<button className={styles.resetBtn}>Reset filters</button>
-        <select className={styles.filterSelect}>
-          <option>Category</option>
-           <option>Breakfast</option>
-            <option>Lunch</option>
-            <option>Dinner</option>
-            <option>Dessert</option>
-        </select>
-        <select className={styles.filterSelect}>
-          <option>Ingredient</option>
-            <option>Eggs</option>
-            <option>Meat</option>
-            <option>Vegetables</option>
-            <option>Cheese</option>
-        </select>
-</div> */}
-  </div>
+      <div className={styles.profileInfo}>
+        <p className={styles.recipesCount}>
+          {mockRecipes.length} recipes
+        </p>
+      </div>
 
+      <div className={styles.profileRecipes}>
+        <RecipesList recipes={mockRecipes} type="own" />
 
-<div className={styles.profileRecipes}>
-      <RecipesList recipes={mockRecipes} type="own" />
-      <LoadMoreBtn onClick={() => {}} isLoading={false} />
-</div>
-
- 
-</div>
+        <LoadMoreBtn
+          onClick={() => {}}
+          isLoading={false}
+        />
+      </div>
+    </main>
   );
 }
-
-
