@@ -63,13 +63,15 @@ const RegistrationForm = () => {
     const handleSubmit = async (
         values: RegisterFormValues,
         actions: FormikHelpers<RegisterFormValues>
-    ) => {
-
-        const {confirmPassword, ...payload} = values;
-
-        mutation.mutate(payload);
-        actions.setSubmitting(false);
-    };
+        ) => {
+        const payload = {
+            name: values.username,
+            email: values.email,
+            password: values.password,
+         };
+            mutation.mutate(payload);
+            actions.setSubmitting(false);
+        };
 
 
     return (
