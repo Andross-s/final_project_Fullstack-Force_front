@@ -5,6 +5,7 @@ import { parse } from 'cookie';
 import { isAxiosError } from 'axios';
 import { logErrorResponse } from '../../_utils/utils';
 
+// Логін: проксує запит на бекенд і прокидає його cookies у браузер
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
@@ -15,15 +16,27 @@ export async function POST(req: NextRequest) {
 
     if (setCookie) {
       const cookieArray = Array.isArray(setCookie) ? setCookie : [setCookie];
+      // ФІКС: раніше прокидались лише accessToken/refreshToken — sessionId губився,
+      // через що бекенд відхиляв усі подальші авторизовані запити (401).
+      // Тепер прокидаємо ВСІ cookie, що прислав бекенд, по їх реальній назві.
       for (const cookieStr of cookieArray) {
+        const [nameValue] = cookieStr.split(';');
+        const separatorIndex = nameValue.indexOf('=');
+        const name = nameValue.slice(0, separatorIndex).trim();
+        // ФІКС: значення декодуємо, бо cookieStore.set() сам кодує його при відповіді —
+        // без decode виходило подвійне URL-кодування і бекенд не міг розпарсити sessionId (500).
+        const value = decodeURIComponent(nameValue.slice(separatorIndex + 1).trim());
+
         const parsed = parse(cookieStr);
         const options = {
           expires: parsed.Expires ? new Date(parsed.Expires) : undefined,
           path: parsed.Path,
-          maxAge: Number(parsed['Max-Age']),
+          maxAge: parsed['Max-Age'] ? Number(parsed['Max-Age']) : undefined,
+          httpOnly: true,
+          secure: process.env.NODE_ENV === 'production',
         };
-        if (parsed.accessToken) cookieStore.set('accessToken', parsed.accessToken, options);
-        if (parsed.refreshToken) cookieStore.set('refreshToken', parsed.refreshToken, options);
+
+        cookieStore.set(name, value, options);
       }
 
       return NextResponse.json(apiRes.data, { status: apiRes.status });

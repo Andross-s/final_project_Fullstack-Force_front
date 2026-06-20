@@ -2,14 +2,19 @@
 import React, { useEffect } from 'react';
 import { refreshSession, getUserById } from '../../lib/api/client';
 import { useAuthStore } from '../../stores/authStore';
+import { useFavoritesStore } from '../../stores/favoritesStore';
 
 type AuthProviderProps = {
   children: React.ReactNode;
 };
 
+// Відновлює сесію користувача при завантаженні застосунку (через cookies)
 export default function AuthProvider({ children }: AuthProviderProps) {
   const setUser = useAuthStore(state => state.setUser);
   const clearIsAuthenticated = useAuthStore(state => state.clearIsAuthenticated);
+  // ДОДАНО: підвантажуємо список обраних рецептів одразу після відновлення сесії,
+  // інакше іконка favorite завжди показувала "не обране", навіть якщо рецепт уже збережений.
+  const loadFavorites = useFavoritesStore(state => state.loadFavorites);
 
   useEffect(() => {
     const restoreSession = async () => {
@@ -28,6 +33,8 @@ export default function AuthProvider({ children }: AuthProviderProps) {
           if (userData) {
             setUser(userData);
             localStorage.setItem('userId', userId);
+            // ДОДАНО: гідруємо стор обраних рецептів даними з бекенду
+            void loadFavorites();
             return;
           }
         }
@@ -42,7 +49,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
     };
 
     void restoreSession();
-  }, [setUser, clearIsAuthenticated]);
+  }, [setUser, clearIsAuthenticated, loadFavorites]);
 
   return <>{children}</>;
 }

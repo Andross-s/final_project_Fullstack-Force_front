@@ -9,16 +9,20 @@ import css from './LoginForm.module.css';
 import { useRouter } from 'next/navigation';
 import { login } from '../../../lib/api/client';
 import { useAuthStore } from '../../../stores/authStore';
+import { useFavoritesStore } from '../../../stores/favoritesStore';
 import Image from 'next/image';
 import { RegisterLoginData } from '@/types/user';
 import { validationLoginSchema } from '../LoginForm/LoginFormValidation';
 import { AxiosError } from 'axios';
 
+// Форма логіну
 const Login = () => {
   const router = useRouter();
   const fieldId = useId();
   const [showPassword, setShowPassword] = useState(false);
   const setUser = useAuthStore(state => state.setUser);
+  // ДОДАНО: стор обраних рецептів, щоб одразу підвантажити favorites після логіну
+  const loadFavorites = useFavoritesStore(state => state.loadFavorites);
 
   const mutation = useMutation({
     mutationFn: login,
@@ -28,6 +32,8 @@ const Login = () => {
           localStorage.setItem('userId', res._id);
         }
         setUser(res);
+        // ДОДАНО: без цього іконки favorite не відображали реальний стан до перезавантаження сторінки
+        void loadFavorites();
         toast.success('Login successful!');
         router.push('/');
       }
