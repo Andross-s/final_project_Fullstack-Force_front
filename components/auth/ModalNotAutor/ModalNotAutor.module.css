@@ -1,0 +1,91 @@
+.backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  padding: 56px 24px 32px;
+  width: 362px;
+  max-width: 90%;
+  background: #FAF3E0;
+  border-radius: 32px;
+}
+
+.closeModalBtn {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.title {
+  width: 100%;
+  font-weight: 600;
+  font-size: 32px;
+  line-height: 39px;
+  text-align: center;
+  color: #000;
+}
+
+.text {
+  width: 100%;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 155%;
+  text-align: center;
+  color: #000;
+}
+
+.actions {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  width: 100%;
+}
+
+.actionBtn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 54px;
+  width: 100%;
+  font-weight: 600;
+  font-size: 18px;
+  border-radius: 8px;
+  background: #9B6C43;
+  color: #fff;
+}
+
+.actionBtnSecondary {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 54px;
+  width: 100%;
+  font-weight: 600;
+  font-size: 18px;
+  border-radius: 8px;
+  border: 1px solid #000;
+  background: transparent;
+  color: #000;
+}

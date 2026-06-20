@@ -1,8 +1,10 @@
 'use client';
 
+import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import BookmarkIcon from '@/components/icon/bookmark-alternative.svg';
+import ModalNotAutor from '@/components/auth/ModalNotAutor/ModalNotAutor';
 import { useAuthStore } from '@/stores/authStore';
 import { useFavoritesStore } from '@/stores/favoritesStore';
 import styles from './RecipeCard.module.css';
@@ -16,6 +18,7 @@ type RecipeCardProps = {
   thumb: string;
 };
 
+// Картка рецепта на MainPage
 export default function RecipeCard({
   id,
   title,
@@ -30,6 +33,19 @@ export default function RecipeCard({
   const isFavorite = useFavoritesStore(state => state.isFavorite);
 
   const fav = isFavorite(id);
+
+  // ДОДАНО: локальний стан модалки "потрібна авторизація" для гостей
+  const [showAuthModal, setShowAuthModal] = useState(false);
+
+  // ФІКС: раніше для незалогіненого користувача клік на favorite просто нічого не робив
+  // (`user && toggleFavorite(...)`). Тепер показуємо модалку авторизації.
+  const handleFavoriteClick = () => {
+    if (!user) {
+      setShowAuthModal(true);
+      return;
+    }
+    toggleFavorite(id);
+  };
 
   return (
     <div className={styles.card}>
@@ -53,11 +69,14 @@ export default function RecipeCard({
         </div>
 
         <div className={styles.buttons}>
-          <button className={styles.learnMore}>Learn More</button>
+          {/* ФІКС: раніше це був звичайний <button> без onClick — нікуди не вів */}
+          <Link href={`/recipes/${id}`} className={styles.learnMore}>
+            Learn More
+          </Link>
 
           <button
             className={styles.favoriteBtn}
-            onClick={() => user && toggleFavorite(id, user._id)}
+            onClick={handleFavoriteClick}
             aria-label="Toggle favorite"
             style={{
               color: fav ? 'var(--light-brown)' : '#999',
@@ -68,6 +87,10 @@ export default function RecipeCard({
           </button>
         </div>
       </div>
+
+      {showAuthModal && (
+        <ModalNotAutor onClose={() => setShowAuthModal(false)} />
+      )}
     </div>
   );
 }

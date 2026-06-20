@@ -18,6 +18,7 @@ type IngredientItem = {
   amount: string;
 };
 
+// Сторінка деталей рецепта (раніше не відмальовувалась через хибний шлях запиту в useRecipe)
 export default function RecipeDetailsPage() {
   const { id } = useParams();
  const recipeId = Array.isArray(id) ? id[0] : id;
@@ -27,7 +28,9 @@ const { data, isLoading, isError } = useRecipe(recipeId ?? "");
   if (isLoading) return <RecipeDetailsSkeleton />;
   if (isError) return <p className={styles.error}>Помилка завантаження рецепта</p>;
 
-  const recipe = data.recipe;
+  // ФІКС: бекенд повертає сам рецепт без обгортки `{ recipe: {...} }`,
+  // тому раніше `data.recipe` було undefined і сторінка падала.
+  const recipe = data;
 
   return (
     <div className={styles.wrapper}>
