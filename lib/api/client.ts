@@ -32,6 +32,6 @@ export const getUserById = async (userId: string) => {
 };
 
 export const logout = async () => {
-  const { data } = await nextServer.post(`/api/auth/logout`);
-  return data;
+  const res = await nextServer.post('/api/auth/logout');
+  return res.data;
 };
