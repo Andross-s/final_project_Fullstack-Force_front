@@ -16,15 +16,10 @@ export async function POST(req: NextRequest) {
 
     if (setCookie) {
       const cookieArray = Array.isArray(setCookie) ? setCookie : [setCookie];
-      // ФІКС: раніше прокидались лише accessToken/refreshToken — sessionId губився,
-      // через що бекенд відхиляв усі подальші авторизовані запити (401).
-      // Тепер прокидаємо ВСІ cookie, що прислав бекенд, по їх реальній назві.
       for (const cookieStr of cookieArray) {
         const [nameValue] = cookieStr.split(';');
         const separatorIndex = nameValue.indexOf('=');
         const name = nameValue.slice(0, separatorIndex).trim();
-        // ФІКС: значення декодуємо, бо cookieStore.set() сам кодує його при відповіді —
-        // без decode виходило подвійне URL-кодування і бекенд не міг розпарсити sessionId (500).
         const value = decodeURIComponent(nameValue.slice(separatorIndex + 1).trim());
 
         const parsed = parse(cookieStr);

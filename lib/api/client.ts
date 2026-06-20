@@ -30,3 +30,8 @@ export const getUserById = async (userId: string) => {
   const { data } = await nextServer.get(`/api/user/${userId}`);
   return data.data;
 };
+
+export const logout = async () => {
+  const { data } = await nextServer.post(`/api/auth/logout`);
+  return data;
+};
