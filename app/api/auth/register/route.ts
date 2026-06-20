@@ -1,30 +1,22 @@
-import { NextResponse } from 'next/server';
-import { cookies } from 'next/headers';
+import { NextRequest, NextResponse } from 'next/server';
 import { api } from '../../api';
+import { cookies } from 'next/headers';
 import { parse } from 'cookie';
 import { isAxiosError } from 'axios';
 import { logErrorResponse } from '../../_utils/utils';
 
-// Оновлення сесії: відправляє поточні cookies бекенду й оновлює їх у браузері
-export async function POST() {
+// Реєстрація: проксує запит на бекенд і прокидає його cookies у браузер
+export async function POST(req: NextRequest) {
   try {
+    const body = await req.json();
+    const apiRes = await api.post('/api/auth/register', body);
+
     const cookieStore = await cookies();
-
-    const apiRes = await api.post(
-      '/api/auth/refresh',
-      {},
-      {
-        headers: {
-          Cookie: cookieStore.toString(),
-        },
-      }
-    );
-
     const setCookie = apiRes.headers['set-cookie'];
 
     if (setCookie) {
       const cookieArray = Array.isArray(setCookie) ? setCookie : [setCookie];
-      // ФІКС: те саме, що й у login — прокидаємо ВСІ cookie (включно з sessionId),
+      // ФІКС: те саме, що й у login/refresh — прокидаємо ВСІ cookie (включно з sessionId),
       // а не лише accessToken/refreshToken.
       for (const cookieStr of cookieArray) {
         const [nameValue] = cookieStr.split(';');
@@ -36,7 +28,7 @@ export async function POST() {
         const parsed = parse(cookieStr);
         const options = {
           expires: parsed.Expires ? new Date(parsed.Expires) : undefined,
-          path: parsed.Path || '/',
+          path: parsed.Path,
           maxAge: parsed['Max-Age'] ? Number(parsed['Max-Age']) : undefined,
           httpOnly: true,
           secure: process.env.NODE_ENV === 'production',
@@ -44,9 +36,11 @@ export async function POST() {
 
         cookieStore.set(name, value, options);
       }
+
+      return NextResponse.json(apiRes.data, { status: apiRes.status });
     }
 
-    return NextResponse.json({ success: true }, { status: 200 });
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   } catch (error) {
     if (isAxiosError(error)) {
       const serverStatus = error.response?.status;

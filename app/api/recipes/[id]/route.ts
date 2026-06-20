@@ -5,19 +5,17 @@ import { isAxiosError } from 'axios';
 
 type RouteContext = {
   params: Promise<{
-    userId: string;
+    id: string;
   }>;
 };
 
-// Отримати користувача за id (з прокидкою cookies для авторизації на бекенді)
+// НОВИЙ proxy-route: отримати рецепт за id з бекенду (раніше такого route-хендлера не існувало)
 export async function GET(req: NextRequest, context: RouteContext) {
   try {
-    const { userId } = await context.params;
+    const { id } = await context.params;
     const cookieStore = await cookies();
 
-    // ФІКС: був шлях `/user/${userId}` без префіксу `/api/` → бекенд повертав 404 "Route not found",
-    // через що AuthProvider не міг відновити сесію користувача.
-    const apiRes = await api.get(`/api/user/${userId}`, {
+    const apiRes = await api.get(`/api/recipes/${id}`, {
       headers: {
         Cookie: cookieStore.toString(),
       },

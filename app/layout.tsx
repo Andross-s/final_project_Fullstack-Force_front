@@ -11,6 +11,8 @@ import { useEffect } from "react";
 import { useAuthStore } from "@/stores/authStore";
 import { useFavoritesStore } from "@/stores/favoritesStore";
 
+import AuthProvider from '@/components/AuthProvider/AuthProvider';
+
 const montserrat = Montserrat({
   variable: '--font-montserrat',
   subsets: ['latin', 'cyrillic'],
@@ -44,8 +46,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="uk">
       <body className={`${montserrat.variable} ${dmSans.variable}`}>
         <QueryProvider>
-          <Layout>{children}</Layout>
-          <Toaster position="top-right" />
+          <AuthProvider>
+            <Layout>{children}</Layout>
+            <Toaster position="top-right" />
+          </AuthProvider>
         </QueryProvider>
       </body>
     </html>

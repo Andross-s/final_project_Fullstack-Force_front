@@ -23,12 +23,16 @@ export default function SaveButton({ recipeId }: SaveButtonProps) {
   // Локальний стан для блокування кнопки під час запиту
   const [isProcessing, setIsProcessing] = useState(false);
 
+  // ДОДАНО: локальний стан для модалки "потрібна авторизація"
+  const [showAuthModal, setShowAuthModal] = useState(false);
+
   const fav = isFavorite(recipeId);
 
   const handleClick = async () => {
-    // Якщо користувач не авторизований — відкриваємо модалку
+    // ФІКС: раніше тут був document.body.classList.add("modal-open"),
+    // який нічого не показував (немає обробника цього класу). Тепер реально відкриваємо модалку.
     if (!user) {
-      document.body.classList.add("modal-open");
+      setShowAuthModal(true);
       return;
     }
 
@@ -38,8 +42,8 @@ export default function SaveButton({ recipeId }: SaveButtonProps) {
     try {
       setIsProcessing(true);
 
-      // Відправляємо запит на додавання/видалення з обраного
-      await toggleFavorite(recipeId, user._id);
+      // ФІКС: toggleFavorite більше не приймає userId — бекенд визначає користувача по сесії
+      await toggleFavorite(recipeId);
 
     } finally {
       // Повертаємо кнопку в нормальний стан
@@ -64,7 +68,9 @@ export default function SaveButton({ recipeId }: SaveButtonProps) {
       </button>
 
       {/* Модалка для неавторизованих користувачів */}
-      <ModalNotAutor />
+      {showAuthModal && (
+        <ModalNotAutor onClose={() => setShowAuthModal(false)} />
+      )}
     </>
   );
 }

@@ -1,9 +1,11 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useFavoritesStore } from "@/stores/favoritesStore";
 import { useAuthStore } from "@/stores/authStore";
+import ModalNotAutor from "@/components/auth/ModalNotAutor/ModalNotAutor";
 import styles from "./RecipeCard.module.css";
 
 type Props = {
@@ -15,6 +17,7 @@ type Props = {
   likes?: number;
 };
 
+// Картка рецепта на головній сторінці
 export default function RecipeCard({
   id,
   title,
@@ -29,9 +32,13 @@ export default function RecipeCard({
 
   const active = isFavorite(id);
 
-  const handleFavorite = () => {
+  // локальний стан модалки авторизації
+  const [showAuthModal, setShowAuthModal] = useState(false);
+
+  // клік по кнопці "в обране"
+  const handleFavoriteClick = () => {
     if (!user) {
-      console.warn("User not logged in");
+      setShowAuthModal(true);
       return;
     }
     toggleFavorite(id, user._id);
@@ -39,7 +46,7 @@ export default function RecipeCard({
 
   return (
     <div className={styles.card}>
-      {/* 🖼 Фото */}
+      {/* фото */}
       <div className={styles.imageWrapper}>
         <Image
           src={image}
@@ -49,10 +56,10 @@ export default function RecipeCard({
           sizes="(max-width: 767px) 100vw, (max-width: 1439px) 50vw, 25vw"
         />
 
-        {/* ❤️ Иконка избранного */}
+        {/* кнопка обраного */}
         <button
           className={`${styles.favoriteBtn} ${active ? styles.active : ""}`}
-          onClick={handleFavorite}
+          onClick={handleFavoriteClick}
           aria-label="Toggle favorite"
         >
           <svg viewBox="0 0 24 24">
@@ -66,16 +73,16 @@ export default function RecipeCard({
         </button>
       </div>
 
-      {/* 📄 Контент */}
+      {/* контент */}
       <div className={styles.content}>
         <h3 className={styles.title}>{title}</h3>
         <p className={styles.desc}>{description}</p>
 
         <div className={styles.infoRow}>
-          {/* ⏱ Время */}
+          {/* час */}
           {time && <span className={styles.time}>{time} min</span>}
 
-          {/* 👍 Лайки */}
+          {/* лайки */}
           <span className={styles.likes}>
             <svg
               viewBox="0 0 24 24"
@@ -92,10 +99,16 @@ export default function RecipeCard({
           </span>
         </div>
 
+        {/* кнопка переходу */}
         <Link href={`/recipes/${id}`} className={styles.learnMore}>
           Learn More
         </Link>
       </div>
+
+      {/* модалка авторизації */}
+      {showAuthModal && (
+        <ModalNotAutor onClose={() => setShowAuthModal(false)} />
+      )}
     </div>
   );
 }

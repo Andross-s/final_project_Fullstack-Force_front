@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -10,6 +10,16 @@ import RecipesList from "../components/recipes/RecipesList/RecipesList";
 import styles from "./page.module.css";
 import toast from "react-hot-toast";
 
+// тип відповіді від API
+type RecipesResponse = {
+  recipes?: any[];
+  data?: any[] | { recipes?: any[] };
+  totalRecipes?: number;
+  totalAll?: number;
+  totalCount?: number;
+};
+
+// стан фільтрів
 type FiltersState = {
   category: string;
   ingredient: string;
@@ -21,13 +31,12 @@ export default function HomePage() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const [recipes, setRecipes] = useState([]);
+  const [recipes, setRecipes] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  const [page, setPage] = useState(1);
-  const [hasMore, setHasMore] = useState(false);
+  const [categories, setCategories] = useState<any[]>([]);
+  const [ingredients, setIngredients] = useState<any[]>([]);
 
-  // 🧩 Локальні фільтри
   const [filters, setFilters] = useState<FiltersState>({
     category: "",
     ingredient: "",
@@ -35,14 +44,7 @@ export default function HomePage() {
     maxCalories: "",
   });
 
-  const [searchQuery, setSearchQuery] = useState("");
-
-  // 🧩 Категорії
-  const [categories, setCategories] = useState([]);
-
-  // ============================================================
-  // 📌 1. Завантажуємо категорії
-  // ============================================================
+  // 1. Завантажуємо категорії
   useEffect(() => {
     const loadCategories = async () => {
       try {
@@ -53,160 +55,103 @@ export default function HomePage() {
         console.error("Categories fetch error:", err);
       }
     };
-
     loadCategories();
   }, []);
 
-  // ============================================================
-  // 📌 2. ЧИТАЄМО ФІЛЬТРИ З URL ПРИ ЗАВАНТАЖЕННІ
-  // ============================================================
+  // 2. Завантажуємо інгредієнти
   useEffect(() => {
-    const initialFilters: FiltersState = {
-      category: searchParams.get("category") || "",
-      ingredient: searchParams.get("ingredient") || "",
-      maxTime: searchParams.get("maxTime") || "",
-      maxCalories: searchParams.get("maxCalories") || "",
+    const loadIngredients = async () => {
+      try {
+        const res = await fetch("/api/ingredients");
+        const data = await res.json();
+        setIngredients(data || []);
+      } catch (err) {
+        console.error("Ingredients fetch error:", err);
+      }
     };
-
-    const initialSearch = searchParams.get("search") || "";
-
-    setFilters(initialFilters);
-    setSearchQuery(initialSearch);
-
-    fetchRecipes(1, initialFilters, initialSearch);
+    loadIngredients();
   }, []);
 
-  // ============================================================
-  // 📌 3. ОНОВЛЮЄМО URL ПРИ ЗМІНІ ФІЛЬТРІВ
-  // ============================================================
-  const updateURL = (
-    pageValue: number,
-    filters: FiltersState,
-    search: string,
-  ) => {
+  // 3. Читаємо фільтри з URL при завантаженні
+  useEffect(() => {
+    const category = searchParams.get("category") || "";
+    const ingredient = searchParams.get("ingredient") || "";
+    const maxTime = searchParams.get("maxTime") || "";
+    const maxCalories = searchParams.get("maxCalories") || "";
+
+    setFilters({
+      category,
+      ingredient,
+      maxTime,
+      maxCalories,
+    });
+  }, [searchParams]);
+
+  // 4. Завантажуємо рецепти при зміні фільтрів
+  useEffect(() => {
+    const loadRecipes = async () => {
+      setIsLoading(true);
+      try {
+        const query = new URLSearchParams();
+
+        if (filters.category) query.set("category", filters.category);
+        if (filters.ingredient) query.set("ingredient", filters.ingredient);
+        if (filters.maxTime) query.set("maxTime", filters.maxTime);
+        if (filters.maxCalories) query.set("maxCalories", filters.maxCalories);
+
+        const res = await fetch(`/api/recipes?${query.toString()}`);
+        const data: RecipesResponse = await res.json();
+
+        const list =
+          data.recipes ||
+          data.data ||
+          data.totalRecipes ||
+          data.totalAll ||
+          data.totalCount ||
+          [];
+
+        setRecipes(Array.isArray(list) ? list : list.recipes || []);
+      } catch (err) {
+        console.error("Recipes fetch error:", err);
+        toast.error("Помилка завантаження рецептів");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadRecipes();
+  }, [filters]);
+
+  // 5. Оновлюємо URL при зміні фільтрів
+  const updateFilters = (newFilters: Partial<FiltersState>) => {
+    const updated = { ...filters, ...newFilters };
+    setFilters(updated);
+
     const params = new URLSearchParams();
 
-    if (search) params.set("search", search);
-    if (filters.category) params.set("category", filters.category);
-    if (filters.ingredient) params.set("ingredient", filters.ingredient);
-    if (filters.maxTime) params.set("maxTime", filters.maxTime);
-    if (filters.maxCalories) params.set("maxCalories", filters.maxCalories);
+    if (updated.category) params.set("category", updated.category);
+    if (updated.ingredient) params.set("ingredient", updated.ingredient);
+    if (updated.maxTime) params.set("maxTime", updated.maxTime);
+    if (updated.maxCalories) params.set("maxCalories", updated.maxCalories);
 
-    params.set("page", String(pageValue));
-
-    router.replace(`/?${params.toString()}`);
-  };
-
-  // ============================================================
-  // 📌 4. ЗАПИТ НА БЕКЕНД
-  // ============================================================
-  const fetchRecipes = async (
-    pageValue: number,
-    filtersValue: FiltersState,
-    searchValue: string,
-  ) => {
-    try {
-      setIsLoading(true);
-
-      const params = new URLSearchParams();
-
-      if (searchValue) params.set("search", searchValue);
-      if (filtersValue.category) params.set("category", filtersValue.category);
-      if (filtersValue.ingredient)
-        params.set("ingredient", filtersValue.ingredient);
-      if (filtersValue.maxTime) params.set("maxTime", filtersValue.maxTime);
-      if (filtersValue.maxCalories)
-        params.set("maxCalories", filtersValue.maxCalories);
-
-      params.set("page", String(pageValue));
-      params.set("perPage", "12");
-
-      const response = await fetch(`/api/recipes?${params.toString()}`);
-      const data = await response.json();
-
-      if (pageValue === 1) {
-        setRecipes(data.recipes || []);
-      } else {
-        setRecipes((prev) => [...prev, ...(data.recipes || [])]);
-      }
-
-      setHasMore(data.hasMore || false);
-      setPage(pageValue);
-
-      if (!data.recipes || data.recipes.length === 0) {
-        toast.error("No recipes found");
-      }
-    } catch (error) {
-      console.error("Fetch recipes error:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  // ============================================================
-  // 📌 5. Пошук
-  // ============================================================
-  const handleSearch = async (value: string) => {
-    setSearchQuery(value);
-    updateURL(1, filters, value);
-    fetchRecipes(1, filters, value);
-  };
-
-  // ============================================================
-  // 📌 6. Зміна фільтрів
-  // ============================================================
-  const handleFiltersChange = (next: FiltersState) => {
-    setFilters(next);
-  };
-
-  const applyFilters = () => {
-    updateURL(1, filters, searchQuery);
-    fetchRecipes(1, filters, searchQuery);
-  };
-
-  // ============================================================
-  // 📌 7. Load More
-  // ============================================================
-  const loadMore = () => {
-    const nextPage = page + 1;
-    updateURL(nextPage, filters, searchQuery);
-    fetchRecipes(nextPage, filters, searchQuery);
+    router.push(`/?${params.toString()}`);
   };
 
   return (
-    <main className={styles.page}>
-      <section className={styles.searchSection}>
-        <SearchBox onSearch={handleSearch} />
+    <div className={styles.page}>
+      {/* поле пошуку */}
+      <SearchBox />
 
-        <Filters
-          categories={categories}
-          onChange={handleFiltersChange}
-        />
+      {/* фільтри */}
+      <Filters
+        categories={categories}
+        ingredients={ingredients}
+        filters={filters}
+        onChange={updateFilters}
+      />
 
-        <button
-          className={styles.applyButton}
-          onClick={applyFilters}
-          disabled={isLoading}
-        >
-          {isLoading ? "Loading..." : "Apply filters"}
-        </button>
-
-        {recipes.length > 0 && (
-          <>
-            <RecipesList recipes={recipes} />
-
-            {hasMore && (
-              <button
-                className={styles.loadMore}
-                onClick={loadMore}
-                disabled={isLoading}
-              >
-                {isLoading ? "Loading..." : "Load more"}
-              </button>
-            )}
-          </>
-        )}
-      </section>
-    </main>
+      {/* список рецептів */}
+      <RecipesList recipes={recipes} isLoading={isLoading} />
+    </div>
   );
 }

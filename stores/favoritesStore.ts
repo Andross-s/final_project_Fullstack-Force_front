@@ -1,31 +1,30 @@
 import { create } from 'zustand';
-import { User } from '@/types/user';
 import { addFavoriteApi, removeFavoriteApi, getFavoritesApi } from '@/lib/api/favorites';
 
-type FavoriteItem = {
-  _id: string;
-  recipeId: string;
-};
-
 type FavoritesStore = {
-  favorites: FavoriteItem[];
+  favoriteIds: string[];
   isLoading: boolean;
 
-  loadFavorites: (userId: string) => Promise<void>;
-  toggleFavorite: (recipeId: string, userId: string) => Promise<void>;
+  loadFavorites: () => Promise<void>;
+  toggleFavorite: (recipeId: string) => Promise<void>;
   isFavorite: (recipeId: string) => boolean;
 };
 
+// ФІКС: стор раніше зберігав favorites як `{_id, recipeId}[]`, але бекенд повертає:
+// GET — масив повних рецептів (з полем `_id`, без `recipeId`),
+// POST/DELETE — лише `{message}`, без даних рецепта.
+// Через цю невідповідність isFavorite() завжди повертав false, а кнопка "Save"
+// ніколи не перемикалась на "Saved". Тепер зберігаємо просто список id обраних рецептів.
 export const useFavoritesStore = create<FavoritesStore>((set, get) => ({
-  favorites: [],
+  favoriteIds: [],
   isLoading: false,
 
-  /* Завантаження списку обраних рецептів користувача */
-  loadFavorites: async (userId: string) => {
+  /* Завантаження списку обраних рецептів поточного користувача */
+  loadFavorites: async () => {
     set({ isLoading: true });
     try {
-      const data = await getFavoritesApi(userId);
-      set({ favorites: data });
+      const recipes = await getFavoritesApi();
+      set({ favoriteIds: recipes.map((recipe: { _id: string }) => recipe._id) });
     } catch (error) {
       console.error('Помилка завантаження обраних:', error);
     } finally {
@@ -33,22 +32,18 @@ export const useFavoritesStore = create<FavoritesStore>((set, get) => ({
     }
   },
 
-  /* Перемикання стану обраного рецепта */
-  toggleFavorite: async (recipeId: string, userId: string) => {
-    const { favorites } = get();
-    const isFav = favorites.some(f => f.recipeId === recipeId);
+  /* Перемикання стану обраного рецепта (userId більше не потрібен — визначається по сесії) */
+  toggleFavorite: async (recipeId: string) => {
+    const { favoriteIds } = get();
+    const isFav = favoriteIds.includes(recipeId);
 
     try {
       if (isFav) {
-        await removeFavoriteApi(recipeId, userId);
-        set({
-          favorites: favorites.filter(f => f.recipeId !== recipeId),
-        });
+        await removeFavoriteApi(recipeId);
+        set({ favoriteIds: favoriteIds.filter(id => id !== recipeId) });
       } else {
-        const newFav = await addFavoriteApi(recipeId, userId);
-        set({
-          favorites: [...favorites, newFav],
-        });
+        await addFavoriteApi(recipeId);
+        set({ favoriteIds: [...favoriteIds, recipeId] });
       }
     } catch (error) {
       console.error('Помилка оновлення обраного:', error);
@@ -57,6 +52,6 @@ export const useFavoritesStore = create<FavoritesStore>((set, get) => ({
 
   /* Перевірка, чи є рецепт у списку обраних */
   isFavorite: (recipeId: string) => {
-    return get().favorites.some(f => f.recipeId === recipeId);
+    return get().favoriteIds.includes(recipeId);
   },
 }));

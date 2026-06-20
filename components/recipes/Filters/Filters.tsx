@@ -8,8 +8,20 @@ type Category = {
   name: string;
 };
 
+type Ingredient = {
+  _id: string;
+  name: string;
+};
+
 type FiltersProps = {
   categories: Category[];
+  ingredients: Ingredient[];
+  filters: {
+    category: string;
+    ingredient: string;
+    maxTime: string;
+    maxCalories: string;
+  };
   onChange: (filters: {
     category: string;
     ingredient: string;
@@ -18,19 +30,19 @@ type FiltersProps = {
   }) => void;
 };
 
-export default function Filters({ categories, onChange }: FiltersProps) {
-  const [category, setCategory] = useState("");
-  const [ingredient, setIngredient] = useState("");
-  const [maxTime, setMaxTime] = useState("");
-  const [maxCalories, setMaxCalories] = useState("");
+export default function Filters({ categories, ingredients, filters, onChange }: FiltersProps) {
+  const [category, setCategory] = useState(filters.category || "");
+  const [ingredient, setIngredient] = useState(filters.ingredient || "");
+  const [maxTime, setMaxTime] = useState(filters.maxTime || "");
+  const [maxCalories, setMaxCalories] = useState(filters.maxCalories || "");
 
-  // ⏳ Таймер для debounce
+  // таймер для debounce
   const debounceRef = useRef<NodeJS.Timeout | null>(null);
 
-  // 🔄 Оновлення фільтрів
+  // оновлення фільтрів
   const handleChange = (
     field: "category" | "ingredient" | "maxTime" | "maxCalories",
-    value: string,
+    value: string
   ) => {
     if (field === "category") setCategory(value);
     if (field === "ingredient") setIngredient(value);
@@ -44,7 +56,7 @@ export default function Filters({ categories, onChange }: FiltersProps) {
       maxCalories: field === "maxCalories" ? value : maxCalories,
     };
 
-    // 🧠 Debounce тільки для текстових полів
+    // debounce тільки для інгредієнтів
     if (field === "ingredient") {
       if (debounceRef.current) clearTimeout(debounceRef.current);
 
@@ -52,12 +64,11 @@ export default function Filters({ categories, onChange }: FiltersProps) {
         onChange(next);
       }, 350);
     } else {
-      // ⏱ Інші поля — без debounce
       onChange(next);
     }
   };
 
-  // 🔁 Скидання всіх фільтрів
+  // скидання всіх фільтрів
   const handleReset = () => {
     setCategory("");
     setIngredient("");
@@ -74,7 +85,7 @@ export default function Filters({ categories, onChange }: FiltersProps) {
 
   return (
     <div className={styles.filters}>
-      {/* 🏷 Категорія (select) */}
+      {/* категорія */}
       <select
         className={styles.input}
         value={category}
@@ -88,16 +99,21 @@ export default function Filters({ categories, onChange }: FiltersProps) {
         ))}
       </select>
 
-      {/* 🧂 Інгредієнт */}
-      <input
+      {/* інгредієнт */}
+      <select
         className={styles.input}
-        type="text"
-        placeholder="Ingredient name"
         value={ingredient}
         onChange={(e) => handleChange("ingredient", e.target.value)}
-      />
+      >
+        <option value="">All ingredients</option>
+        {ingredients.map((i) => (
+          <option key={i._id} value={i._id}>
+            {i.name}
+          </option>
+        ))}
+      </select>
 
-      {/* ⏱ Макс. час */}
+      {/* макс час */}
       <input
         className={styles.input}
         type="number"
@@ -107,7 +123,7 @@ export default function Filters({ categories, onChange }: FiltersProps) {
         onChange={(e) => handleChange("maxTime", e.target.value)}
       />
 
-      {/* 🔥 Макс. калорії */}
+      {/* макс калорії */}
       <input
         className={styles.input}
         type="number"
@@ -117,7 +133,7 @@ export default function Filters({ categories, onChange }: FiltersProps) {
         onChange={(e) => handleChange("maxCalories", e.target.value)}
       />
 
-      {/* 🔁 Кнопка скидання */}
+      {/* кнопка скидання */}
       <button className={styles.resetBtn} onClick={handleReset}>
         Reset filters
       </button>
