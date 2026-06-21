@@ -2,103 +2,116 @@
 
 import { useState } from "react";
 import styles from "./Filters.module.css";
-import { useCategories, useIngredients } from "@/hooks/useFilters";
-import FilterIcon from "@/components/icon/filter.svg";
-import CloseIcon from "@/components/icon/close.svg";
-
-type FiltersProps = {
-  recipesCount: number;
-  selectedCategory: string;
-  selectedIngredient: string;
-  onCategoryChange: (value: string) => void;
-  onIngredientChange: (value: string) => void;
-  onResetFilters: () => void;
-};
+import useIsMobileOrTablet from "./useIsMobileOrTablet";
+import MobileFilters from "./MobileFilters";
 
 export default function Filters({
-  recipesCount,
-  selectedCategory,
-  selectedIngredient,
-  onCategoryChange,
-  onIngredientChange,
-  onResetFilters,
-}: FiltersProps) {
-  const [isOpen, setIsOpen] = useState(false);
+  categories,
+  ingredients,
+  selectedCategories,
+  selectedIngredients,
+  onCategoriesChange,
+  onIngredientsChange,
+  onReset,
+}) {
+  const isMobile = useIsMobileOrTablet();
+  const [showMobileFilters, setShowMobileFilters] = useState(false);
 
-  const { data: categories = [], isLoading: categoriesLoading } =
-    useCategories();
+  // Захист від undefined під час SSR
+  if (!categories || !Array.isArray(categories)) return null;
+  if (!ingredients || !Array.isArray(ingredients)) return null;
 
-  const { data: ingredients = [], isLoading: ingredientsLoading } =
-    useIngredients();
+  // Десктопна версія
+  if (!isMobile) {
+    return (
+      <div className={styles.wrapper}>
+        <div className={styles.controls}>
 
-  return (
-    <div className={styles.wrapper}>
-      <p className={styles.count}>{recipesCount} recipes</p>
+          {/* Фільтр категорій */}
+          <div className={styles.dropdownWrapper}>
+            <button className={styles.dropdownButton}>Categories</button>
 
-      <button
-        className={styles.mobileButton}
-        type="button"
-        onClick={() => setIsOpen(true)}
-      >
-        Filters
-        <FilterIcon
-          className={`${styles.icon} ${styles.filterIcon}`}
-        />
-      </button>
+            <div className={styles.dropdownMenu}>
+              {categories.map((cat) => (
+                <label key={cat._id} className={styles.checkbox}>
+                  <input
+                    type="checkbox"
+                    checked={selectedCategories.includes(cat._id)}
+                    onChange={() => {
+                      if (selectedCategories.includes(cat._id)) {
+                        onCategoriesChange(
+                          selectedCategories.filter((c) => c !== cat._id)
+                        );
+                      } else {
+                        onCategoriesChange([...selectedCategories, cat._id]);
+                      }
+                    }}
+                  />
+                  {cat.name}
+                </label>
+              ))}
+            </div>
+          </div>
 
-      <div className={`${styles.controls} ${isOpen ? styles.open : ""}`}>
-        <div className={styles.mobileHeader}>
-          <span>Filters</span>
+          {/* Фільтр інгредієнтів */}
+          <div className={styles.dropdownWrapper}>
+            <button className={styles.dropdownButton}>Ingredients</button>
 
-          <button
-            className={styles.closeButton}
-            type="button"
-            onClick={() => setIsOpen(false)}
-          >
-            <CloseIcon
-              className={`${styles.icon} ${styles.closeIcon}`}
-            />
+            <div className={styles.dropdownMenu}>
+              {ingredients.map((ing) => (
+                <label key={ing._id} className={styles.checkbox}>
+                  <input
+                    type="checkbox"
+                    checked={selectedIngredients.includes(ing._id)}
+                    onChange={() => {
+                      if (selectedIngredients.includes(ing._id)) {
+                        onIngredientsChange(
+                          selectedIngredients.filter((i) => i !== ing._id)
+                        );
+                      } else {
+                        onIngredientsChange([...selectedIngredients, ing._id]);
+                      }
+                    }}
+                  />
+                  {ing.name}
+                </label>
+              ))}
+            </div>
+          </div>
+
+          <button className={styles.resetButton} onClick={onReset}>
+            Reset
           </button>
         </div>
-
-        <button
-          className={styles.resetButton}
-          type="button"
-          onClick={onResetFilters}
-        >
-          Reset filters
-        </button>
-
-        <select
-          className={styles.input}
-          value={selectedCategory}
-          onChange={(event) => onCategoryChange(event.target.value)}
-          disabled={categoriesLoading}
-        >
-          <option value="">Category</option>
-
-          {categories.map((category: { _id: string; name: string }) => (
-            <option key={category._id} value={category.name}>
-              {category.name}
-            </option>
-          ))}
-        </select>
-
-        <select
-          className={styles.input}
-          value={selectedIngredient}
-          onChange={(event) => onIngredientChange(event.target.value)}
-          disabled={ingredientsLoading}
-        >
-          <option value="">Ingredient</option>
-
-          {ingredients.map((ingredient: { _id: string; name: string }) => (
-            <option key={ingredient._id} value={ingredient._id}>
-              {ingredient.name}
-            </option>
-          ))}
-        </select>
       </div>
-    </div>
+    );
+  }
+
+  // Мобільна версія
+  return (
+    <>
+      <button
+        className={styles.mobileBtn}
+        onClick={() => setShowMobileFilters(true)}
+      >
+        Filters
+      </button>
+
+      {showMobileFilters && (
+        <MobileFilters
+          categories={categories}
+          ingredients={ingredients}
+          selectedCategories={selectedCategories}
+          selectedIngredients={selectedIngredients}
+          onApply={(cats, ings) => {
+            onCategoriesChange(cats);
+            onIngredientsChange(ings);
+            setShowMobileFilters(false);
+          }}
+          onReset={onReset}
+          onClose={() => setShowMobileFilters(false)}
+        />
+      )}
+    </>
   );
 }

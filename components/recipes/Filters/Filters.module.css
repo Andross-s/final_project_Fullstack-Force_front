@@ -163,5 +163,18 @@
   .controls.open {
     width: 100%;
     max-width: 344px;
+
   }
+.mobileBtn {
+  width: 100%;
+  padding: 14px;
+  border-radius: 12px;
+  background: var(--light-brown);
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  display: block;
+}
+
 }
