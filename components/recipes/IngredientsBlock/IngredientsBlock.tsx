@@ -30,7 +30,7 @@ export default function IngredientsBlock({
   const [ingredientAmount, setIngredientAmount] = useState('');
 
   const handleAdd = () => {
-    // ИСПРАВЛЕНО: Заменено с "!" на "||"
+   
     if (!selectedIngredient || !ingredientAmount.trim()) {
       toast.error('Select ingredient and enter amount');
       return;
@@ -79,7 +79,7 @@ export default function IngredientsBlock({
     );
   };
 
-  // ИСПРАВЛЕНО: Заменено с "!" на "||"
+
   const isAddDisabled =
     !selectedIngredient || !ingredientAmount.trim();
 
