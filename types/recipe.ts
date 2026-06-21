@@ -5,6 +5,7 @@ export interface Ingredient {
 
 export interface SelectedIngredient {
   ingredientId: string;
+  name: string;
   ingredientAmount: string;
 }
 

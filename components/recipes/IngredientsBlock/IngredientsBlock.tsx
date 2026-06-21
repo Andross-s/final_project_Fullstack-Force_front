@@ -15,7 +15,7 @@ import type {
 interface Props {
   ingredients: Ingredient[];
   values: RecipeFormValues;
-  setFieldValue: (field: string, value: unknown) => void;
+  setFieldValue: (field: string, value: RecipeFormValues['ingredients']) => void;
 }
 
 export default function IngredientsBlock({
@@ -29,6 +29,11 @@ export default function IngredientsBlock({
   const handleAdd = () => {
     if (!selectedIngredient || !ingredientAmount.trim()) {
       toast.error('Select ingredient and enter amount');
+      return;
+    }
+
+    if (values.ingredients.length >= 16) {
+      toast.error('Maximum 16 ingredients allowed');
       return;
     }
 
@@ -49,10 +54,14 @@ export default function IngredientsBlock({
 
     const newIngredient: SelectedIngredient = {
       ingredientId: ingredient._id,
-      ingredientAmount,
+      name: ingredient.name,
+      ingredientAmount: ingredientAmount.trim(),
     };
 
-    setFieldValue('ingredients', [...values.ingredients, newIngredient]);
+    setFieldValue('ingredients', [
+      ...values.ingredients,
+      newIngredient,
+    ]);
 
     setSelectedIngredient('');
     setIngredientAmount('');
@@ -61,57 +70,81 @@ export default function IngredientsBlock({
   const removeIngredient = (ingredientId: string) => {
     setFieldValue(
       'ingredients',
-      values.ingredients.filter((i) => i.ingredientId !== ingredientId)
+      values.ingredients.filter(
+        (i) => i.ingredientId !== ingredientId
+      )
     );
   };
+
+  const isAddDisabled =
+    !selectedIngredient || !ingredientAmount.trim();
 
   return (
     <section className={styles.wrapper}>
       <h2 className={styles.title}>Ingredients</h2>
 
       <div className={styles.controls}>
- <select
- value={selectedIngredient}
- onChange={(e) => setSelectedIngredient(e.target.value)}
-  className={styles.select}
+        <select
+          value={selectedIngredient}
+          onChange={(e) => setSelectedIngredient(e.target.value)}
+          className={styles.select}
         >
- <option value="">Select ingredient</option>
- {ingredients.map((i) => (
- <option key={i._id} value={i._id}>
-   {i.name}
- </option>
- ))}
-   </select>
+          <option value="">Select ingredient</option>
 
- <input
- value={ingredientAmount}
- maxLength={10}
-  onChange={(e) => setIngredientAmount(e.target.value)}
- placeholder="Amount"
+          {ingredients.map((i) => (
+            <option key={i._id} value={i._id}>
+              {i.name}
+            </option>
+          ))}
+        </select>
+
+        <input
+          value={ingredientAmount}
+          maxLength={10}
+          onChange={(e) => setIngredientAmount(e.target.value)}
+          placeholder="Amount"
           className={styles.input}
         />
 
-  <button type="button" onClick={handleAdd} className={styles.addBtn}>
+        <button
+          type="button"
+          onClick={handleAdd}
+          className={styles.addBtn}
+          disabled={isAddDisabled}
+        >
           Add ingredient
         </button>
       </div>
 
       <div className={styles.list}>
-        {values.ingredients.map((i, idx) => (
-          <div key={`${i.ingredientId}-${idx}`} className={styles.item}>
-  <span>{i.ingredientAmount}</span>
- <button
-    type="button"
-   onClick={() => removeIngredient(i.ingredientId)}
- className={styles.deleteBtn}
- >
-  ×
+        {values.ingredients.map((i) => (
+          <div
+            key={i.ingredientId}
+            className={styles.item}
+          >
+            <span className={styles.name}>{i.name}</span>
+            <span className={styles.amount}>
+              {i.ingredientAmount}
+            </span>
+
+            <button
+              type="button"
+              onClick={() =>
+                removeIngredient(i.ingredientId)
+              }
+              className={styles.deleteBtn}
+            >
+              ×
             </button>
           </div>
         ))}
       </div>
 
-      <ErrorMessage name="ingredients" component="p" className={styles.error} />
+      <ErrorMessage
+        name="ingredients"
+        component="p"
+        className={styles.error}
+      />
     </section>
   );
 }

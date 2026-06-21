@@ -21,7 +21,8 @@ export const validationSchema = Yup.object({
     .min(1, "Minimum 1 calorie")
     .max(10000, "Maximum 10000 calories"),
 
-  category: Yup.string().required("Category is required"),
+  category: Yup.string()
+    .required("Category is required"),
 
   ingredients: Yup.array()
     .of(
@@ -34,7 +35,7 @@ export const validationSchema = Yup.object({
     )
     .min(2, "Minimum 2 ingredients")
     .max(16, "Maximum 16 ingredients")
-    .required(),
+    .required("Ingredients are required"),
 
   instruction: Yup.string()
     .max(1200, "Maximum 1200 characters")
@@ -42,8 +43,10 @@ export const validationSchema = Yup.object({
 
   recipeImg: Yup.mixed()
     .nullable()
+    .notRequired()
     .test("fileSize", "Image must be less than 2MB", (value) => {
       if (!value) return true;
+
       return value instanceof File && value.size <= 2 * 1024 * 1024;
     })
     .test("fileType", "Only jpg, jpeg, png, webp allowed", (value) => {
@@ -51,7 +54,7 @@ export const validationSchema = Yup.object({
 
       return (
         value instanceof File &&
-        ["image/jpeg", "image/jpg", "image/png", "image/webp"].includes(value.type)
+        ["image/jpeg", "image/png", "image/webp"].includes(value.type)
       );
     }),
 });
