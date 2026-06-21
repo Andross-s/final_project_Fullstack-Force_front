@@ -31,7 +31,7 @@ export default function IngredientsBlock({
 
   const handleAdd = () => {
    
-    if (!selectedIngredient || !ingredientAmount.trim()) {
+    if (!selectedIngredient || ingredientAmount.trim() === '') {
       toast.error('Select ingredient and enter amount');
       return;
     }
@@ -81,7 +81,7 @@ export default function IngredientsBlock({
 
 
   const isAddDisabled =
-    !selectedIngredient || !ingredientAmount.trim();
+    !selectedIngredient || ingredientAmount.trim() === '';
 
   return (
     <section className={styles.wrapper}>
