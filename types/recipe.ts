@@ -5,15 +5,14 @@ export interface Ingredient {
 
 export interface SelectedIngredient {
   ingredientId: string;
-  name: string;
   ingredientAmount: string;
 }
 
 export interface RecipeFormValues {
   name: string;
   descr: string;
-  cookingTime: number | string;
-  cals: number | string;
+  cookingTime: number | "";
+  cals: number | "";
   category: string;
   ingredients: SelectedIngredient[];
   instruction: string;

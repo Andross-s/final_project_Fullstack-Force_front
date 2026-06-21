@@ -54,7 +54,6 @@ export default function IngredientsBlock({
 
     const newIngredient: SelectedIngredient = {
       ingredientId: ingredient._id,
-      name: ingredient.name,
       ingredientAmount: ingredientAmount.trim(),
     };
 
@@ -118,20 +117,20 @@ export default function IngredientsBlock({
 
       <div className={styles.list}>
         {values.ingredients.map((i) => (
-          <div
-            key={i.ingredientId}
-            className={styles.item}
-          >
-            <span className={styles.name}>{i.name}</span>
+          <div key={i.ingredientId} className={styles.item}>
+            <span className={styles.name}>
+              {ingredients.find(
+                (ing) => ing._id === i.ingredientId
+              )?.name}
+            </span>
+
             <span className={styles.amount}>
               {i.ingredientAmount}
             </span>
 
             <button
               type="button"
-              onClick={() =>
-                removeIngredient(i.ingredientId)
-              }
+              onClick={() => removeIngredient(i.ingredientId)}
               className={styles.deleteBtn}
             >
               ×
