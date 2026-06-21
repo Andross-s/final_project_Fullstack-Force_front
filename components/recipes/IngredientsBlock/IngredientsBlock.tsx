@@ -30,7 +30,6 @@ export default function IngredientsBlock({
   const [ingredientAmount, setIngredientAmount] = useState('');
 
   const handleAdd = () => {
-   
     if (!selectedIngredient || ingredientAmount.trim() === '') {
       toast.error('Select ingredient and enter amount');
       return;
@@ -70,6 +69,7 @@ export default function IngredientsBlock({
     setIngredientAmount('');
   };
 
+  // ✅ теперь используется → ошибка исчезает
   const removeIngredient = (ingredientId: string) => {
     setFieldValue(
       'ingredients',
@@ -79,7 +79,6 @@ export default function IngredientsBlock({
     );
   };
 
-
   const isAddDisabled =
     !selectedIngredient || ingredientAmount.trim() === '';
 
@@ -88,61 +87,72 @@ export default function IngredientsBlock({
       <h2 className={styles.title}>Ingredients</h2>
 
       <div className={styles.controls}>
-        <select
-          value={selectedIngredient}
-          onChange={(e) => setSelectedIngredient(e.target.value)}
-          className={styles.select}
-        >
-          <option value="">Select ingredient</option>
+        <div className={styles.nameColumn}>
+          <label className={styles.label}>Name</label>
 
-          {ingredients.map((i) => (
-            <option key={i._id} value={i._id}>
-              {i.name}
-            </option>
+          <select
+            value={selectedIngredient}
+            onChange={(e) => setSelectedIngredient(e.target.value)}
+            className={styles.select}
+          >
+            <option value="">Select ingredient</option>
+
+            {ingredients.map((i) => (
+              <option key={i._id} value={i._id}>
+                {i.name}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className={styles.amountColumn}>
+          <label className={styles.label}>Amount</label>
+
+          <input
+            value={ingredientAmount}
+            maxLength={10}
+            onChange={(e) => setIngredientAmount(e.target.value)}
+            placeholder="Amount"
+            className={styles.input}
+          />
+
+          <button
+            type="button"
+            onClick={handleAdd}
+            className={styles.addBtn}
+            disabled={isAddDisabled}
+          >
+            Add ingredient
+          </button>
+        </div>
+      </div>
+
+      {/* ✅ ВАЖНО: список возвращён — всё как в ТЗ */}
+      {values.ingredients.length > 0 && (
+        <div className={styles.list}>
+          {values.ingredients.map((i) => (
+            <div key={i.ingredientId} className={styles.item}>
+              <span className={styles.name}>
+                {ingredients.find(
+                  (ing) => ing._id === i.ingredientId
+                )?.name}
+              </span>
+
+              <span className={styles.amount}>
+                {i.ingredientAmount}
+              </span>
+
+              <button
+                type="button"
+                onClick={() => removeIngredient(i.ingredientId)}
+                className={styles.deleteBtn}
+              >
+                ×
+              </button>
+            </div>
           ))}
-        </select>
-
-        <input
-          value={ingredientAmount}
-          maxLength={10}
-          onChange={(e) => setIngredientAmount(e.target.value)}
-          placeholder="Amount"
-          className={styles.input}
-        />
-
-        <button
-          type="button"
-          onClick={handleAdd}
-          className={styles.addBtn}
-          disabled={isAddDisabled}
-        >
-          Add ingredient
-        </button>
-      </div>
-
-      <div className={styles.list}>
-        {values.ingredients.map((i) => (
-          <div key={i.ingredientId} className={styles.item}>
-            <span className={styles.name}>
-              {ingredients.find(
-                (ing) => ing._id === i.ingredientId
-              )?.name}
-            </span>
-
-            <span className={styles.amount}>
-              {i.ingredientAmount}
-            </span>
-
-            <button
-              type="button"
-              onClick={() => removeIngredient(i.ingredientId)}
-              className={styles.deleteBtn}
-            >
-              ×
-            </button>
-          </div>
-        ))}
-      </div>
+        </div>
+      )}
 
       <ErrorMessage
         name="ingredients"

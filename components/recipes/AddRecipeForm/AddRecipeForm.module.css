@@ -12,15 +12,27 @@
 }
 
 .sectionTitle {
+    font-size: 32px;
+    font-weight: 700;
+    margin: 0;
+}
+.blockTitle {
     font-size: 20px;
     font-weight: 600;
-    margin-bottom: 20px;
+    color: #050505;
+    margin: 0;
 }
 
 .topSection {
     display: flex;
     flex-direction: column;
     gap: 32px;
+}
+
+.leftColumn {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
 
 .fieldWrapper {
@@ -30,8 +42,9 @@
 }
 
 .fieldWrapper label {
-    font-size: 12px;
-    color: #6f6f6f;
+    font-size: 14px;
+    font-weight: 500;
+    color: #050505;
 }
 
 .row {
@@ -44,12 +57,11 @@
 .textarea,
 .select {
     width: 100%;
-    padding: 12px 16px;
+    padding: 14px 16px;
     border: 1px solid #d9d9d9;
     border-radius: 12px;
     background: #fff;
     font-size: 14px;
-    transition: border-color 0.3s ease;
 }
 
 .input:focus,
@@ -71,7 +83,7 @@
 
 .button {
     width: 100%;
-    height: 48px;
+    height: 52px;
     border: none;
     border-radius: 12px;
     background: #9b6c43;
@@ -91,8 +103,6 @@
     cursor: not-allowed;
 }
 
-/* Tablet */
-
 @media screen and (min-width: 768px) {
     .wrapper {
         padding: 0 32px;
@@ -101,18 +111,7 @@
     .row {
         display: grid;
         grid-template-columns: 1fr 1fr;
-    }
-
-    .sectionTitle {
-        font-size: 22px;
-    }
-}
-
-/* Desktop */
-
-@media screen and (min-width: 1440px) {
-    .wrapper {
-        padding: 0;
+        gap: 16px;
     }
 
     .topSection {
@@ -121,8 +120,10 @@
         gap: 40px;
         align-items: start;
     }
+}
 
-    .sectionTitle {
-        font-size: 24px;
+@media screen and (min-width: 1440px) {
+    .wrapper {
+        padding: 0;
     }
 }

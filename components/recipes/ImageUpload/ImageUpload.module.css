@@ -5,29 +5,30 @@
     gap: 12px;
 }
 
+
 .label {
-    font-size: 14px;
-    font-weight: 500;
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 1.2;
     color: #050505;
 }
 
+
 .uploadArea {
     position: relative;
-
     width: 100%;
-    min-height: 220px;
-
-    border: 2px dashed #d9d9d9;
-    border-radius: 16px;
-
+    aspect-ratio: 1 / 1;
+    max-width: 280px;
+    border: none;
+    border-radius: 24px;
     overflow: hidden;
     cursor: pointer;
-
-    background-color: #fafafa;
-
+    background-color: #c4c4c4;
     display: flex;
     align-items: center;
     justify-content: center;
+    margin: 0 auto;
+    
 }
 
 .input {
@@ -38,37 +39,44 @@
     display: flex;
     justify-content: center;
     align-items: center;
-
     width: 100%;
     height: 100%;
-
-    text-align: center;
     padding: 20px;
 }
 
+
 .placeholderText {
-    font-size: 14px;
-    color: #6f6f6f;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.placeholderText svg,
+.placeholderText img {
+    width: 48px;
+    height: 48px;
+    opacity: 0.4;
+    
 }
 
 .preview {
+    width: 100%;
+    height: 100%;
     object-fit: cover;
 }
 
 .removeBtn {
     width: 100%;
+    max-width: 280px;
     height: 44px;
-
     border: none;
     border-radius: 12px;
-
     background: #ececec;
-
     cursor: pointer;
-
     font-size: 14px;
     font-weight: 500;
-
+    margin: 0 auto;
     transition: opacity 0.3s ease;
 }
 
@@ -79,20 +87,16 @@
 .error {
     color: #d32f2f;
     font-size: 12px;
+    text-align: center;
 }
 
-/* Tablet */
 
 @media screen and (min-width: 768px) {
     .uploadArea {
-        min-height: 280px;
+        max-width: 320px;
     }
-}
 
-/* Desktop */
-
-@media screen and (min-width: 1440px) {
-    .uploadArea {
-        min-height: 340px;
+    .removeBtn {
+        max-width: 320px;
     }
 }
