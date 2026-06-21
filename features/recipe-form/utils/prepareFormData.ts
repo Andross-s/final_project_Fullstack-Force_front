@@ -5,8 +5,11 @@ export const prepareFormData = (values: RecipeFormValues) => {
 
   formData.append("title", values.name);
   formData.append("description", values.descr);
-  formData.append("cookingTime", values.cookingTime);
-  formData.append("calories", values.cals);
+  
+ 
+  formData.append("cookingTime", String(values.cookingTime));
+  formData.append("calories", String(values.cals));
+  
   formData.append("category", values.category);
   formData.append("instructions", values.instruction);
 
