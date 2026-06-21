@@ -123,7 +123,7 @@ export default function AddRecipeForm() {
         <label>Recipe Title</label>
         <Field
           name="name"
-          placeholder="Enter recipe title"
+          placeholder="Enter the name of your recipe"
           className={styles.input}
         />
         <ErrorMessage
@@ -138,7 +138,7 @@ export default function AddRecipeForm() {
         <Field
           as="textarea"
           name="descr"
-          placeholder="Enter recipe description"
+          placeholder="Enter a brief description of your recipe"
           className={styles.textarea}
         />
         <ErrorMessage

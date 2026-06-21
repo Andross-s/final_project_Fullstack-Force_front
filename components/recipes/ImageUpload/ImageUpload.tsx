@@ -19,7 +19,6 @@ export default function ImageUpload({ setFieldValue }: Props) {
 
     if (!file) return;
 
-   
     if (preview) {
       URL.revokeObjectURL(preview);
     }
@@ -39,7 +38,6 @@ export default function ImageUpload({ setFieldValue }: Props) {
 
     setPreview(null);
 
-   
     if (inputRef.current) {
       inputRef.current.value = '';
     }
@@ -55,7 +53,7 @@ export default function ImageUpload({ setFieldValue }: Props) {
 
   return (
     <div className={styles.wrapper}>
-      <p className={styles.label}>Upload photo</p>
+      <p className={styles.label}>Upload Photo</p>
 
       <label className={styles.uploadArea}>
         {preview ? (
@@ -67,9 +65,19 @@ export default function ImageUpload({ setFieldValue }: Props) {
           />
         ) : (
           <div className={styles.placeholder}>
-            <span className={styles.placeholderText}>
-              Upload recipe photo
-            </span>
+            <svg
+              width="64"
+              height="64"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#7F7F7F"
+              strokeWidth="1.2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z" />
+              <circle cx="12" cy="13" r="3" />
+            </svg>
           </div>
         )}
 
