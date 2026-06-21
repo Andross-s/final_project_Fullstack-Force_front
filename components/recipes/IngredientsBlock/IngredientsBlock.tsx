@@ -1,19 +1,24 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { ErrorMessage } from "formik";
-import styles from "./IngredientsBlock.module.css";
+import { useState } from 'react';
+import { ErrorMessage } from 'formik';
+import toast from 'react-hot-toast';
+
+import styles from './IngredientsBlock.module.css';
 
 import type {
   Ingredient,
   RecipeFormValues,
   SelectedIngredient,
-} from "@/types/recipe";
+} from '@/types/recipe';
 
 interface Props {
   ingredients: Ingredient[];
   values: RecipeFormValues;
-  setFieldValue: (field: string, value: unknown) => void;
+  setFieldValue: (
+    field: string,
+    value: RecipeFormValues['ingredients']
+  ) => void;
 }
 
 export default function IngredientsBlock({
@@ -21,80 +26,129 @@ export default function IngredientsBlock({
   values,
   setFieldValue,
 }: Props) {
-  const [selectedIngredient, setSelectedIngredient] = useState("");
-  const [ingredientAmount, setIngredientAmount] = useState("");
+  const [selectedIngredient, setSelectedIngredient] = useState('');
+  const [ingredientAmount, setIngredientAmount] = useState('');
 
   const handleAdd = () => {
-    if (!selectedIngredient || !ingredientAmount) return;
+   
+    if (!selectedIngredient || ingredientAmount.trim() === '') {
+      toast.error('Select ingredient and enter amount');
+      return;
+    }
+
+    if (values.ingredients.length >= 16) {
+      toast.error('Maximum 16 ingredients allowed');
+      return;
+    }
 
     const exists = values.ingredients.some(
       (i) => i.ingredientId === selectedIngredient
     );
 
-    if (exists) return;
+    if (exists) {
+      toast.error('Ingredient already added');
+      return;
+    }
 
-    const ing = ingredients.find((i) => i._id === selectedIngredient);
+    const ingredient = ingredients.find(
+      (i) => i._id === selectedIngredient
+    );
 
-    if (!ing) return;
+    if (!ingredient) return;
 
-    const newItem: SelectedIngredient = {
-      ingredientId: ing._id,
-      name: ing.name,
-      ingredientAmount,
+    const newIngredient: SelectedIngredient = {
+      ingredientId: ingredient._id,
+      ingredientAmount: ingredientAmount.trim(),
     };
 
-    setFieldValue("ingredients", [...values.ingredients, newItem]);
+    setFieldValue('ingredients', [
+      ...values.ingredients,
+      newIngredient,
+    ]);
 
-    setSelectedIngredient("");
-    setIngredientAmount("");
+    setSelectedIngredient('');
+    setIngredientAmount('');
   };
 
-  const remove = (id: string) => {
+  const removeIngredient = (ingredientId: string) => {
     setFieldValue(
-      "ingredients",
-      values.ingredients.filter((i) => i.ingredientId !== id)
+      'ingredients',
+      values.ingredients.filter(
+        (i) => i.ingredientId !== ingredientId
+      )
     );
   };
 
+
+  const isAddDisabled =
+    !selectedIngredient || ingredientAmount.trim() === '';
+
   return (
-    <div className={styles.wrapper}>
-      <h2>Ingredients</h2>
+    <section className={styles.wrapper}>
+      <h2 className={styles.title}>Ingredients</h2>
 
-      <select
-        value={selectedIngredient}
-        onChange={(e) => setSelectedIngredient(e.target.value)}
-      >
-        <option value="">Select</option>
+      <div className={styles.controls}>
+        <select
+          value={selectedIngredient}
+          onChange={(e) => setSelectedIngredient(e.target.value)}
+          className={styles.select}
+        >
+          <option value="">Select ingredient</option>
 
-        {ingredients.map((i) => (
-          <option key={i._id} value={i._id}>
-            {i.name}
-          </option>
+          {ingredients.map((i) => (
+            <option key={i._id} value={i._id}>
+              {i.name}
+            </option>
+          ))}
+        </select>
+
+        <input
+          value={ingredientAmount}
+          maxLength={10}
+          onChange={(e) => setIngredientAmount(e.target.value)}
+          placeholder="Amount"
+          className={styles.input}
+        />
+
+        <button
+          type="button"
+          onClick={handleAdd}
+          className={styles.addBtn}
+          disabled={isAddDisabled}
+        >
+          Add ingredient
+        </button>
+      </div>
+
+      <div className={styles.list}>
+        {values.ingredients.map((i) => (
+          <div key={i.ingredientId} className={styles.item}>
+            <span className={styles.name}>
+              {ingredients.find(
+                (ing) => ing._id === i.ingredientId
+              )?.name}
+            </span>
+
+            <span className={styles.amount}>
+              {i.ingredientAmount}
+            </span>
+
+            <button
+              type="button"
+              onClick={() => removeIngredient(i.ingredientId)}
+              className={styles.deleteBtn}
+            >
+              ×
+            </button>
+          </div>
         ))}
-      </select>
+      </div>
 
-      <input
-        value={ingredientAmount}
-        onChange={(e) => setIngredientAmount(e.target.value)}
-        placeholder="Amount"
+      <ErrorMessage
+        name="ingredients"
+        component="p"
+        className={styles.error}
       />
-
-      <button type="button" onClick={handleAdd}>
-        Add
-      </button>
-
-      {values.ingredients.map((i, index) => (
-        <div key={`${i.ingredientId}-${index}`}>
-          <span>{i.name}</span>
-          <span>{i.ingredientAmount}</span>
-
-          <button type="button" onClick={() => remove(i.ingredientId)}>
-            X
-          </button>
-        </div>
-      ))}
-
-      <ErrorMessage name="ingredients" component="p" />
-    </div>
+    </section>
   );
 }
