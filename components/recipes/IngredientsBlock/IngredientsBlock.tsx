@@ -1,14 +1,16 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { ErrorMessage } from "formik";
-import styles from "./IngredientsBlock.module.css";
+import { useState } from 'react';
+import { ErrorMessage } from 'formik';
+import toast from 'react-hot-toast';
+
+import styles from './IngredientsBlock.module.css';
 
 import type {
   Ingredient,
   RecipeFormValues,
   SelectedIngredient,
-} from "@/types/recipe";
+} from '@/types/recipe';
 
 interface Props {
   ingredients: Ingredient[];
@@ -21,80 +23,95 @@ export default function IngredientsBlock({
   values,
   setFieldValue,
 }: Props) {
-  const [selectedIngredient, setSelectedIngredient] = useState("");
-  const [ingredientAmount, setIngredientAmount] = useState("");
+  const [selectedIngredient, setSelectedIngredient] = useState('');
+  const [ingredientAmount, setIngredientAmount] = useState('');
 
   const handleAdd = () => {
-    if (!selectedIngredient || !ingredientAmount) return;
+    if (!selectedIngredient || !ingredientAmount.trim()) {
+      toast.error('Select ingredient and enter amount');
+      return;
+    }
 
     const exists = values.ingredients.some(
       (i) => i.ingredientId === selectedIngredient
     );
 
-    if (exists) return;
+    if (exists) {
+      toast.error('Ingredient already added');
+      return;
+    }
 
-    const ing = ingredients.find((i) => i._id === selectedIngredient);
+    const ingredient = ingredients.find(
+      (i) => i._id === selectedIngredient
+    );
 
-    if (!ing) return;
+    if (!ingredient) return;
 
-    const newItem: SelectedIngredient = {
-      ingredientId: ing._id,
-      name: ing.name,
+    const newIngredient: SelectedIngredient = {
+      ingredientId: ingredient._id,
       ingredientAmount,
     };
 
-    setFieldValue("ingredients", [...values.ingredients, newItem]);
+    setFieldValue('ingredients', [...values.ingredients, newIngredient]);
 
-    setSelectedIngredient("");
-    setIngredientAmount("");
+    setSelectedIngredient('');
+    setIngredientAmount('');
   };
 
-  const remove = (id: string) => {
+  const removeIngredient = (ingredientId: string) => {
     setFieldValue(
-      "ingredients",
-      values.ingredients.filter((i) => i.ingredientId !== id)
+      'ingredients',
+      values.ingredients.filter((i) => i.ingredientId !== ingredientId)
     );
   };
 
   return (
-    <div className={styles.wrapper}>
-      <h2>Ingredients</h2>
+    <section className={styles.wrapper}>
+      <h2 className={styles.title}>Ingredients</h2>
 
-      <select
-        value={selectedIngredient}
-        onChange={(e) => setSelectedIngredient(e.target.value)}
-      >
-        <option value="">Select</option>
+      <div className={styles.controls}>
+ <select
+ value={selectedIngredient}
+ onChange={(e) => setSelectedIngredient(e.target.value)}
+  className={styles.select}
+        >
+ <option value="">Select ingredient</option>
+ {ingredients.map((i) => (
+ <option key={i._id} value={i._id}>
+   {i.name}
+ </option>
+ ))}
+   </select>
 
-        {ingredients.map((i) => (
-          <option key={i._id} value={i._id}>
-            {i.name}
-          </option>
+ <input
+ value={ingredientAmount}
+ maxLength={10}
+  onChange={(e) => setIngredientAmount(e.target.value)}
+ placeholder="Amount"
+          className={styles.input}
+        />
+
+  <button type="button" onClick={handleAdd} className={styles.addBtn}>
+          Add ingredient
+        </button>
+      </div>
+
+      <div className={styles.list}>
+        {values.ingredients.map((i, idx) => (
+          <div key={`${i.ingredientId}-${idx}`} className={styles.item}>
+  <span>{i.ingredientAmount}</span>
+ <button
+    type="button"
+   onClick={() => removeIngredient(i.ingredientId)}
+ className={styles.deleteBtn}
+ >
+  ×
+            </button>
+          </div>
         ))}
-      </select>
+      </div>
 
-      <input
-        value={ingredientAmount}
-        onChange={(e) => setIngredientAmount(e.target.value)}
-        placeholder="Amount"
-      />
-
-      <button type="button" onClick={handleAdd}>
-        Add
-      </button>
-
-      {values.ingredients.map((i, index) => (
-        <div key={`${i.ingredientId}-${index}`}>
-          <span>{i.name}</span>
-          <span>{i.ingredientAmount}</span>
-
-          <button type="button" onClick={() => remove(i.ingredientId)}>
-            X
-          </button>
-        </div>
-      ))}
-
-      <ErrorMessage name="ingredients" component="p" />
-    </div>
+      <ErrorMessage name="ingredients" component="p" className={styles.error} />
+    </section>
   );
 }
