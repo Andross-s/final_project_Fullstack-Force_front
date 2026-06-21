@@ -218,7 +218,7 @@ export default function AddRecipeForm() {
       as="textarea"
       name="instruction"
       className={styles.textarea}
-      placeholder="Enter cooking instructions"
+      placeholder="Enter a text"
     />
 
     <ErrorMessage
