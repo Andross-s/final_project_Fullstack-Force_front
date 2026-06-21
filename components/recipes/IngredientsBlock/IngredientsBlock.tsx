@@ -15,7 +15,10 @@ import type {
 interface Props {
   ingredients: Ingredient[];
   values: RecipeFormValues;
-  setFieldValue: (field: string, value: RecipeFormValues['ingredients']) => void;
+  setFieldValue: (
+    field: string,
+    value: RecipeFormValues['ingredients']
+  ) => void;
 }
 
 export default function IngredientsBlock({
