@@ -88,61 +88,45 @@ export default function IngredientsBlock({
       <h2 className={styles.title}>Ingredients</h2>
 
       <div className={styles.controls}>
-        <select
-          value={selectedIngredient}
-          onChange={(e) => setSelectedIngredient(e.target.value)}
-          className={styles.select}
-        >
-          <option value="">Select ingredient</option>
+  <div className={styles.nameColumn}>
+    <label className={styles.label}>Name</label>
 
-          {ingredients.map((i) => (
-            <option key={i._id} value={i._id}>
-              {i.name}
-            </option>
-          ))}
-        </select>
+    <select
+      value={selectedIngredient}
+      onChange={(e) => setSelectedIngredient(e.target.value)}
+      className={styles.select}
+    >
+      <option value="">Select ingredient</option>
 
-        <input
-          value={ingredientAmount}
-          maxLength={10}
-          onChange={(e) => setIngredientAmount(e.target.value)}
-          placeholder="Amount"
-          className={styles.input}
-        />
+      {ingredients.map((i) => (
+        <option key={i._id} value={i._id}>
+          {i.name}
+        </option>
+      ))}
+    </select>
+  </div>
 
-        <button
-          type="button"
-          onClick={handleAdd}
-          className={styles.addBtn}
-          disabled={isAddDisabled}
-        >
-          Add ingredient
-        </button>
-      </div>
+  <div className={styles.amountColumn}>
+    <label className={styles.label}>Amount</label>
 
-      <div className={styles.list}>
-        {values.ingredients.map((i) => (
-          <div key={i.ingredientId} className={styles.item}>
-            <span className={styles.name}>
-              {ingredients.find(
-                (ing) => ing._id === i.ingredientId
-              )?.name}
-            </span>
+    <input
+      value={ingredientAmount}
+      maxLength={10}
+      onChange={(e) => setIngredientAmount(e.target.value)}
+      placeholder="Amount"
+      className={styles.input}
+    />
 
-            <span className={styles.amount}>
-              {i.ingredientAmount}
-            </span>
-
-            <button
-              type="button"
-              onClick={() => removeIngredient(i.ingredientId)}
-              className={styles.deleteBtn}
-            >
-              ×
-            </button>
-          </div>
-        ))}
-      </div>
+    <button
+      type="button"
+      onClick={handleAdd}
+      className={styles.addBtn}
+      disabled={isAddDisabled}
+    >
+      Add ingredient
+    </button>
+  </div>
+</div>
 
       <ErrorMessage
         name="ingredients"

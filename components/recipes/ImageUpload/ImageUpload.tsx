@@ -19,6 +19,7 @@ export default function ImageUpload({ setFieldValue }: Props) {
 
     if (!file) return;
 
+   
     if (preview) {
       URL.revokeObjectURL(preview);
     }
