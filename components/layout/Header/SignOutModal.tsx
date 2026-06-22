@@ -6,6 +6,7 @@ import css from './SignOutModal.module.css';
 import Image from 'next/image';
 import { useAuthStore } from '@/stores/authStore';
 import { logout } from '@/lib/api/client';
+import { toast } from 'react-hot-toast';
 
 type Props = {
   onClose: () => void;
@@ -18,12 +19,14 @@ export default function SignOutModal({ onClose }: Props) {
   const handleLogout = async () => {
     try {
       await logout();
+    } catch (error) {
+      console.error('Logout failed', error);
+      toast.error('Logout request failed, but you have been signed out locally.');
+    } finally {
       localStorage.removeItem('userId');
       clearIsAuthenticated();
       onClose();
       router.push('/');
-    } catch (error) {
-      console.error('Logout failed', error);
     }
   };
 

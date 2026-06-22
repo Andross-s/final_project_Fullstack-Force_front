@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { useAuthStore } from '@/stores/authStore';
 
 export const nextServer = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
@@ -26,28 +27,68 @@ if (process.env.NODE_ENV === 'development') {
     return config;
   });
 
-  nextServer.interceptors.response.use(
-    res => {
-      console.log('[API] Response:', res.status, res.config.url, res.data);
-      return res;
-    },
-    err => {
-      const status = err?.response?.status;
-      const url = err?.config?.url;
-      if (status === 401 && url?.includes('/api/auth/refresh')) {
-        console.warn('[API] No active session found (401 Refresh skipped)');
-        return Promise.reject(err);
-      }
-      console.error(
-        '[API] Error:',
-        err?.response?.status,
-        err?.config?.url,
-        err?.response?.data ?? err.message
-      );
-      return Promise.reject(err);
-    }
-  );
+  nextServer.interceptors.response.use(res => {
+    console.log('[API] Response:', res.status, res.config.url, res.data);
+    return res;
+  });
 }
+
+const AUTH_EXCLUDED_PATHS = ['/api/auth/refresh', '/api/auth/login', '/api/auth/register'];
+const isAuthExcluded = (url?: string) =>
+  Boolean(url && AUTH_EXCLUDED_PATHS.some(path => url.includes(path)));
+
+let refreshPromise: Promise<boolean> | null = null;
+function refreshOnce(): Promise<boolean> {
+  if (!refreshPromise) {
+    refreshPromise = nextServer
+      .post('/api/auth/refresh')
+      .then(() => true)
+      .catch(() => false)
+      .finally(() => {
+        refreshPromise = null;
+      });
+  }
+  return refreshPromise;
+}
+
+function clearLocalAuth() {
+  useAuthStore.getState().clearIsAuthenticated();
+  if (typeof window !== 'undefined') {
+    localStorage.removeItem('userId');
+  }
+}
+
+nextServer.interceptors.response.use(
+  res => res,
+  async error => {
+    const status = error?.response?.status;
+    const originalRequest = error?.config;
+    const url: string | undefined = originalRequest?.url;
+
+    if (process.env.NODE_ENV === 'development') {
+      console.error('[API] Error:', status, url, error?.response?.data ?? error.message);
+    }
+
+    if (status !== 401 || isAuthExcluded(url) || originalRequest?._retried) {
+      return Promise.reject(error);
+    }
+
+    const refreshed = await refreshOnce();
+
+    if (refreshed) {
+      originalRequest._retried = true;
+      try {
+        return await nextServer.request(originalRequest);
+      } catch (retryError) {
+        clearLocalAuth();
+        return Promise.reject(retryError);
+      }
+    }
+
+    clearLocalAuth();
+    return Promise.reject(error);
+  }
+);
 
 export interface CheckSession {
   success: boolean;
