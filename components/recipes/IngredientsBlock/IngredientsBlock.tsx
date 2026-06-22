@@ -69,7 +69,6 @@ export default function IngredientsBlock({
     setIngredientAmount('');
   };
 
-  // ✅ теперь используется → ошибка исчезает
   const removeIngredient = (ingredientId: string) => {
     setFieldValue(
       'ingredients',
@@ -127,7 +126,7 @@ export default function IngredientsBlock({
         </div>
       </div>
 
-      {/* ✅ ВАЖНО: список возвращён — всё как в ТЗ */}
+  
       {values.ingredients.length > 0 && (
         <div className={styles.list}>
           {values.ingredients.map((i) => (

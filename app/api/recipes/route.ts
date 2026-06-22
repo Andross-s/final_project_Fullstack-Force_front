@@ -1,6 +1,5 @@
-import { isAxiosError } from "axios";
+
 import { NextRequest, NextResponse } from "next/server";
-import { nextServer as api } from "@/lib/api/api";
 import { cookies } from "next/headers";
 
 
