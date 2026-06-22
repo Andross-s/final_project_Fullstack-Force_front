@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import css from './SignOutModal.module.css';
 import Image from 'next/image';
 import { useAuthStore } from '@/stores/authStore';
@@ -12,6 +13,7 @@ type Props = {
 
 export default function SignOutModal({ onClose }: Props) {
   const clearIsAuthenticated = useAuthStore(state => state.clearIsAuthenticated);
+  const router = useRouter();
 
   const handleLogout = async () => {
     try {
@@ -19,6 +21,7 @@ export default function SignOutModal({ onClose }: Props) {
       localStorage.removeItem('userId');
       clearIsAuthenticated();
       onClose();
+      router.push('/');
     } catch (error) {
       console.error('Logout failed', error);
     }
