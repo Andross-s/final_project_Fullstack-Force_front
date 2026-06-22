@@ -1,7 +1,14 @@
+<<<<<<< HEAD
 "use client";
 
 import RecipeCard from "@/components/recipes/RecipeCard/RecipeCard";
 import styles from "./RecipesList.module.css";
+=======
+'use client';
+
+import RecipeCard from '../RecipeCard/RecipeCard';
+import styles from './RecipesList.module.css';
+>>>>>>> 4a56f07d3a3cffbb4f488624f0be91020a66a7cb
 
 export type RecipeListItem = {
   _id: string;
