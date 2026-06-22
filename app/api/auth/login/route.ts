@@ -5,7 +5,6 @@ import { parse } from 'cookie';
 import { isAxiosError } from 'axios';
 import { logErrorResponse } from '../../_utils/utils';
 
-// Логін: проксує запит на бекенд і прокидає його cookies у браузер
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();

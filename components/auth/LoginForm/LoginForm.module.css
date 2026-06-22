@@ -1,5 +1,6 @@
 .pageWrapper {
   padding-top: 74px;
+  font-family: var(--font-montserrat);
 }
 
 .formContainer {
