@@ -4,11 +4,11 @@ import RecipesSection, {
   FetchRecipesParams,
   FetchRecipesResult,
 } from "@/components/recipes/RecipesSection/RecipesSection";
-import { RecipeListItem } from "@/components/recipes/RecipesList/RecipesList";
+import { Recipe } from "@/types/recipe";
 
 type RecipesResponse = {
-  recipes?: RecipeListItem[];
-  data?: RecipeListItem[] | { recipes?: RecipeListItem[] };
+  recipes?: Recipe[];
+  data?: Recipe[] | { recipes?: Recipe[] };
   totalRecipes?: number;
   total?: number;
   totalCount?: number;
@@ -18,8 +18,8 @@ const normalizeRecipesResponse = (data: RecipesResponse): FetchRecipesResult => 
   const recipes = Array.isArray(data.recipes)
     ? data.recipes
     : Array.isArray(data.data)
-      ? data.data
-      : data.data?.recipes || [];
+    ? data.data
+    : data.data?.recipes || [];
 
   const total =
     data.totalRecipes ?? data.total ?? data.totalCount ?? recipes.length;

@@ -1,21 +1,15 @@
+"use client";
+
 import React from "react";
-import { RecipeCard } from "./RecipeCard";
-import styles from "./RecipeList.module.css";
+import { Recipe } from "@/types/recipe";
+import { RecipeCard } from "../RecipeCard/RecipeCard";
+import styles from "./RecipesList.module.css";
 
-interface Recipe {
-  id: number;
-  title: string;
-  description: string;
-  calories: string;
-  time: number;
-  image: string;
-}
-
-interface RecipeListProps {
+interface RecipesListProps {
   recipes: Recipe[];
 }
 
-export const RecipeList: React.FC<RecipeListProps> = ({ recipes }) => {
+export const RecipesList: React.FC<RecipesListProps> = ({ recipes }) => {
   return (
     <div className={styles.list}>
       {recipes.map((recipe) => (
@@ -23,7 +17,7 @@ export const RecipeList: React.FC<RecipeListProps> = ({ recipes }) => {
           key={recipe.id}
           title={recipe.title}
           description={recipe.description}
-          calories={recipe.calories}
+          calories={String(recipe.calories)}
           time={recipe.time}
           image={recipe.image}
         />

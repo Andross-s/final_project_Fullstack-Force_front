@@ -18,3 +18,12 @@ export interface RecipeFormValues {
   instruction: string;
   recipeImg: File | null;
 }
+
+export interface Recipe {
+  id: string;
+  title: string;
+  description: string;
+  time: number;
+  calories: number;
+  image: string;
+}

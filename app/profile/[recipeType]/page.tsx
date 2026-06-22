@@ -1,7 +1,7 @@
 "use client";
 
 import { ProfileNavigation } from "@/components/profile/ProfileNavigation/ProfileNavigation";
-import RecipesList from "@/components/recipes/RecipesList/RecipesList";
+import { RecipesList } from "@/components/recipes/RecipesList/RecipesList";
 import { LoadMoreBtn } from "@/components/recipes/LoadMoreBtn/LoadMoreBtn";
 
 import { useParams } from "next/navigation";

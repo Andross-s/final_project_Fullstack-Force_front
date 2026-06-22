@@ -2,18 +2,8 @@
 
 import { useEffect, useState } from "react";
 import Filters from "@/components/recipes/Filters/Filters";
-import RecipesList from "@/components/recipes/RecipesList/RecipesList";
-
-type Recipe = {
-  _id: string;
-  title: string;
-  thumb?: string;
-  time?: number;
-  calories?: number;
-  description?: string;
-  categoryId?: string;
-  ingredients?: string[];
-};
+import { RecipesList } from "@/components/recipes/RecipesList/RecipesList";
+import { Recipe } from "@/types/recipe";
 
 export default function RecipesPage() {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
@@ -33,7 +23,16 @@ export default function RecipesPage() {
         const res = await fetch(`/api/recipes?${params.toString()}`);
         const data = await res.json();
 
-        setRecipes(data.recipes || []);
+        const normalized: Recipe[] = (data.recipes || []).map((r: any) => ({
+          id: r._id,
+          title: r.title,
+          description: r.description || "",
+          time: r.time || 0,
+          calories: r.calories || 0,
+          image: r.thumb || "/default-image-desktop.jpg",
+        }));
+
+        setRecipes(normalized);
       } catch (err) {
         console.error("Failed to load data:", err);
       }
@@ -53,8 +52,8 @@ export default function RecipesPage() {
         recipesCount={recipes.length}
         selectedCategory={selectedCategory}
         selectedIngredient={selectedIngredient}
-        onCategoryChange={(value) => setSelectedCategory(value)}
-        onIngredientChange={(value) => setSelectedIngredient(value)}
+        onCategoryChange={setSelectedCategory}
+        onIngredientChange={setSelectedIngredient}
         onResetFilters={handleResetFilters}
       />
 

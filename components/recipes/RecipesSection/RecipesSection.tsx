@@ -5,7 +5,7 @@ import { useInfiniteQuery } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 import { LoadMoreBtn } from '@/components/recipes/LoadMoreBtn/LoadMoreBtn';
-import RecipesList, { RecipeListItem } from '@/components/recipes/RecipesList/RecipesList';
+import { RecipesList } from '@/components/recipes/RecipesList/RecipesList';
 import SearchBox from '@/components/recipes/SearchBox/SearchBox';
 import Filters from '@/components/recipes/Filters/Filters';
 import styles from './RecipesSection.module.css';
@@ -21,14 +21,14 @@ export type FetchRecipesParams = {
 };
 
 export type FetchRecipesResult = {
-  recipes: RecipeListItem[];
+  recipes: any[];
   total: number;
 };
 
 type RecipesSectionProps = {
   title: string;
   fetchRecipes: (params: FetchRecipesParams) => Promise<FetchRecipesResult>;
-  listType?: string; 
+  listType?: string;
 };
 
 export default function RecipesSection({
@@ -63,7 +63,6 @@ export default function RecipesSection({
     initialPageParam: 1,
     getNextPageParam: (lastPage, allPages) => {
       const loaded = allPages.reduce((sum, page) => sum + page.recipes.length, 0);
-
       return loaded < lastPage.total ? allPages.length + 1 : undefined;
     },
   });

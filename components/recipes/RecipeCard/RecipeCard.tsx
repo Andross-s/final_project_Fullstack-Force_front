@@ -1,6 +1,5 @@
 import React from "react";
 import styles from "./RecipeCard.module.css";
-import clockIcon from "../../assets/icons/clock.svg";
 
 interface RecipeCardProps {
   title: string;
@@ -23,7 +22,7 @@ export const RecipeCard: React.FC<RecipeCardProps> = ({
         <img src={image} alt={title} className={styles.image} />
 
         <div className={styles.timeBadge}>
-          <img src={clockIcon} alt="time" className={styles.clockIcon} />
+          <img src="/icons/clock.svg" alt="time" className={styles.clockIcon} />
           <span>{time}</span>
         </div>
       </div>
