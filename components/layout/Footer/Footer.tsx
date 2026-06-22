@@ -12,7 +12,6 @@ type Props = {
 };
 
 export const Footer = ({ isUserAuthorized }: Props) => {
-
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleAccountClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
@@ -39,13 +38,10 @@ export const Footer = ({ isUserAuthorized }: Props) => {
             Recipes
           </Link>
 
-          <Link className={styles['footer-nav-link']} href="/profile" onClick={handleAccountClick}>
+          <Link className={styles['footer-nav-link']} href="/profile/own" onClick={handleAccountClick}>
             Account
           </Link>
-          {isModalOpen && (
-            <ModalAccount onClose={() => setIsModalOpen(false)} />
-          )}
-        
+          {isModalOpen && <ModalAccount onClose={() => setIsModalOpen(false)} />}
         </nav>
       </div>
     </footer>

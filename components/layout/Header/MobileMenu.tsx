@@ -35,7 +35,7 @@ export default function MobileMenu({
           </Link>
 
           {isAuthenticated && (
-            <Link href="/profile" onClick={onClose}>
+            <Link href="/profile/own" onClick={onClose}>
               My Profile
             </Link>
           )}
