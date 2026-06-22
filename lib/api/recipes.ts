@@ -28,3 +28,14 @@ export const getIngredientsApi = async () => {
   const res = await nextServer.get('/api/ingredients');
   return res.data;
 };
+
+/* GET власні рецепти поточного користувача (з пагінацією/фільтрами) */
+export const getOwnRecipesApi = async (params: {
+  page: number;
+  perPage?: number;
+  category?: string;
+  search?: string;
+}) => {
+  const res = await nextServer.get('/api/recipes/own', { params });
+  return res.data;
+};
