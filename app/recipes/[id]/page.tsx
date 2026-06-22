@@ -27,8 +27,9 @@ export default function RecipeDetailsPage() {
   const { id } = useParams();
   const recipeId = Array.isArray(id) ? id[0] : id;
 
-  const { data, isError } = useRecipe(recipeId ?? '');
-  if (isError) return <NotFoundRecipe />;
+  const { data, isLoading, isError } = useRecipe(recipeId ?? '');
+  if (isLoading) return null;
+  if (isError || !data) return <NotFoundRecipe />;
 
   return (
     <div className={styles.wrapper}>
