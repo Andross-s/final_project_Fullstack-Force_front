@@ -7,6 +7,8 @@ import BookmarkIcon from '@/components/icon/bookmark-alternative.svg';
 import ModalNotAutor from '@/components/auth/ModalNotAutor/ModalNotAutor';
 import { useAuthStore } from '@/stores/authStore';
 import { useFavoritesStore } from '@/stores/favoritesStore';
+import { useQueryClient } from '@tanstack/react-query';
+import type { RecipeListItem } from '../RecipesList/RecipesList';
 import styles from './RecipeCard.module.css';
 
 type RecipeCardProps = {
@@ -16,6 +18,7 @@ type RecipeCardProps = {
   time: string;
   calories?: number;
   thumb: string;
+  type?: string;
 };
 
 // Картка рецепта на MainPage
@@ -26,25 +29,47 @@ export default function RecipeCard({
   time,
   calories,
   thumb,
+  type,
 }: RecipeCardProps) {
   const user = useAuthStore(state => state.user);
+  const queryClient = useQueryClient();
 
   const toggleFavorite = useFavoritesStore(state => state.toggleFavorite);
-  const isFavorite = useFavoritesStore(state => state.isFavorite);
-
-  const fav = isFavorite(id);
+  const fav = useFavoritesStore(state =>
+    type === 'favorites' || state.favoriteIds.includes(id)
+  );
 
   // ДОДАНО: локальний стан модалки "потрібна авторизація" для гостей
   const [showAuthModal, setShowAuthModal] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
 
   // ФІКС: раніше для незалогіненого користувача клік на favorite просто нічого не робив
   // (`user && toggleFavorite(...)`). Тепер показуємо модалку авторизації.
-  const handleFavoriteClick = () => {
+  const handleFavoriteClick = async () => {
     if (!user) {
       setShowAuthModal(true);
       return;
     }
-    toggleFavorite(id);
+
+    if (isProcessing) return;
+
+    try {
+      setIsProcessing(true);
+      const wasFavorite = fav;
+      const success = await toggleFavorite(id);
+
+      if (!success) return;
+
+      if (wasFavorite) {
+        queryClient.setQueryData<RecipeListItem[]>(['favorites'], recipes =>
+          recipes?.filter(recipe => recipe._id !== id) ?? []
+        );
+      } else {
+        void queryClient.invalidateQueries({ queryKey: ['favorites'] });
+      }
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
   return (
@@ -77,10 +102,13 @@ export default function RecipeCard({
           <button
             className={styles.favoriteBtn}
             onClick={handleFavoriteClick}
+            disabled={isProcessing}
             aria-label="Toggle favorite"
+            data-active={fav}
             style={{
               color: fav ? 'var(--light-brown)' : '#999',
               borderColor: fav ? 'var(--light-brown)' : 'var(--light-gray)',
+              opacity: isProcessing ? 0.6 : 1,
             }}
           >
             <BookmarkIcon aria-hidden="true" />

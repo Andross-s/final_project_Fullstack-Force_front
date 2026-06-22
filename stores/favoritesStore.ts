@@ -6,7 +6,7 @@ type FavoritesStore = {
   isLoading: boolean;
 
   loadFavorites: () => Promise<void>;
-  toggleFavorite: (recipeId: string) => Promise<void>;
+  toggleFavorite: (recipeId: string) => Promise<boolean>;
   isFavorite: (recipeId: string) => boolean;
 };
 
@@ -34,19 +34,27 @@ export const useFavoritesStore = create<FavoritesStore>((set, get) => ({
 
   /* Перемикання стану обраного рецепта (userId більше не потрібен — визначається по сесії) */
   toggleFavorite: async (recipeId: string) => {
-    const { favoriteIds } = get();
-    const isFav = favoriteIds.includes(recipeId);
+    const isFav = get().favoriteIds.includes(recipeId);
 
     try {
       if (isFav) {
         await removeFavoriteApi(recipeId);
-        set({ favoriteIds: favoriteIds.filter(id => id !== recipeId) });
+        set(state => ({
+          favoriteIds: state.favoriteIds.filter(id => id !== recipeId),
+        }));
       } else {
         await addFavoriteApi(recipeId);
-        set({ favoriteIds: [...favoriteIds, recipeId] });
+        set(state => ({
+          favoriteIds: state.favoriteIds.includes(recipeId)
+            ? state.favoriteIds
+            : [...state.favoriteIds, recipeId],
+        }));
       }
+
+      return true;
     } catch (error) {
       console.error('Помилка оновлення обраного:', error);
+      return false;
     }
   },
 

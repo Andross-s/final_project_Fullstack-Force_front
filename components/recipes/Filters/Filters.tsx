@@ -10,6 +10,7 @@ type FiltersProps = {
   recipesCount: number;
   selectedCategory: string;
   selectedIngredient: string;
+  ingredientValue?: "id" | "name";
   onCategoryChange: (value: string) => void;
   onIngredientChange: (value: string) => void;
   onResetFilters: () => void;
@@ -19,6 +20,7 @@ export default function Filters({
   recipesCount,
   selectedCategory,
   selectedIngredient,
+  ingredientValue = "name",
   onCategoryChange,
   onIngredientChange,
   onResetFilters,
@@ -93,7 +95,10 @@ export default function Filters({
           <option value="">Ingredient</option>
 
           {ingredients.map((ingredient: { _id: string; name: string }) => (
-            <option key={ingredient._id} value={ingredient.name}>
+            <option
+              key={ingredient._id}
+              value={ingredientValue === "id" ? ingredient._id : ingredient.name}
+            >
               {ingredient.name}
             </option>
           ))}

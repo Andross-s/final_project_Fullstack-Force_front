@@ -13,6 +13,10 @@ export type RecipeListItem = {
   cals?: number | string | null;
   thumb?: string;
   recipeImage?: string;
+  category?: string | { _id: string; name?: string };
+  ingredients?: Array<{
+    ingredient?: string | { _id: string; name?: string };
+  }>;
 };
 
 type RecipesListProps = {
@@ -20,7 +24,7 @@ type RecipesListProps = {
   type?: string;
 };
 
-export function RecipesList({ recipes }: RecipesListProps) {
+export function RecipesList({ recipes, type }: RecipesListProps) {
   return (
     <div className={styles.wrapper}>
       <div className={styles.grid}>
@@ -33,6 +37,7 @@ export function RecipesList({ recipes }: RecipesListProps) {
             time={String(recipe.time || recipe.cookingTime || '')}
             calories={typeof recipe.calories === 'number' ? recipe.calories : undefined}
             thumb={recipe.thumb || recipe.recipeImage || ''}
+            type={type}
           />
         ))}
       </div>
