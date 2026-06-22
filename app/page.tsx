@@ -4,22 +4,32 @@ import RecipesSection, {
   FetchRecipesParams,
   FetchRecipesResult,
 } from "@/components/recipes/RecipesSection/RecipesSection";
-import { RecipeListItem } from "@/components/recipes/RecipesList/RecipesList";
+
+// Коментар: локальний тип рецепту, щоб не залежати від RecipesList
+type Recipe = {
+  _id: string;
+  title: string;
+  description: string;
+  time: number;
+  likes: number;
+  image?: string;
+};
 
 type RecipesResponse = {
-  recipes?: RecipeListItem[];
-  data?: RecipeListItem[] | { recipes?: RecipeListItem[] };
+  recipes?: Recipe[];
+  data?: Recipe[] | { recipes?: Recipe[] };
   totalRecipes?: number;
   total?: number;
   totalCount?: number;
 };
 
+// Коментар: нормалізація відповіді від API
 const normalizeRecipesResponse = (data: RecipesResponse): FetchRecipesResult => {
   const recipes = Array.isArray(data.recipes)
     ? data.recipes
     : Array.isArray(data.data)
-      ? data.data
-      : data.data?.recipes || [];
+    ? data.data
+    : data.data?.recipes || [];
 
   const total =
     data.totalRecipes ?? data.total ?? data.totalCount ?? recipes.length;
@@ -27,6 +37,7 @@ const normalizeRecipesResponse = (data: RecipesResponse): FetchRecipesResult => 
   return { recipes, total };
 };
 
+// Коментар: функція для отримання рецептів на головній сторінці
 const fetchHomeRecipes = async ({
   page,
   pageSize,
