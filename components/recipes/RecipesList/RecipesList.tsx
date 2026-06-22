@@ -1,3 +1,5 @@
+'use client';
+
 import RecipeCard from '../RecipeCard/RecipeCard';
 import styles from './RecipesList.module.css';
 
