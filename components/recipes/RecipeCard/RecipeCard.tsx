@@ -1,96 +1,61 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
-import BookmarkIcon from '@/components/icon/bookmark-alternative.svg';
-import ModalNotAutor from '@/components/auth/ModalNotAutor/ModalNotAutor';
-import { useAuthStore } from '@/stores/authStore';
-import { useFavoritesStore } from '@/stores/favoritesStore';
-import styles from './RecipeCard.module.css';
+import styles from "./RecipeCard.module.css";
+import Link from "next/link";
 
-type RecipeCardProps = {
-  id: string;
+type Recipe = {
+  _id: string;
   title: string;
-  description: string;
-  time: string;
+  thumb?: string;
+  time?: number;
   calories?: number;
-  thumb: string;
+  description?: string;
 };
 
-// Картка рецепта на MainPage
-export default function RecipeCard({
-  id,
-  title,
-  description,
-  time,
-  calories,
-  thumb,
-}: RecipeCardProps) {
-  const user = useAuthStore(state => state.user);
+type Props = {
+  recipe: Recipe;
+};
 
-  const toggleFavorite = useFavoritesStore(state => state.toggleFavorite);
-  const isFavorite = useFavoritesStore(state => state.isFavorite);
-
-  const fav = isFavorite(id);
-
-  // ДОДАНО: локальний стан модалки "потрібна авторизація" для гостей
-  const [showAuthModal, setShowAuthModal] = useState(false);
-
-  // ФІКС: раніше для незалогіненого користувача клік на favorite просто нічого не робив
-  // (`user && toggleFavorite(...)`). Тепер показуємо модалку авторизації.
-  const handleFavoriteClick = () => {
-    if (!user) {
-      setShowAuthModal(true);
-      return;
-    }
-    toggleFavorite(id);
-  };
+export default function RecipeCard({ recipe }: Props) {
+  const calories =
+    recipe.calories && recipe.calories > 0 ? recipe.calories : "—";
 
   return (
-    <div className={styles.card}>
+    <li className={styles.card}>
       <div className={styles.imageWrapper}>
-        <Image
-          src={thumb}
-          alt={title}
-          fill
-          className={styles.image}
-          sizes="(max-width: 767px) 100vw, (max-width: 1439px) 50vw, 25vw"
-        />
+        {recipe.thumb && (
+          <img
+            src={recipe.thumb}
+            alt={recipe.title}
+            className={styles.image}
+          />
+        )}
       </div>
 
       <div className={styles.content}>
-        <h3 className={styles.title}>{title}</h3>
-        <p className={styles.description}>{description}</p>
+        <h3 className={styles.title}>{recipe.title}</h3>
 
-        <div className={styles.infoRow}>
-          <span>{time}</span>
-          <span>{calories ? `${calories} kcal` : '—'}</span>
+        {recipe.description && (
+          <p className={styles.description}>{recipe.description}</p>
+        )}
+
+        <div className={styles.metaRow}>
+          <div className={styles.metaGroup}>
+            <span className={styles.metaLabel}>Time</span>
+            <span className={styles.metaValue}>
+              {recipe.time ? `${recipe.time} min` : "—"}
+            </span>
+          </div>
+          <div className={styles.metaGroup}>
+            <span className={styles.metaLabel}>Calories</span>
+            <span className={styles.metaValue}>{calories}</span>
+          </div>
         </div>
 
-        <div className={styles.buttons}>
-          {/* ФІКС: раніше це був звичайний <button> без onClick — нікуди не вів */}
-          <Link href={`/recipes/${id}`} className={styles.learnMore}>
-            Learn More
-          </Link>
-
-          <button
-            className={styles.favoriteBtn}
-            onClick={handleFavoriteClick}
-            aria-label="Toggle favorite"
-            style={{
-              color: fav ? 'var(--light-brown)' : '#999',
-              borderColor: fav ? 'var(--light-brown)' : 'var(--light-gray)',
-            }}
-          >
-            <BookmarkIcon aria-hidden="true" />
-          </button>
-        </div>
+        <Link href={`/recipes/${recipe._id}`} className={styles.learnMoreBtn}>
+          Learn more
+        </Link>
       </div>
-
-      {showAuthModal && (
-        <ModalNotAutor onClose={() => setShowAuthModal(false)} />
-      )}
-    </div>
+    </li>
   );
 }

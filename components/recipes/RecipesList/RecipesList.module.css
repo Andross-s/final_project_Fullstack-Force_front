@@ -1,29 +1,26 @@
 .wrapper {
-  width: 100%;
-  margin-top: 32px; /* ← добавил отступ */
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 16px;
 }
 
-.grid {
+.list {
   display: grid;
-  align-items: stretch;
-  gap: 24px;
-  grid-auto-rows: 1fr;
+  gap: 16px;
 }
 
-@media (max-width: 767px) {
-  .grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-@media (min-width: 768px) and (max-width: 1439px) {
-  .grid {
+/* Tablet — 2 карточки */
+@media (min-width: 768px) and (max-width: 1279px) {
+  .list {
     grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
   }
 }
 
-@media (min-width: 1440px) {
-  .grid {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+/* Desktop — 4 карточки */
+@media (min-width: 1280px) {
+  .list {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 32px;
   }
 }
