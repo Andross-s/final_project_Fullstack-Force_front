@@ -60,7 +60,7 @@ export default function Header() {
                 Recipes
               </Link>
 
-              <Link href="/profile" className={pathname === '/profile' ? css.activeLink : ''}>
+              <Link href="/profile/own" className={pathname.startsWith('/profile') ? css.activeLink : ''}>
                 My Profile
               </Link>
 

@@ -18,6 +18,7 @@ import styles from './page.module.css';
 export default function ProfilePage() {
   const { recipeType } = useParams<{ recipeType: string }>();
 
+  // OWN RECIPES
   const {
     data,
     fetchNextPage,
@@ -40,6 +41,7 @@ export default function ProfilePage() {
     [data]
   );
 
+  // FAVORITES
   const [visibleCount, setVisibleCount] = useState(12);
 
   const { data: favData } = useQuery({
@@ -77,6 +79,7 @@ export default function ProfilePage() {
       </div>
 
       <div className={styles.profileRecipes}>
+        {/* OWN RECIPES STATES */}
         {recipeType === 'own' && isLoading && <p>Завантаження...</p>}
         {recipeType === 'own' && isError && (
           <p>Не вдалося завантажити рецепти</p>

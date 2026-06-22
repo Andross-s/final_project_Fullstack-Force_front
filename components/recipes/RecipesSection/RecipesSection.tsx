@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
+import { useRouter } from 'next/navigation';
 import { LoadMoreBtn } from '@/components/recipes/LoadMoreBtn/LoadMoreBtn';
 import RecipesList, { RecipeListItem } from '@/components/recipes/RecipesList/RecipesList';
 import SearchBox from '@/components/recipes/SearchBox/SearchBox';
@@ -35,6 +36,8 @@ export default function RecipesSection({
   fetchRecipes,
   listType,
 }: RecipesSectionProps) {
+  const router = useRouter();
+
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedIngredient, setSelectedIngredient] = useState('');
@@ -59,21 +62,13 @@ export default function RecipesSection({
       }),
     initialPageParam: 1,
     getNextPageParam: (lastPage, allPages) => {
-      const loaded = allPages.reduce(
-        (sum, page) => sum + page.recipes.length,
-        0,
-      );
+      const loaded = allPages.reduce((sum, page) => sum + page.recipes.length, 0);
 
-      return loaded < lastPage.total
-        ? allPages.length + 1
-        : undefined;
+      return loaded < lastPage.total ? allPages.length + 1 : undefined;
     },
   });
 
-  const recipes = useMemo(
-    () => data?.pages.flatMap(page => page.recipes) || [],
-    [data],
-  );
+  const recipes = useMemo(() => data?.pages.flatMap(page => page.recipes) || [], [data]);
 
   const totalRecipes = data?.pages[0]?.total ?? 0;
 
@@ -83,10 +78,13 @@ export default function RecipesSection({
   };
 
   useEffect(() => {
-    if (!searchQuery || isLoading || isFetching || recipes.length > 0) return;
+    if (!searchQuery || isLoading || isFetching) return;
 
-    toast.error(`No recipes found for "${searchQuery}"`);
-  }, [isFetching, isLoading, recipes.length, searchQuery]);
+    if (isError || recipes.length === 0) {
+      toast.error(`No recipes found for "${searchQuery}"`);
+      router.push('/recipes/not-found');
+    }
+  }, [isError, isFetching, isLoading, recipes.length, router, searchQuery]);
 
   return (
     <main className={styles.page}>
@@ -107,9 +105,7 @@ export default function RecipesSection({
       <section className={styles.container}>
         <div className={styles.resultsHeader}>
           <h2 className={styles.title}>
-            {searchQuery
-              ? `Search Results for “${searchQuery}”`
-              : title}
+            {searchQuery ? `Search Results for “${searchQuery}”` : title}
           </h2>
         </div>
 
@@ -139,9 +135,7 @@ export default function RecipesSection({
         {hasNextPage && (
           <LoadMoreBtn
             onClick={() => fetchNextPage()}
-            isLoading={
-              isFetchingNextPage || (isFetching && !isLoading)
-            }
+            isLoading={isFetchingNextPage || (isFetching && !isLoading)}
           />
         )}
       </section>

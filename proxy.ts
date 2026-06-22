@@ -1,75 +1,40 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { cookies } from 'next/headers';
-import { parse } from 'cookie';
-import { refreshSession } from './lib/api/client';
 
 const privateRoutes = ['/profile', '/add-recipe'];
 const publicRoutes = ['/auth'];
 
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
-  const cookieStore = await cookies();
-  const accessToken = cookieStore.get('accessToken')?.value;
-  const refreshToken = cookieStore.get('refreshToken')?.value;
+
+  // Просто пасивно зчитуємо куки, які прийшли з браузера
+  const accessToken = request.cookies.get('accessToken')?.value;
+  const refreshToken = request.cookies.get('refreshToken')?.value;
 
   const isPublicRoute = publicRoutes.some(route => pathname.startsWith(route));
   const isPrivateRoute = privateRoutes.some(route => pathname.startsWith(route));
 
-  if (!accessToken) {
-    if (refreshToken) {
-      try {
-        const data = await refreshSession();
-        const setCookie = data.headers['set-cookie'];
+  // Якщо маршрут не приватний і не публічний (наприклад, головна сторінка) — просто йдемо далі
+  if (!isPublicRoute && !isPrivateRoute) return NextResponse.next();
 
-        if (setCookie) {
-          const cookieArray = Array.isArray(setCookie) ? setCookie : [setCookie];
-          for (const cookieStr of cookieArray) {
-            const parsed = parse(cookieStr);
-            const options = {
-              expires: parsed.Expires ? new Date(parsed.Expires) : undefined,
-              path: parsed.Path,
-              maxAge: Number(parsed['Max-Age']),
-            };
-            if (parsed.accessToken) cookieStore.set('accessToken', parsed.accessToken, options);
-            if (parsed.refreshToken) cookieStore.set('refreshToken', parsed.refreshToken, options);
-          }
-
-          if (isPublicRoute) {
-            return NextResponse.redirect(new URL('/', request.url), {
-              headers: {
-                Cookie: cookieStore.toString(),
-              },
-            });
-          }
-
-          if (isPrivateRoute) {
-            return NextResponse.next({
-              headers: {
-                Cookie: cookieStore.toString(),
-              },
-            });
-          }
-        }
-      } catch {
-        cookieStore.delete('accessToken');
-        cookieStore.delete('refreshToken');
-      }
-    }
-
-    if (isPublicRoute) {
-      return NextResponse.next();
-    }
-
-    if (isPrivateRoute) {
-      return NextResponse.redirect(new URL('/auth/login', request.url));
-    }
-  }
+  // СЕСІЯ ВВАЖАЄТЬСЯ ЖИВОЮ, ЯКЩО Є ХОЧА Б РЕФРЕШ-ТОКЕН!
+  const hasValidSession = Boolean(accessToken || refreshToken);
 
   if (isPublicRoute) {
-    return NextResponse.redirect(new URL('/', request.url));
+    // Якщо користувач уже авторизований (хоча б по рефрешу), не пускаємо його на сторінки логіну/реєстрації
+    if (hasValidSession) {
+      return NextResponse.redirect(new URL('/', request.url));
+    }
+    return NextResponse.next();
   }
 
   if (isPrivateRoute) {
+    // Якщо користувач лізе на приватну сторінку і в куках взагалі порожньо — на логін
+    if (!hasValidSession) {
+      return NextResponse.redirect(new URL('/auth/login', request.url));
+    }
+
+    // Якщо аксесу немає, але рефреш є — мідлвара просто пропускає запит у браузер.
+    // Там клієнтський Axios сам зробить один чистий рефреш через інтерцептор.
     return NextResponse.next();
   }
 }
