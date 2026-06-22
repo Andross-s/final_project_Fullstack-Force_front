@@ -2,7 +2,7 @@
     width: 100%;
     max-width: 1240px;
     margin: 0 auto;
-    padding: 0 16px;
+    padding: 40px 16px 0 16px;
 }
 
 .form {
@@ -16,6 +16,7 @@
     font-weight: 700;
     margin: 0;
 }
+
 .blockTitle {
     font-size: 20px;
     font-weight: 600;
@@ -66,13 +67,31 @@
 
 .input:focus,
 .textarea:focus,
-.select:focus {
+.select:focus,
+.instructionTextarea:focus {
     outline: none;
     border-color: #9b6c43;
 }
 
 .textarea {
     min-height: 120px;
+    resize: vertical;
+}
+
+.instructionsSection {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.instructionTextarea {
+    width: 100%;
+    padding: 14px 16px;
+    border: 1px solid #d9d9d9;
+    border-radius: 12px;
+    background: #fff;
+    font-size: 14px;
+    min-height: 160px;
     resize: vertical;
 }
 
@@ -105,7 +124,7 @@
 
 @media screen and (min-width: 768px) {
     .wrapper {
-        padding: 0 32px;
+        padding: 60px 32px 0 32px;
     }
 
     .row {
@@ -124,6 +143,6 @@
 
 @media screen and (min-width: 1440px) {
     .wrapper {
-        padding: 0;
+        padding: 60px 0 0 0;
     }
 }
