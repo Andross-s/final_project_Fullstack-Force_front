@@ -36,7 +36,7 @@ const fetchHomeRecipes = async ({
 }: FetchRecipesParams) => {
   const params = new URLSearchParams({
     page: String(page),
-    pageSize: String(pageSize),
+    perPage: String(pageSize),
   });
 
   if (query) params.set("query", query);

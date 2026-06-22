@@ -4,73 +4,81 @@ import { useEffect, useState } from "react";
 import Filters from "@/components/recipes/Filters/Filters";
 import RecipesList from "@/components/recipes/RecipesList/RecipesList";
 
-export default function RecipesPage() {
-  const [recipes, setRecipes] = useState([]);
-  const [categories, setCategories] = useState([]);
-  const [ingredients, setIngredients] = useState([]);
+type Recipe = {
+  _id: string;
+  title: string;
+  thumb?: string;
+  time?: number;
+  calories?: number;
+  description?: string;
+  categoryId?: string;
+  ingredients?: string[];
+  [key: string]: any;
+};
 
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-  const [selectedIngredients, setSelectedIngredients] = useState<string[]>([]);
+export default function RecipesPage() {
+  const [recipes, setRecipes] = useState<Recipe[]>([]);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(false);
+
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedIngredient, setSelectedIngredient] = useState("");
 
   useEffect(() => {
     async function loadData() {
       try {
-        // RECIPES
-        const resRecipes = await fetch("/api/recipes");
-        const recipesData = await resRecipes.json();
+        const params = new URLSearchParams();
+        params.set("page", String(page));
+        params.set("perPage", "12");
 
-        console.log("RECIPES:", recipesData.recipes); // ← ВАЖНО
+        if (selectedCategory) params.set("category", selectedCategory);
+        if (selectedIngredient) params.set("ingredient", selectedIngredient);
 
-        setRecipes(recipesData.recipes);
+        const res = await fetch(`/api/recipes?${params.toString()}`);
+        const data = await res.json();
 
-        // CATEGORIES
-        const resCategories = await fetch("/api/categories");
-        const categoriesData = await resCategories.json();
-        setCategories(categoriesData);
-
-        // INGREDIENTS
-        const resIngredients = await fetch("/api/ingredients");
-        const ingredientsData = await resIngredients.json();
-        setIngredients(ingredientsData);
-
+        setRecipes(data.recipes || []);
+        setHasMore((data.totalRecipes || 0) > (data.recipes?.length || 0));
       } catch (err) {
         console.error("Failed to load data:", err);
       }
     }
 
     loadData();
-  }, []);
+  }, [page, selectedCategory, selectedIngredient]);
 
-  const filteredRecipes = recipes.filter((recipe) => {
-    const matchCategory =
-      selectedCategories.length === 0 ||
-      selectedCategories.includes(recipe.categoryId);
+  const handleResetFilters = () => {
+    setSelectedCategory("");
+    setSelectedIngredient("");
+    setPage(1);
+  };
 
-    const matchIngredients =
-      selectedIngredients.length === 0 ||
-      recipe.ingredients?.some((ing: string) =>
-        selectedIngredients.includes(ing)
-      );
-
-    return matchCategory && matchIngredients;
-  });
+  const handleLoadMore = () => {
+    setPage((prev) => prev + 1);
+  };
 
   return (
     <div style={{ padding: "20px 0" }}>
       <Filters
-        categories={categories}
-        ingredients={ingredients}
-        selectedCategories={selectedCategories}
-        selectedIngredients={selectedIngredients}
-        onCategoriesChange={setSelectedCategories}
-        onIngredientsChange={setSelectedIngredients}
-        onReset={() => {
-          setSelectedCategories([]);
-          setSelectedIngredients([]);
+        recipesCount={recipes.length}
+        selectedCategory={selectedCategory}
+        selectedIngredient={selectedIngredient}
+        onCategoryChange={(value) => {
+          setSelectedCategory(value);
+          setPage(1);
         }}
+        onIngredientChange={(value) => {
+          setSelectedIngredient(value);
+          setPage(1);
+        }}
+        onResetFilters={handleResetFilters}
       />
 
-      <RecipesList recipes={filteredRecipes} />
+      <RecipesList
+        recipes={recipes}
+        hasMore={hasMore}
+        onLoadMore={handleLoadMore}
+      />
     </div>
   );
 }
