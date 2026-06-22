@@ -17,19 +17,8 @@ type Props = {
 };
 
 export default function RecipeCard({ recipe }: Props) {
-  const isFavorite = false; 
-  const isLoading = false;
-  const isAuthorized = false;
-
   const calories =
     recipe.calories && recipe.calories > 0 ? recipe.calories : "—";
-
-  const handleFavoriteClick = () => {
-    if (!isAuthorized) {
-      return;
-    }
-    // запрос на бек, смена состояния
-  };
 
   return (
     <li className={styles.card}>
@@ -41,17 +30,6 @@ export default function RecipeCard({ recipe }: Props) {
             className={styles.image}
           />
         )}
-
-        <button
-          type="button"
-          className={`${styles.favoriteBtn} ${
-            isFavorite ? styles.favoriteActive : ""
-          } ${isLoading ? styles.favoriteLoading : ""}`}
-          onClick={handleFavoriteClick}
-          disabled={isLoading}
-        >
-          {/* svg-иконка */}
-        </button>
       </div>
 
       <div className={styles.content}>
@@ -74,10 +52,7 @@ export default function RecipeCard({ recipe }: Props) {
           </div>
         </div>
 
-        <Link
-          href={`/recipes/${recipe._id}`}
-          className={styles.learnMoreBtn}
-        >
+        <Link href={`/recipes/${recipe._id}`} className={styles.learnMoreBtn}>
           Learn more
         </Link>
       </div>

@@ -13,14 +13,10 @@ type Recipe = {
   description?: string;
   categoryId?: string;
   ingredients?: string[];
-  [key: string]: any;
 };
 
 export default function RecipesPage() {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
-  const [page, setPage] = useState(1);
-  const [hasMore, setHasMore] = useState(false);
-
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedIngredient, setSelectedIngredient] = useState("");
 
@@ -28,7 +24,7 @@ export default function RecipesPage() {
     async function loadData() {
       try {
         const params = new URLSearchParams();
-        params.set("page", String(page));
+        params.set("page", "1");
         params.set("perPage", "12");
 
         if (selectedCategory) params.set("category", selectedCategory);
@@ -38,23 +34,17 @@ export default function RecipesPage() {
         const data = await res.json();
 
         setRecipes(data.recipes || []);
-        setHasMore((data.totalRecipes || 0) > (data.recipes?.length || 0));
       } catch (err) {
         console.error("Failed to load data:", err);
       }
     }
 
     loadData();
-  }, [page, selectedCategory, selectedIngredient]);
+  }, [selectedCategory, selectedIngredient]);
 
   const handleResetFilters = () => {
     setSelectedCategory("");
     setSelectedIngredient("");
-    setPage(1);
-  };
-
-  const handleLoadMore = () => {
-    setPage((prev) => prev + 1);
   };
 
   return (
@@ -63,22 +53,12 @@ export default function RecipesPage() {
         recipesCount={recipes.length}
         selectedCategory={selectedCategory}
         selectedIngredient={selectedIngredient}
-        onCategoryChange={(value) => {
-          setSelectedCategory(value);
-          setPage(1);
-        }}
-        onIngredientChange={(value) => {
-          setSelectedIngredient(value);
-          setPage(1);
-        }}
+        onCategoryChange={(value) => setSelectedCategory(value)}
+        onIngredientChange={(value) => setSelectedIngredient(value)}
         onResetFilters={handleResetFilters}
       />
 
-      <RecipesList
-        recipes={recipes}
-        hasMore={hasMore}
-        onLoadMore={handleLoadMore}
-      />
+      <RecipesList recipes={recipes} />
     </div>
   );
 }

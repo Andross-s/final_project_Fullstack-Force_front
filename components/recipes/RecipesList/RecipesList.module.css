@@ -24,9 +24,3 @@
     gap: 32px;
   }
 }
-
-.loadMoreWrapper {
-  display: flex;
-  justify-content: center;
-  margin-top: 32px;
-}
