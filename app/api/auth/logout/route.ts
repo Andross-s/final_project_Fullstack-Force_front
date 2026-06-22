@@ -5,15 +5,22 @@ import { parse } from 'cookie';
 import { isAxiosError } from 'axios';
 import { logErrorResponse } from '../../_utils/utils';
 
-// Логін: проксує запит на бекенд і прокидає його cookies у браузер
 export async function POST(req: NextRequest) {
   try {
-    const body = await req.json();
-    const apiRes = await api.post('/api/auth/login', body);
-
     const cookieStore = await cookies();
-    const setCookie = apiRes.headers['set-cookie'];
+    const cookieHeader = req.headers.get('cookie') || '';
 
+    const apiRes = await api.post(
+      '/api/auth/logout',
+      {},
+      {
+        headers: {
+          Cookie: cookieHeader,
+        },
+      }
+    );
+
+    const setCookie = apiRes.headers['set-cookie'];
     if (setCookie) {
       const cookieArray = Array.isArray(setCookie) ? setCookie : [setCookie];
       for (const cookieStr of cookieArray) {
@@ -33,30 +40,33 @@ export async function POST(req: NextRequest) {
 
         cookieStore.set(name, value, options);
       }
-
-      return NextResponse.json(apiRes.data, { status: apiRes.status });
     }
 
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  } catch (error) {
-    if (isAxiosError(error)) {
-      const serverStatus = error.response?.status;
-      const serverData = error.response?.data;
+    if (apiRes.status === 204 || apiRes.status === 200) {
+      return NextResponse.json({ message: 'Logged out successfully' }, { status: 200 });
+    }
 
+    return NextResponse.json(apiRes.data || { message: 'Logged out' }, { status: apiRes.status });
+  } catch (error) {
+    if (isAxiosError(error) && error.response?.status === 401) {
+      const cookieStore = await cookies();
+      cookieStore.delete('accessToken');
+      cookieStore.delete('refreshToken');
+      cookieStore.delete('sessionId');
+
+      return NextResponse.json({ message: 'Logged out (session already ended)' }, { status: 200 });
+    }
+
+    if (isAxiosError(error)) {
+      const serverData = error.response?.data;
       logErrorResponse(serverData);
       return NextResponse.json(
-        {
-          error: error.message,
-          response: serverData,
-        },
-        { status: serverStatus || 500 }
+        { error: error.message, response: serverData },
+        { status: error.response?.status || 500 }
       );
     }
 
     logErrorResponse({ message: (error as Error).message });
-    return NextResponse.json(
-      { error: (error as Error).message || 'Internal Server Error' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }
