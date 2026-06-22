@@ -78,7 +78,7 @@ export default function Filters({
           <option value="">Category</option>
 
           {categories.map((category: { _id: string; name: string }) => (
-            <option key={category._id} value={category.name}>
+            <option key={category._id} value={category._id}>
               {category.name}
             </option>
           ))}
@@ -93,7 +93,7 @@ export default function Filters({
           <option value="">Ingredient</option>
 
           {ingredients.map((ingredient: { _id: string; name: string }) => (
-            <option key={ingredient._id} value={ingredient._id}>
+            <option key={ingredient._id} value={ingredient.name}>
               {ingredient.name}
             </option>
           ))}
