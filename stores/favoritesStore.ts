@@ -6,7 +6,7 @@ type FavoritesStore = {
   isLoading: boolean;
 
   loadFavorites: () => Promise<void>;
-  toggleFavorite: (recipeId: string) => Promise<void>;
+  toggleFavorite: (recipeId: string) => Promise<boolean>;
   isFavorite: (recipeId: string) => boolean;
 };
 
@@ -45,8 +45,10 @@ export const useFavoritesStore = create<FavoritesStore>((set, get) => ({
         await addFavoriteApi(recipeId);
         set({ favoriteIds: [...favoriteIds, recipeId] });
       }
+      return true;
     } catch (error) {
       console.error('Помилка оновлення обраного:', error);
+      return false;
     }
   },
 

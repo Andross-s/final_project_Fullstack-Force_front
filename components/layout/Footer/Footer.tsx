@@ -39,7 +39,11 @@ export const Footer = ({ isUserAuthorized }: Props) => {
             Recipes
           </Link>
 
-          <Link className={styles['footer-nav-link']} href="/profile" onClick={handleAccountClick}>
+          <Link
+            className={styles['footer-nav-link']}
+            href="/profile/own"
+            onClick={handleAccountClick}
+          >
             Account
           </Link>
           {isModalOpen && (
