@@ -1,4 +1,9 @@
+import { isAxiosError } from "axios";
 import { NextRequest, NextResponse } from "next/server";
+import { nextServer as api } from "@/lib/api/api";
+import { cookies } from "next/headers";
+
+
 
 const BACKEND_URL =
   "https://final-project-fullstack-force-back-r48i.onrender.com/api";
@@ -96,4 +101,31 @@ export async function GET(request: NextRequest) {
     recipes: pagedRecipes,
     totalRecipes,
   });
+}
+
+
+export async function POST(req: NextRequest) {
+  try {
+    const formData = await req.formData();
+    const cookieStore = await cookies();
+
+  
+    const response = await fetch(BACKEND_URL + "/recipes", {
+      method: "POST",
+      body: formData,
+      headers: {
+        Cookie: cookieStore.toString(), 
+      },
+    });
+
+    const data = await response.json();
+
+    return NextResponse.json(data, { status: response.status });
+  } catch (error) {
+    console.error("POST /api/recipes error:", error);
+    return NextResponse.json(
+      { error: "Internal Server Error" },
+      { status: 500 }
+    );
+  }
 }

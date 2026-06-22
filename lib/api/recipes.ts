@@ -1,4 +1,4 @@
-import { nextServer } from './api';
+import { nextServer } from '@/lib/api/api';
 
 /* Отримати список рецептів з пагінацією */
 export const getRecipesApi = async (page: number) => {
