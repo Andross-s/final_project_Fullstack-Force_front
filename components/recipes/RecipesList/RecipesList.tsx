@@ -1,8 +1,9 @@
 import RecipeCard from "../RecipeCard/RecipeCard";
 import styles from "./RecipesList.module.css";
 
+// Коментар: компонент лише відображає список рецептів
 export default function RecipesList({ recipes }) {
-  if (!recipes.length) {
+  if (!recipes || recipes.length === 0) {
     return <p className={styles.empty}>No recipes found</p>;
   }
 
