@@ -16,6 +16,8 @@ type RecipeCardProps = {
   time: string;
   calories?: number;
   thumb: string;
+  type?: string;
+  onFavoriteToggled?: () => void;
 };
 
 // Картка рецепта на MainPage
@@ -26,6 +28,8 @@ export default function RecipeCard({
   time,
   calories,
   thumb,
+  type,
+  onFavoriteToggled,
 }: RecipeCardProps) {
   const user = useAuthStore(state => state.user);
 
@@ -39,12 +43,13 @@ export default function RecipeCard({
 
   // ФІКС: раніше для незалогіненого користувача клік на favorite просто нічого не робив
   // (`user && toggleFavorite(...)`). Тепер показуємо модалку авторизації.
-  const handleFavoriteClick = () => {
+  const handleFavoriteClick = async () => {
     if (!user) {
       setShowAuthModal(true);
       return;
     }
-    toggleFavorite(id);
+    await toggleFavorite(id);
+    onFavoriteToggled?.();
   };
 
   return (
@@ -69,23 +74,26 @@ export default function RecipeCard({
         </div>
 
         <div className={styles.buttons}>
-          {/* ФІКС: раніше це був звичайний <button> без onClick — нікуди не вів */}
-          <Link href={`/recipes/${id}`} className={styles.learnMore}>
-            Learn More
-          </Link>
-
-          <button
-            className={styles.favoriteBtn}
-            onClick={handleFavoriteClick}
-            aria-label="Toggle favorite"
-            style={{
-              color: fav ? 'var(--light-brown)' : '#999',
-              borderColor: fav ? 'var(--light-brown)' : 'var(--light-gray)',
-            }}
-          >
-            <BookmarkIcon aria-hidden="true" />
-          </button>
-        </div>
+  <Link
+    href={`/recipes/${id}`}
+    className={`${styles.learnMore} ${type === 'own' ? styles.learnMoreFull : ''}`}
+  >
+    Learn More
+  </Link>
+  {type !== 'own' && (
+    <button
+      className={styles.favoriteBtn}
+      onClick={handleFavoriteClick}
+      aria-label="Toggle favorite"
+      style={{
+        color: fav ? 'var(--light-brown)' : '#999',
+        borderColor: fav ? 'var(--light-brown)' : 'var(--light-gray)',
+      }}
+    >
+      <BookmarkIcon aria-hidden="true" />
+    </button>
+  )}
+</div>
       </div>
 
       {showAuthModal && (
