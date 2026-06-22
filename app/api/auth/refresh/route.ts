@@ -5,7 +5,6 @@ import { parse } from 'cookie';
 import { isAxiosError } from 'axios';
 import { logErrorResponse } from '../../_utils/utils';
 
-// Оновлення сесії: відправляє поточні cookies бекенду й оновлює їх у браузері
 export async function POST() {
   try {
     const cookieStore = await cookies();
@@ -24,13 +23,10 @@ export async function POST() {
 
     if (setCookie) {
       const cookieArray = Array.isArray(setCookie) ? setCookie : [setCookie];
-      // ФІКС: те саме, що й у login — прокидаємо ВСІ cookie (включно з sessionId),
-      // а не лише accessToken/refreshToken.
       for (const cookieStr of cookieArray) {
         const [nameValue] = cookieStr.split(';');
         const separatorIndex = nameValue.indexOf('=');
         const name = nameValue.slice(0, separatorIndex).trim();
-        // ФІКС: decode значення, щоб уникнути подвійного URL-кодування cookie.
         const value = decodeURIComponent(nameValue.slice(separatorIndex + 1).trim());
 
         const parsed = parse(cookieStr);
