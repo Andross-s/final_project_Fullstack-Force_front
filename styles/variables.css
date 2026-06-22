@@ -31,8 +31,8 @@
   --red: #c80000;
 
   /* Typography */
-  --font-family: var(--font-montserrat), 'Montserrat', sans-serif;
-  --second-family: var(--font-dm-sans), 'DM Sans', sans-serif;
+  --font-family: var(--font-montserrat, 'Montserrat', sans-serif);
+  --second-family: var(--font-dm-sans, 'DM Sans', sans-serif);
 
   --font-weight-regular: 400;
   --font-weight-semibold: 600;
