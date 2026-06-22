@@ -30,7 +30,11 @@ type RecipesSectionProps = {
   listType?: string;
 };
 
-export default function RecipesSection({ title, fetchRecipes, listType }: RecipesSectionProps) {
+export default function RecipesSection({
+  title,
+  fetchRecipes,
+  listType,
+}: RecipesSectionProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedIngredient, setSelectedIngredient] = useState('');
@@ -55,13 +59,21 @@ export default function RecipesSection({ title, fetchRecipes, listType }: Recipe
       }),
     initialPageParam: 1,
     getNextPageParam: (lastPage, allPages) => {
-      const loaded = allPages.reduce((sum, page) => sum + page.recipes.length, 0);
+      const loaded = allPages.reduce(
+        (sum, page) => sum + page.recipes.length,
+        0,
+      );
 
-      return loaded < lastPage.total ? allPages.length + 1 : undefined;
+      return loaded < lastPage.total
+        ? allPages.length + 1
+        : undefined;
     },
   });
 
-  const recipes = useMemo(() => data?.pages.flatMap(page => page.recipes) || [], [data]);
+  const recipes = useMemo(
+    () => data?.pages.flatMap(page => page.recipes) || [],
+    [data],
+  );
 
   const totalRecipes = data?.pages[0]?.total ?? 0;
 
@@ -78,24 +90,41 @@ export default function RecipesSection({ title, fetchRecipes, listType }: Recipe
 
   return (
     <main className={styles.page}>
-      <section className={styles.container}>
-        <div className={styles.header}>
-          <h1 className={styles.title}>{title}</h1>
+      <section className={styles.hero}>
+        <div className={styles.heroContent}>
+          <h1 className={styles.heroTitle}>
+            Plan, Cook, and
+            <br />
+            Share Your Flavors
+          </h1>
 
           <div className={styles.search}>
             <SearchBox onSearch={setSearchQuery} />
           </div>
         </div>
+      </section>
+
+      <section className={styles.container}>
+        <div className={styles.resultsHeader}>
+          <h2 className={styles.title}>
+            {searchQuery
+              ? `Search Results for “${searchQuery}”`
+              : title}
+          </h2>
+        </div>
 
         <div className={styles.filtersRow}>
-          <Filters
-            recipesCount={totalRecipes}
-            selectedCategory={selectedCategory}
-            selectedIngredient={selectedIngredient}
-            onCategoryChange={setSelectedCategory}
-            onIngredientChange={setSelectedIngredient}
-            onResetFilters={handleResetFilters}
-          />
+
+          <div className={styles.filtersBox}>
+            <Filters
+              recipesCount={totalRecipes}
+              selectedCategory={selectedCategory}
+              selectedIngredient={selectedIngredient}
+              onCategoryChange={setSelectedCategory}
+              onIngredientChange={setSelectedIngredient}
+              onResetFilters={handleResetFilters}
+            />
+          </div>
         </div>
 
         {isError ? (
@@ -111,7 +140,9 @@ export default function RecipesSection({ title, fetchRecipes, listType }: Recipe
         {hasNextPage && (
           <LoadMoreBtn
             onClick={() => fetchNextPage()}
-            isLoading={isFetchingNextPage || (isFetching && !isLoading)}
+            isLoading={
+              isFetchingNextPage || (isFetching && !isLoading)
+            }
           />
         )}
       </section>
