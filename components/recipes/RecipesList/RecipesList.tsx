@@ -1,32 +1,33 @@
-"use client";
+import React from "react";
+import { RecipeCard } from "./RecipeCard";
+import styles from "./RecipeList.module.css";
 
-import RecipeCard from "@/components/recipes/RecipeCard/RecipeCard";
-import styles from "./RecipesList.module.css";
-
-export type RecipeListItem = {
-  _id: string;
+interface Recipe {
+  id: number;
   title: string;
-  thumb?: string;
-  time?: number;
-  calories?: number;
-  description?: string;
-  categoryId?: string;
-  ingredients?: string[];
-  [key: string]: any;
-};
+  description: string;
+  calories: string;
+  time: number;
+  image: string;
+}
 
-type Props = {
-  recipes: RecipeListItem[];
-};
+interface RecipeListProps {
+  recipes: Recipe[];
+}
 
-export default function RecipesList({ recipes }: Props) {
+export const RecipeList: React.FC<RecipeListProps> = ({ recipes }) => {
   return (
-    <div className={styles.wrapper}>
-      <ul className={styles.list}>
-        {recipes.map((recipe) => (
-          <RecipeCard key={recipe._id} recipe={recipe} />
-        ))}
-      </ul>
+    <div className={styles.list}>
+      {recipes.map((recipe) => (
+        <RecipeCard
+          key={recipe.id}
+          title={recipe.title}
+          description={recipe.description}
+          calories={recipe.calories}
+          time={recipe.time}
+          image={recipe.image}
+        />
+      ))}
     </div>
   );
-}
+};

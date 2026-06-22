@@ -1,61 +1,38 @@
-"use client";
-
+import React from "react";
 import styles from "./RecipeCard.module.css";
-import Link from "next/link";
+import clockIcon from "../../assets/icons/clock.svg";
 
-type Recipe = {
-  _id: string;
+interface RecipeCardProps {
   title: string;
-  thumb?: string;
-  time?: number;
-  calories?: number;
-  description?: string;
-};
-
-type Props = {
-  recipe: Recipe;
-};
-
-export default function RecipeCard({ recipe }: Props) {
-  const calories =
-    recipe.calories && recipe.calories > 0 ? recipe.calories : "—";
-
-  return (
-    <li className={styles.card}>
-      <div className={styles.imageWrapper}>
-        {recipe.thumb && (
-          <img
-            src={recipe.thumb}
-            alt={recipe.title}
-            className={styles.image}
-          />
-        )}
-      </div>
-
-      <div className={styles.content}>
-        <h3 className={styles.title}>{recipe.title}</h3>
-
-        {recipe.description && (
-          <p className={styles.description}>{recipe.description}</p>
-        )}
-
-        <div className={styles.metaRow}>
-          <div className={styles.metaGroup}>
-            <span className={styles.metaLabel}>Time</span>
-            <span className={styles.metaValue}>
-              {recipe.time ? `${recipe.time} min` : "—"}
-            </span>
-          </div>
-          <div className={styles.metaGroup}>
-            <span className={styles.metaLabel}>Calories</span>
-            <span className={styles.metaValue}>{calories}</span>
-          </div>
-        </div>
-
-        <Link href={`/recipes/${recipe._id}`} className={styles.learnMoreBtn}>
-          Learn more
-        </Link>
-      </div>
-    </li>
-  );
+  description: string;
+  calories: string;
+  time: number;
+  image: string;
 }
+
+export const RecipeCard: React.FC<RecipeCardProps> = ({
+  title,
+  description,
+  calories,
+  time,
+  image,
+}) => {
+  return (
+    <div className={styles.card}>
+      <div className={styles.imageWrapper}>
+        <img src={image} alt={title} className={styles.image} />
+
+        <div className={styles.timeBadge}>
+          <img src={clockIcon} alt="time" className={styles.clockIcon} />
+          <span>{time}</span>
+        </div>
+      </div>
+
+      <div className={styles.title}>{title}</div>
+      <div className={styles.description}>{description}</div>
+      <div className={styles.calories}>{calories}</div>
+
+      <button className={styles.learnMore}>Learn more</button>
+    </div>
+  );
+};

@@ -6,21 +6,27 @@
 
 .list {
   display: grid;
+  justify-content: center;
   gap: 16px;
 }
 
-/* Tablet — 2 карточки */
+@media (max-width: 767px) {
+  .list {
+    grid-template-columns: 344px;
+    gap: 16px;
+  }
+}
+
 @media (min-width: 768px) and (max-width: 1279px) {
   .list {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, 344px);
     gap: 24px;
   }
 }
 
-/* Desktop — 4 карточки */
 @media (min-width: 1280px) {
   .list {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(4, 344px);
     gap: 32px;
   }
 }
