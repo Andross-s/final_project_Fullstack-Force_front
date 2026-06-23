@@ -1,10 +1,11 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
-import { useRouter } from 'next/navigation';
 import { LoadMoreBtn } from '@/components/recipes/LoadMoreBtn/LoadMoreBtn';
+import NoMatchFound from '@/components/shared/NoMatchFound/NoMatchFound';
 import RecipesList, { RecipeListItem } from '@/components/recipes/RecipesList/RecipesList';
 import SearchBox from '@/components/recipes/SearchBox/SearchBox';
 import Filters from '@/components/recipes/Filters/Filters';
@@ -28,13 +29,11 @@ export type FetchRecipesResult = {
 type RecipesSectionProps = {
   title: string;
   fetchRecipes: (params: FetchRecipesParams) => Promise<FetchRecipesResult>;
-  listType?: string; 
 };
 
 export default function RecipesSection({
   title,
   fetchRecipes,
-  listType,
 }: RecipesSectionProps) {
   const router = useRouter();
 
@@ -52,14 +51,16 @@ export default function RecipesSection({
     isLoading,
   } = useInfiniteQuery({
     queryKey: ['recipes', title, searchQuery, selectedCategory, selectedIngredient],
-    queryFn: ({ pageParam }) =>
-      fetchRecipes({
+    queryFn: async ({ pageParam }) => {
+
+      return fetchRecipes({
         page: pageParam,
         pageSize: PAGE_SIZE,
         query: searchQuery,
         category: selectedCategory,
         ingredient: selectedIngredient,
-      }),
+      });
+    },
     initialPageParam: 1,
     getNextPageParam: (lastPage, allPages) => {
       const loaded = allPages.reduce((sum, page) => sum + page.recipes.length, 0);
@@ -73,18 +74,24 @@ export default function RecipesSection({
   const totalRecipes = data?.pages[0]?.total ?? 0;
 
   const handleResetFilters = () => {
+    setSearchQuery('');
     setSelectedCategory('');
     setSelectedIngredient('');
   };
 
   useEffect(() => {
-    if (!searchQuery || isLoading || isFetching) return;
-
-    if (isError || recipes.length === 0) {
-      toast.error(`No recipes found for "${searchQuery}"`);
+    if (isError && !searchQuery) {
       router.push('/recipes/not-found');
     }
-  }, [isError, isFetching, isLoading, recipes.length, router, searchQuery]);
+  }, [isError, router, searchQuery]);
+
+  useEffect(() => {
+    if (!searchQuery || isLoading || isFetching || isError) return;
+
+    if (recipes.length === 0) {
+      toast.error(`No recipes found for "${searchQuery}"`);
+    }
+  }, [isError, isFetching, isLoading, recipes.length, searchQuery]);
 
   return (
     <main className={styles.page}>
@@ -122,12 +129,12 @@ export default function RecipesSection({
           </div>
         </div>
 
-        {isError ? (
-          <p className={styles.state}>Could not load recipes</p>
-        ) : isLoading ? (
+        {isLoading || isFetching ? (
           <p className={styles.state}>Loading...</p>
         ) : recipes.length > 0 ? (
           <RecipesList recipes={recipes} />
+        ) : searchQuery ? (
+          <NoMatchFound onReset={handleResetFilters} />
         ) : (
           <p className={styles.state}>No recipes found</p>
         )}
