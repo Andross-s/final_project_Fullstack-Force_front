@@ -48,4 +48,9 @@
     grid-row: 1;
     grid-column: 1;
   }
+
+  .wrapper {
+    padding-left: 108px;
+    padding-right: 108px;
+  }
 }
