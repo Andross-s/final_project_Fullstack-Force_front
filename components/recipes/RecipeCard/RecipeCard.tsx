@@ -21,9 +21,11 @@ type Recipe = {
 
 type Props = {
   recipe: Recipe;
+  type?: string;
+  onFavoriteToggled?: () => void;
 };
 
-export default function RecipeCard({ recipe }: Props) {
+export default function RecipeCard({ recipe,type, onFavoriteToggled }: Props) {
   const user = useAuthStore(state => state.user);
   const toggleFavorite = useFavoritesStore(state => state.toggleFavorite);
   const isFavorite = useFavoritesStore(state => state.isFavorite);
@@ -44,6 +46,7 @@ export default function RecipeCard({ recipe }: Props) {
     try {
       setIsProcessing(true);
       await toggleFavorite(recipe._id);
+      onFavoriteToggled?.();
     } finally {
       setIsProcessing(false);
     }
@@ -72,10 +75,10 @@ export default function RecipeCard({ recipe }: Props) {
       </div>
 
       <div className={styles.actions}>
-        <Link href={`/recipes/${recipe._id}`} className={styles.learnMoreBtn}>
+        <Link href={`/recipes/${recipe._id}`} className={`${styles.learnMoreBtn} ${type === 'own' ? styles.learnMoreBtnFull : ''}`} >
           Learn more
         </Link>
-
+        {type !== 'own' && (
         <button
           type="button"
           className={`${styles.favoriteBtn} ${fav ? styles.favoriteBtnActive : ''}`}
@@ -84,7 +87,8 @@ export default function RecipeCard({ recipe }: Props) {
           aria-label={fav ? 'Remove from favorites' : 'Add to favorites'}
         >
           <BookmarkIcon className={styles.favoriteIcon} />
-        </button>
+          </button>
+          )}
       </div>
 
       {showAuthModal && <ModalNotAutor onClose={() => setShowAuthModal(false)} />}
