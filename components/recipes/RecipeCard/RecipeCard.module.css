@@ -1,23 +1,19 @@
 .card {
-  position: relative;
   display: flex;
   flex-direction: column;
-  background-color: #ffffff;
-  border-radius: 24px;
-  overflow: hidden;
-  box-shadow: 0 16px 40px rgba(15, 15, 15, 0.08);
-  transition: transform 150ms ease-out, box-shadow 150ms ease-out;
-}
-
-.card:hover {
-  transform: translateY(2px);
-  box-shadow: 0 8px 24px rgba(15, 15, 15, 0.06);
+  height: 100%;
+  width: 100%;
+  background: var(--light-beige);
+  border-radius: 16px;
+  padding: 10px;
+  box-sizing: border-box;
 }
 
 .imageWrapper {
   position: relative;
   width: 100%;
-  padding-top: 70%;
+  aspect-ratio: 264 / 178;
+  border-radius: 8px;
   overflow: hidden;
 }
 
@@ -29,91 +25,158 @@
   object-fit: cover;
 }
 
-/* контент */
-.content {
-  padding: 16px 18px 18px;
+.timeRow {
   display: flex;
-  flex-direction: column;
-  gap: 8px;
+  justify-content: space-between;
+  margin-top: 16px;
 }
 
 .title {
-  font-size: 16px;
-  line-height: 1.3;
-  font-weight: 600;
-  color: #2f2f2f;
+  font-family: var(--font-family);
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--black);
 }
 
 .description {
-  font-size: 13px;
-  line-height: 1.4;
-  color: #6f6f6f;
-  max-height: 3.8em;
+  margin-top: 8px;
+  font-family: var(--font-family);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.55;
+  color: var(--black);
+  min-height: calc(1.55em * 2); /* дві строки в em — стабільніше щодо шрифту */
+  padding-bottom: 2px; /* запобігає підрізанню нижнього пікселя на деяких дисплеях */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
   overflow: hidden;
 }
 
-.metaRow {
+.caloriesRow {
+  display: flex;
+  justify-content: flex-start;
+  margin-top: 8px;
+}
+
+.metaPill {
+  max-height: 28px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  margin-top: 4px;
+  gap: 4px;
+  padding: 2px 8px 2px 4px;
+  border-radius: 8px;
+  background: var(--white);
+  font-family: var(--font-family);
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--black);
 }
 
-.metaGroup {
+.caloriesPill {
+  background-color: transparent;
+}
+
+.metaIcon {
+  flex-shrink: 0;
+  width: 14px;
+  height: 14px;
+}
+
+.actions {
   display: flex;
   align-items: center;
-  gap: 6px;
-}
-
-.metaLabel {
-  font-size: 12px;
-  line-height: 1.3;
-  color: #8c8c8c;
-}
-
-.metaValue {
-  font-size: 12px;
-  line-height: 1.3;
-  font-weight: 500;
-  color: #2f2f2f;
+  gap: 8px;
+  margin-top: auto;
+  padding-top: 8px;
 }
 
 .learnMoreBtn {
-  margin-top: 10px;
-  align-self: flex-start;
-  padding: 10px 20px;
-  border-radius: 30px;
-  border: 1px solid #050505;
-  background-color: transparent;
-  color: #050505;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  border: 1px solid var(--black);
+  border-radius: 8px;
+  background: transparent;
+  font-family: var(--font-family);
   font-size: 14px;
   font-weight: 600;
-  line-height: 1.3;
+  color: var(--black);
   cursor: pointer;
-  transition: all 0.25s ease;
+  transition: var(--transition-base);
   text-decoration: none;
 }
 
 .learnMoreBtn:hover {
-  background-color: #050505;
-  color: #ffffff;
+  background: var(--brown);
+  color: var(--white);
 }
 
-/* mobile */
-@media (max-width: 767px) {
+.favoriteBtn {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--black);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--black);
+  cursor: pointer;
+  transition: var(--transition-base);
+}
+
+.favoriteBtn:hover,
+.favoriteBtnActive {
+  background: var(--light-brown);
+  color: var(--white);
+}
+
+.favoriteIcon {
+  flex-shrink: 0;
+  width: 14px;
+  height: 18px;
+}
+
+/* mobile adaptive */
+@media (min-width: 393px) {
   .card {
-    border-radius: 20px;
+    padding: 12px;
+  }
+}
+
+/* tablet */
+@media (min-width: 768px) {
+  .favoriteBtn {
+    width: 38px;
+    height: 38px;
   }
 
-  .content {
-    padding: 14px 14px 16px;
-  }
-
-  .title {
+  .learnMoreBtn {
+    padding: 8px 16px;
     font-size: 15px;
   }
+}
 
-  .description {
-    font-size: 12px;
+/* desktop */
+@media (min-width: 1440px) {
+  .metaPill {
+    width: 53px;
+    height: 28px;
+  }
+
+  .favoriteBtn {
+    width: 40px;
+    height: 40px;
+  }
+
+  .learnMoreBtn {
+    flex: 0 0 216px;
+    height: 40px;
+    padding: 8px;
+    font-size: 16px;
   }
 }

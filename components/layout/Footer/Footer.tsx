@@ -15,8 +15,7 @@ type Props = {
 export const Footer = ({ isUserAuthorized }: Props) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const pathname = usePathname();
-  const hideAccountLink =
-    pathname?.startsWith('/auth/login') || pathname?.startsWith('/auth/register');
+  const isAuthPage = pathname?.startsWith('/auth');
 
   const handleAccountClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     if (!isUserAuthorized) {
@@ -42,7 +41,7 @@ export const Footer = ({ isUserAuthorized }: Props) => {
             Recipes
           </Link>
 
-          {!hideAccountLink && (
+          {!isAuthPage && (
             <Link className={styles['footer-nav-link']} href="/profile/own" onClick={handleAccountClick}>
               Account
             </Link>

@@ -62,11 +62,11 @@ const RegistrationForm = () => {
     values: RegisterFormValues,
     actions: FormikHelpers<RegisterFormValues>
   ) => {
-    const payload = {
-      name: values.username,
-      email: values.email,
-      password: values.password,
-    };
+  const payload = {
+    name: values.username.trim(),
+    email: values.email.trim().toLowerCase(),
+    password: values.password,
+  };
     mutation.mutate(payload);
     actions.setSubmitting(false);
   };
