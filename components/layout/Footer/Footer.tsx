@@ -34,7 +34,7 @@ export const Footer = ({ isUserAuthorized }: Props) => {
         </Link>
 
         <div className={styles['footer-credits']}>
-          <div>© 2025 CookingCompanion</div>
+          <div>© 2025 CookingCompanion. All rights reserved.</div>
         </div>
 
         <nav className={styles['footer-nav']}>
