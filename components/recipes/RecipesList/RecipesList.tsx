@@ -12,7 +12,7 @@ export type RecipeListItem = {
   description?: string;
   categoryId?: string;
   ingredients?: string[];
-  [key: string]: any;
+  [key: string]: unknown;
 };
 
 type Props = {
