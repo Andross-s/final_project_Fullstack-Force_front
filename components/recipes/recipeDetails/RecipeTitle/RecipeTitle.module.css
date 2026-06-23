@@ -1,6 +1,7 @@
 .title {
-  font-size: 32px;
-  font-weight: var(--font-weight-bold);
-  color: var(--brown);
+  font-size: 48px;
+  line-height: 53px;
+  font-weight: 600;
+  color: black;
   margin: 0;
 }

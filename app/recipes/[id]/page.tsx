@@ -1,60 +1,65 @@
-"use client";
+'use client';
 
-import { useParams } from "next/navigation";
-import { useRecipe } from "@/hooks/useRecipe";
+import { useParams } from 'next/navigation';
+import { useRecipe } from '@/hooks/useRecipe';
 
-import RecipeImage from "@/components/recipes/recipeDetails/RecipeImage/RecipeImage";
-import RecipeTitle from "@/components/recipes/recipeDetails/RecipeTitle/RecipeTitle";
-import GeneralInfo from "@/components/recipes/recipeDetails/GeneralInfo/GeneralInfo";
-import RecipeSection from "@/components/recipes/recipeDetails/RecipeSection/RecipeSection";
-import SaveButton from "@/components/recipes/recipeDetails/SaveButton/SaveButton";
+import RecipeImage from '@/components/recipes/recipeDetails/RecipeImage/RecipeImage';
+import RecipeTitle from '@/components/recipes/recipeDetails/RecipeTitle/RecipeTitle';
+import GeneralInfo from '@/components/recipes/recipeDetails/GeneralInfo/GeneralInfo';
+import RecipeSection from '@/components/recipes/recipeDetails/RecipeSection/RecipeSection';
+import SaveButton from '@/components/recipes/recipeDetails/SaveButton/SaveButton';
+import NotFoundRecipe from '@/components/recipes/NotFoundRecipe/NotFoundRecipe';
 
-import RecipeDetailsSkeleton from "@/components/recipes/recipeDetails/RecipeDetailsSkeleton";
-import styles from "./RecipeDetails.module.css";
+import styles from './RecipeDetails.module.css';
+
+type IngredientName = {
+  _id: string;
+  name: string;
+};
 
 type IngredientItem = {
   _id: string;
-  name: string;
+  ingredient: IngredientName;
   amount: string;
 };
 
-// Сторінка деталей рецепта (раніше не відмальовувалась через хибний шлях запиту в useRecipe)
 export default function RecipeDetailsPage() {
   const { id } = useParams();
- const recipeId = Array.isArray(id) ? id[0] : id;
+  const recipeId = Array.isArray(id) ? id[0] : id;
 
-const { data, isLoading, isError } = useRecipe(recipeId ?? "");
-
-  if (isLoading) return <RecipeDetailsSkeleton />;
-  if (isError) return <p className={styles.error}>Помилка завантаження рецепта</p>;
-
-  // ФІКС: бекенд повертає сам рецепт без обгортки `{ recipe: {...} }`,
-  // тому раніше `data.recipe` було undefined і сторінка падала.
-  const recipe = data;
+  const { data, isLoading, isError } = useRecipe(recipeId ?? '');
+  if (isLoading) return null;
+  if (isError || !data) return <NotFoundRecipe />;
 
   return (
     <div className={styles.wrapper}>
-      <RecipeImage src={recipe.thumb} alt={recipe.title} />
+      <RecipeTitle title={data.title} />
 
-      <RecipeTitle title={recipe.title} />
+      <RecipeImage src={data.thumb} alt={data.title} />
+      <div className={styles.layout}>
+        <div className={styles.infoSave}>
+          <GeneralInfo time={data.time} calories={data.calories} category={data.category.name} />
+          <SaveButton recipeId={data._id} />
+        </div>
+        <div className={styles.recipeInfo}>
+          <RecipeSection title="About recipe">
+            <p>{data.description}</p>
+          </RecipeSection>
+          <RecipeSection title="Ingredients:">
+            <ul className={styles.ingredientsList}>
+              {data.ingredients.map((item: IngredientItem) => (
+                <li key={item._id}>
+                  {item.ingredient.name} — {item.amount}
+                </li>
+              ))}
+            </ul>
+          </RecipeSection>
 
-      <GeneralInfo time={recipe.time} calories={recipe.calories} />
-
-      <SaveButton recipeId={recipe._id} />
-
-      <RecipeSection title="Ingredients">
-        <ul>
-         {recipe.ingredients.map((item: IngredientItem) => (
-  <li key={item._id}>
-    {item.name} — {item.amount}
-  </li>
-))}
-        </ul>
-      </RecipeSection>
-
-      <RecipeSection title="Instructions">
-        <p>{recipe.instructions}</p>
-      </RecipeSection>
+          <RecipeSection title="Preparation Steps:">
+            <p>{data.instructions}</p>
+          </RecipeSection>
+        </div>
+      </div>
     </div>
   );
 }

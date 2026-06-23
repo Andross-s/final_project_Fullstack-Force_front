@@ -1,10 +1,11 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { useAuthStore } from "@/stores/authStore";
-import { useFavoritesStore } from "@/stores/favoritesStore";
-import ModalNotAutor from "@/components/auth/ModalNotAutor/ModalNotAutor";
-import styles from "./SaveButton.module.css";
+import { useState } from 'react';
+import { useAuthStore } from '@/stores/authStore';
+import { useFavoritesStore } from '@/stores/favoritesStore';
+import ModalNotAutor from '@/components/auth/ModalNotAutor/ModalNotAutor';
+import Image from 'next/image';
+import styles from './SaveButton.module.css';
 
 type SaveButtonProps = {
   recipeId: string;
@@ -12,13 +13,14 @@ type SaveButtonProps = {
 
 export default function SaveButton({ recipeId }: SaveButtonProps) {
   // Отримуємо дані користувача зі стору
-  const user = useAuthStore((state) => state.user);
+  const user = useAuthStore(state => state.user);
+  console.log(user);
 
   // Функція для перемикання "в обране"
-  const toggleFavorite = useFavoritesStore((state) => state.toggleFavorite);
+  const toggleFavorite = useFavoritesStore(state => state.toggleFavorite);
 
   // Перевірка, чи рецепт уже в обраному
-  const isFavorite = useFavoritesStore((state) => state.isFavorite);
+  const isFavorite = useFavoritesStore(state => state.isFavorite);
 
   // Локальний стан для блокування кнопки під час запиту
   const [isProcessing, setIsProcessing] = useState(false);
@@ -44,7 +46,6 @@ export default function SaveButton({ recipeId }: SaveButtonProps) {
 
       // ФІКС: toggleFavorite більше не приймає userId — бекенд визначає користувача по сесії
       await toggleFavorite(recipeId);
-
     } finally {
       // Повертаємо кнопку в нормальний стан
       setIsProcessing(false);
@@ -58,19 +59,21 @@ export default function SaveButton({ recipeId }: SaveButtonProps) {
         onClick={handleClick}
         disabled={isProcessing} // Блокуємо кнопку під час запиту
         style={{
-          color: fav ? "var(--light-brown)" : "#999",
-          borderColor: fav ? "var(--light-brown)" : "var(--light-gray)",
           opacity: isProcessing ? 0.6 : 1, // Візуальний ефект блокування
-          cursor: isProcessing ? "not-allowed" : "pointer",
+          cursor: isProcessing ? 'not-allowed' : 'pointer',
         }}
       >
-        ♥ {fav ? "Saved" : "Save"}
+        {fav ? 'Unsave' : 'Save'}
+        <Image
+          src={fav ? '/icons/bookmark-alternative-fill.svg' : '/icons/bookmark-alternative.svg'}
+          alt="Bookmark"
+          width={24}
+          height={24}
+        />
       </button>
 
       {/* Модалка для неавторизованих користувачів */}
-      {showAuthModal && (
-        <ModalNotAutor onClose={() => setShowAuthModal(false)} />
-      )}
+      {showAuthModal && <ModalNotAutor onClose={() => setShowAuthModal(false)} />}
     </>
   );
 }
