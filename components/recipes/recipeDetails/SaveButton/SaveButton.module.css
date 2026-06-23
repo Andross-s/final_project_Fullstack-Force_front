@@ -14,6 +14,9 @@
   font-size: 18px;
   font-weight: 600;
   transition: var(--transition-base);
+  @media screen and (max-width: 530px) {
+    width: 100%;
+  }
 }
 
 .button:hover {

@@ -34,7 +34,7 @@ export const Footer = ({ isUserAuthorized }: Props) => {
         </Link>
 
         <div className={styles['footer-credits']}>
-          <div>© 2025 CookingCompanion</div>
+          <div>© 2025 CookingCompanion. All rights reserved.</div>
         </div>
 
         <nav className={styles['footer-nav']}>
@@ -42,11 +42,13 @@ export const Footer = ({ isUserAuthorized }: Props) => {
             Recipes
           </Link>
 
-          {!hideAccountLink && (
-            <Link className={styles['footer-nav-link']} href="/profile/own" onClick={handleAccountClick}>
-              Account
-            </Link>
-          )}
+          <Link
+            className={styles['footer-nav-link']}
+            href="/profile/own"
+            onClick={handleAccountClick}
+          >
+            Account
+          </Link>
           {isModalOpen && <ModalAccount onClose={() => setIsModalOpen(false)} />}
         </nav>
       </div>
