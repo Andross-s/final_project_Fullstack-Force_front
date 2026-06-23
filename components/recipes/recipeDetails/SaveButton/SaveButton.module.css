@@ -17,7 +17,7 @@
 }
 
 .button:hover {
-  background: var(--light-beige);
+  background: #6d554b;
 }
 
 @media screen and (min-width: 769px) {
