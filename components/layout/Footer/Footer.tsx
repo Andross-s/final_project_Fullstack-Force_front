@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 import styles from './Footer.module.css';
 import LogoIcon from '../../icon/logo.svg';
@@ -13,6 +14,9 @@ type Props = {
 
 export const Footer = ({ isUserAuthorized }: Props) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const pathname = usePathname();
+  const hideAccountLink =
+    pathname?.startsWith('/auth/login') || pathname?.startsWith('/auth/register');
 
   const handleAccountClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     if (!isUserAuthorized) {
