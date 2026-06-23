@@ -17,14 +17,26 @@ export type RecipeListItem = {
 
 type Props = {
   recipes: RecipeListItem[];
+  type?: string;
+  onFavoriteToggled?: () => void;
 };
 
-export default function RecipesList({ recipes }: Props) {
+export function RecipesList({ recipes, type, onFavoriteToggled }: RecipesListProps) {
   return (
     <div className={styles.wrapper}>
-      <ul className={styles.list}>
-        {recipes.map((recipe) => (
-          <RecipeCard key={recipe._id} recipe={recipe} />
+      <div className={styles.grid}>
+        {recipes.map(recipe => (
+          <RecipeCard
+            key={recipe._id}
+            id={recipe._id}
+            title={recipe.title || recipe.name || ''}
+            description={recipe.description || recipe.descr || ''}
+            time={String(recipe.time || recipe.cookingTime || '')}
+            calories={typeof recipe.calories === 'number' ? recipe.calories : undefined}
+            thumb={recipe.thumb || recipe.recipeImage || ''}
+            type={type}
+            onFavoriteToggled={onFavoriteToggled}
+          />
         ))}
       </ul>
     </div>

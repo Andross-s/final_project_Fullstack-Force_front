@@ -9,16 +9,42 @@ type Recipe = {
   thumb?: string;
   time?: number;
   calories?: number;
-  description?: string;
+  thumb: string;
+  type?: string;
+  onFavoriteToggled?: () => void;
 };
 
-type Props = {
-  recipe: Recipe;
-};
+// Картка рецепта на MainPage
+export default function RecipeCard({
+  id,
+  title,
+  description,
+  time,
+  calories,
+  thumb,
+  type,
+  onFavoriteToggled,
+}: RecipeCardProps) {
+  const user = useAuthStore(state => state.user);
 
-export default function RecipeCard({ recipe }: Props) {
-  const calories =
-    recipe.calories && recipe.calories > 0 ? recipe.calories : "—";
+  const toggleFavorite = useFavoritesStore(state => state.toggleFavorite);
+  const isFavorite = useFavoritesStore(state => state.isFavorite);
+
+  const fav = isFavorite(id);
+
+  // ДОДАНО: локальний стан модалки "потрібна авторизація" для гостей
+  const [showAuthModal, setShowAuthModal] = useState(false);
+
+  // ФІКС: раніше для незалогіненого користувача клік на favorite просто нічого не робив
+  // (`user && toggleFavorite(...)`). Тепер показуємо модалку авторизації.
+  const handleFavoriteClick = async () => {
+    if (!user) {
+      setShowAuthModal(true);
+      return;
+    }
+    await toggleFavorite(id);
+    onFavoriteToggled?.();
+  };
 
   return (
     <li className={styles.card}>
@@ -52,9 +78,27 @@ export default function RecipeCard({ recipe }: Props) {
           </div>
         </div>
 
-        <Link href={`/recipes/${recipe._id}`} className={styles.learnMoreBtn}>
-          Learn more
-        </Link>
+        <div className={styles.buttons}>
+  <Link
+    href={`/recipes/${id}`}
+    className={`${styles.learnMore} ${type === 'own' ? styles.learnMoreFull : ''}`}
+  >
+    Learn More
+  </Link>
+  {type !== 'own' && (
+    <button
+      className={styles.favoriteBtn}
+      onClick={handleFavoriteClick}
+      aria-label="Toggle favorite"
+      style={{
+        color: fav ? 'var(--light-brown)' : '#999',
+        borderColor: fav ? 'var(--light-brown)' : 'var(--light-gray)',
+      }}
+    >
+      <BookmarkIcon aria-hidden="true" />
+    </button>
+  )}
+</div>
       </div>
     </li>
   );

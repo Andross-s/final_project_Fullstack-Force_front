@@ -117,3 +117,7 @@
     font-size: 12px;
   }
 }
+
+.learnMoreFull {
+  flex: 1;
+}

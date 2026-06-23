@@ -4,9 +4,13 @@ import { ProfileNavigation } from "@/components/profile/ProfileNavigation/Profil
 import RecipesList from "@/components/recipes/RecipesList/RecipesList";
 import { LoadMoreBtn } from "@/components/recipes/LoadMoreBtn/LoadMoreBtn";
 
-import { useParams } from "next/navigation";
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
-import { useMemo, useState } from "react";
+import { useParams } from 'next/navigation';
+import { useMemo } from 'react';
+import { getOwnRecipesApi } from '@/lib/api/recipes';
+import { NoRecipesYet } from '@/components/shared/NoRecipesYet/NoRecipesYet';
+import { useState } from 'react';
+import { useQuery, useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
+import { getFavoritesApi } from '@/lib/api/favorites';
 
 import { getOwnRecipesApi } from "@/lib/api/recipes";
 import { getFavoritesApi } from "@/lib/api/favorites";
@@ -17,22 +21,17 @@ import styles from "./page.module.css";
 export default function ProfilePage() {
   const { recipeType } = useParams<{ recipeType: string }>();
 
-  const {
-    data,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-    isLoading,
-    isError,
-  } = useInfiniteQuery({
-    queryKey: ["own-recipes"],
-    queryFn: ({ pageParam }) =>
-      getOwnRecipesApi({ page: pageParam, perPage: 12 }),
-    initialPageParam: 1,
-    getNextPageParam: (lastPage) =>
-      lastPage.page < lastPage.totalPages ? lastPage.page + 1 : undefined,
-    enabled: recipeType === "own",
-  });
+ const queryClient = useQueryClient();
+
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, isError } =
+    useInfiniteQuery({
+      queryKey: ['own-recipes'],
+      queryFn: ({ pageParam }) => getOwnRecipesApi({ page: pageParam, perPage: 12 }),
+      initialPageParam: 1,
+      getNextPageParam: lastPage =>
+        lastPage.page < lastPage.totalPages ? lastPage.page + 1 : undefined,
+      enabled: recipeType === 'own',
+    });
 
   const ownRecipes = useMemo(
     () => data?.pages.flatMap((p) => p.recipes) ?? [],
@@ -81,30 +80,23 @@ export default function ProfilePage() {
           <p>Не вдалося завантажити рецепти</p>
         )}
 
-        {recipeType === "own" &&
-          !isLoading &&
-          !isError &&
-          ownRecipes.length === 0 && (
-            <NoRecipesYet message="You haven't added any recipes yet" />
-          )}
+        <RecipesList
+  recipes={recipesToShow}
+  type={recipeType}
+  onFavoriteToggled={
+    recipeType === 'favorites'
+      ? () => queryClient.invalidateQueries({ queryKey: ['favorites'] })
+      : undefined
+  }
+/>
 
-        <RecipesList recipes={recipesToShow} />
-
-        {recipeType === "own" ? (
-          hasNextPage && (
-            <LoadMoreBtn
-              onClick={() => fetchNextPage()}
-              isLoading={isFetchingNextPage}
-            />
-          )
-        ) : (
-          visibleCount < allFavorites.length && (
-            <LoadMoreBtn
-              onClick={() => setVisibleCount((prev) => prev + 12)}
-              isLoading={false}
-            />
-          )
-        )}
+        {recipeType === 'own'
+          ? hasNextPage && (
+              <LoadMoreBtn onClick={() => fetchNextPage()} isLoading={isFetchingNextPage} />
+            )
+          : visibleCount < allFavorites.length && (
+              <LoadMoreBtn onClick={() => setVisibleCount(prev => prev + 12)} isLoading={false} />
+            )}
       </div>
     </main>
   );
