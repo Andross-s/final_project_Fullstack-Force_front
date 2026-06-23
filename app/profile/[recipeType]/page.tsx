@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { ProfileNavigation } from '@/components/profile/ProfileNavigation/ProfileNavigation';
-import { RecipesList } from '@/components/recipes/RecipesList/RecipesList';
-import { LoadMoreBtn } from '@/components/recipes/LoadMoreBtn/LoadMoreBtn';
+import { ProfileNavigation } from "@/components/profile/ProfileNavigation/ProfileNavigation";
+import RecipesList from "@/components/recipes/RecipesList/RecipesList";
+import { LoadMoreBtn } from "@/components/recipes/LoadMoreBtn/LoadMoreBtn";
 
 import { useParams } from 'next/navigation';
 import { useMemo } from 'react';
@@ -12,7 +12,11 @@ import { useState } from 'react';
 import { useQuery, useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
 import { getFavoritesApi } from '@/lib/api/favorites';
 
-import styles from './page.module.css';
+import { getOwnRecipesApi } from "@/lib/api/recipes";
+import { getFavoritesApi } from "@/lib/api/favorites";
+import { NoRecipesYet } from "@/components/shared/NoRecipesYet/NoRecipesYet";
+
+import styles from "./page.module.css";
 
 export default function ProfilePage() {
   const { recipeType } = useParams<{ recipeType: string }>();
@@ -29,28 +33,36 @@ export default function ProfilePage() {
       enabled: recipeType === 'own',
     });
 
-  const ownRecipes = useMemo(() => data?.pages.flatMap(p => p.recipes) ?? [], [data]);
+  const ownRecipes = useMemo(
+    () => data?.pages.flatMap((p) => p.recipes) ?? [],
+    [data]
+  );
 
   const [visibleCount, setVisibleCount] = useState(12);
 
   const { data: favData } = useQuery({
-    queryKey: ['favorites'],
+    queryKey: ["favorites"],
     queryFn: getFavoritesApi,
-    enabled: recipeType === 'favorites',
+    enabled: recipeType === "favorites",
   });
 
   const allFavorites = useMemo(() => {
     const list = favData ?? [];
     return list.filter(
       (recipe: { _id: string }, index: number, arr: { _id: string }[]) =>
-        arr.findIndex(r => r._id === recipe._id) === index
+        arr.findIndex((r) => r._id === recipe._id) === index
     );
   }, [favData]);
 
-  const recipesToShow = recipeType === 'own' ? ownRecipes : allFavorites.slice(0, visibleCount);
+  const recipesToShow =
+    recipeType === "own"
+      ? ownRecipes
+      : allFavorites.slice(0, visibleCount);
 
   const totalCount =
-    recipeType === 'own' ? (data?.pages[0]?.totalRecipes ?? 0) : allFavorites.length;
+    recipeType === "own"
+      ? data?.pages[0]?.totalRecipes ?? 0
+      : allFavorites.length;
 
   return (
     <main className={styles.container}>
@@ -63,11 +75,9 @@ export default function ProfilePage() {
       </div>
 
       <div className={styles.profileRecipes}>
-        {recipeType === 'own' && isLoading && <p>Завантаження...</p>}
-        {recipeType === 'own' && isError && <p>Не вдалося завантажити рецепти</p>}
-
-        {recipeType === 'own' && !isLoading && !isError && ownRecipes.length === 0 && (
-          <NoRecipesYet message="You haven't added any recipes yet" />
+        {recipeType === "own" && isLoading && <p>Завантаження...</p>}
+        {recipeType === "own" && isError && (
+          <p>Не вдалося завантажити рецепти</p>
         )}
 
         <RecipesList

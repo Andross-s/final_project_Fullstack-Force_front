@@ -28,7 +28,7 @@ export type FetchRecipesResult = {
 type RecipesSectionProps = {
   title: string;
   fetchRecipes: (params: FetchRecipesParams) => Promise<FetchRecipesResult>;
-  listType?: string;
+  listType?: string; 
 };
 
 export default function RecipesSection({
@@ -127,7 +127,7 @@ export default function RecipesSection({
         ) : isLoading ? (
           <p className={styles.state}>Loading...</p>
         ) : recipes.length > 0 ? (
-          <RecipesList recipes={recipes} type={listType} />
+          <RecipesList recipes={recipes} />
         ) : (
           <p className={styles.state}>No recipes found</p>
         )}

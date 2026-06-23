@@ -1,11 +1,15 @@
 import * as Yup from "yup";
 
+const SUPPORTED_FORMATS = ["image/jpg", "image/jpeg", "image/png", "image/webp"];
+
 export const validationSchema = Yup.object({
   name: Yup.string()
+    .trim()
     .max(64, "Maximum 64 characters")
     .required("Recipe title is required"),
 
   descr: Yup.string()
+    .trim()
     .max(200, "Maximum 200 characters")
     .required("Description is required"),
 
@@ -17,42 +21,41 @@ export const validationSchema = Yup.object({
 
   cals: Yup.number()
     .nullable()
-    .transform((v, o) => (o === "" ? null : v))
+    .transform((value, originalValue) => (originalValue === "" ? null : value))
     .min(1, "Minimum 1 calorie")
     .max(10000, "Maximum 10000 calories"),
 
-  category: Yup.string().required("Category is required"),
+  category: Yup.string()
+    .required("Category is required"),
 
   ingredients: Yup.array()
     .of(
       Yup.object({
-        ingredientId: Yup.string().required(),
+        ingredientId: Yup.string().required("Ingredient is required"),
         ingredientAmount: Yup.string()
+          .trim()
           .max(10, "Maximum 10 characters")
-          .required("Ingredient amount is required"),
+          .required("Amount is required"),
       })
     )
-    .min(2, "Minimum 2 ingredients")
+    .min(2, "Add at least 2 ingredients")
     .max(16, "Maximum 16 ingredients")
-    .required("Ingredients are required")
-    .typeError("Ingredients must be an array"),
+    .required("Ingredients list is required"),
 
   instruction: Yup.string()
+    .trim()
     .max(1200, "Maximum 1200 characters")
     .required("Instruction is required"),
 
-  recipeImg: Yup.mixed()
+  recipeImg: Yup.mixed<File>()
     .nullable()
     .notRequired()
-    .test("fileSize", "Image must be less than 2MB", (value) => {
+    .test("fileSize", "Image size must be less than 2MB", (value) => {
       if (!value) return true;
       return value instanceof File && value.size <= 2 * 1024 * 1024;
     })
-    .test("fileType", "Only jpg, jpeg, png, webp allowed", (value) => {
+    .test("fileType", "Only JPG, JPEG, PNG, WEBP are allowed", (value) => {
       if (!value) return true;
-      return (
-        value instanceof File &&
-        ["image/jpeg", "image/png", "image/webp"].includes(value.type)
-      );
+      return value instanceof File && SUPPORTED_FORMATS.includes(value.type);
     }),
 });

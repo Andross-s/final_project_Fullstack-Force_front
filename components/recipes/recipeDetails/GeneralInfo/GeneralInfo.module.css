@@ -1,6 +1,22 @@
 .meta {
   display: flex;
-  gap: 24px;
-  font-size: 18px;
-  color: var(--brown);
+  flex-direction: column;
+  gap: 15px;
+  width: 100%;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  color: black;
+  border-radius: 16px;
+  background-color: #faf3e0;
+  padding: 24px;
+}
+
+.title {
+  font-weight: 600;
+  font-size: 24px;
+}
+
+.boldstat {
+  font-weight: 600;
 }

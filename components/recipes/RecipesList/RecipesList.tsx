@@ -1,23 +1,21 @@
-'use client';
+"use client";
 
-import RecipeCard from '../RecipeCard/RecipeCard';
-import styles from './RecipesList.module.css';
+import RecipeCard from "@/components/recipes/RecipeCard/RecipeCard";
+import styles from "./RecipesList.module.css";
 
 export type RecipeListItem = {
   _id: string;
-  title?: string;
-  name?: string;
-  descr?: string;
-  description?: string;
-  time?: number | string;
-  cookingTime?: number | string;
-  calories?: number | string | null;
-  cals?: number | string | null;
+  title: string;
   thumb?: string;
-  recipeImage?: string;
+  time?: number;
+  calories?: number;
+  description?: string;
+  categoryId?: string;
+  ingredients?: string[];
+  [key: string]: any;
 };
 
-type RecipesListProps = {
+type Props = {
   recipes: RecipeListItem[];
   type?: string;
   onFavoriteToggled?: () => void;
@@ -40,9 +38,7 @@ export function RecipesList({ recipes, type, onFavoriteToggled }: RecipesListPro
             onFavoriteToggled={onFavoriteToggled}
           />
         ))}
-      </div>
+      </ul>
     </div>
   );
 }
-
-export default RecipesList;

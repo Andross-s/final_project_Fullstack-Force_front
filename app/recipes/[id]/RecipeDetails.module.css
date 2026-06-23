@@ -2,12 +2,55 @@
   display: flex;
   flex-direction: column;
   gap: 32px;
-  padding: 32px 0;
+  padding: 122px 32px 32px 48px;
 }
 
-.error {
-  color: red;
-  font-size: 20px;
-  text-align: center;
-  margin-top: 40px;
+.ingredientsList {
+  list-style-type: '• ';
+  list-style-position: inside;
+}
+
+.infoSave {
+  display: flex;
+  flex-direction: row;
+  gap: 24px;
+}
+
+.recipeInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 155%;
+  color: #000;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+}
+
+@media screen and (min-width: 769px) {
+  .layout {
+    grid-template-columns: 1fr 393px;
+  }
+
+  .infoSave {
+    flex-direction: column;
+    grid-row: 1;
+    grid-column: 2;
+  }
+
+  .recipeInfo {
+    grid-row: 1;
+    grid-column: 1;
+  }
+
+  .wrapper {
+    padding-left: 108px;
+    padding-right: 108px;
+  }
 }

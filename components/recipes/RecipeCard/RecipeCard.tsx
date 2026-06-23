@@ -1,19 +1,13 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
-import BookmarkIcon from '@/components/icon/bookmark-alternative.svg';
-import ModalNotAutor from '@/components/auth/ModalNotAutor/ModalNotAutor';
-import { useAuthStore } from '@/stores/authStore';
-import { useFavoritesStore } from '@/stores/favoritesStore';
-import styles from './RecipeCard.module.css';
+import styles from "./RecipeCard.module.css";
+import Link from "next/link";
 
-type RecipeCardProps = {
-  id: string;
+type Recipe = {
+  _id: string;
   title: string;
-  description: string;
-  time: string;
+  thumb?: string;
+  time?: number;
   calories?: number;
   thumb: string;
   type?: string;
@@ -53,24 +47,35 @@ export default function RecipeCard({
   };
 
   return (
-    <div className={styles.card}>
+    <li className={styles.card}>
       <div className={styles.imageWrapper}>
-        <Image
-          src={thumb}
-          alt={title}
-          fill
-          className={styles.image}
-          sizes="(max-width: 767px) 100vw, (max-width: 1439px) 50vw, 25vw"
-        />
+        {recipe.thumb && (
+          <img
+            src={recipe.thumb}
+            alt={recipe.title}
+            className={styles.image}
+          />
+        )}
       </div>
 
       <div className={styles.content}>
-        <h3 className={styles.title}>{title}</h3>
-        <p className={styles.description}>{description}</p>
+        <h3 className={styles.title}>{recipe.title}</h3>
 
-        <div className={styles.infoRow}>
-          <span>{time}</span>
-          <span>{calories ? `${calories} kcal` : '—'}</span>
+        {recipe.description && (
+          <p className={styles.description}>{recipe.description}</p>
+        )}
+
+        <div className={styles.metaRow}>
+          <div className={styles.metaGroup}>
+            <span className={styles.metaLabel}>Time</span>
+            <span className={styles.metaValue}>
+              {recipe.time ? `${recipe.time} min` : "—"}
+            </span>
+          </div>
+          <div className={styles.metaGroup}>
+            <span className={styles.metaLabel}>Calories</span>
+            <span className={styles.metaValue}>{calories}</span>
+          </div>
         </div>
 
         <div className={styles.buttons}>
@@ -95,10 +100,6 @@ export default function RecipeCard({
   )}
 </div>
       </div>
-
-      {showAuthModal && (
-        <ModalNotAutor onClose={() => setShowAuthModal(false)} />
-      )}
-    </div>
+    </li>
   );
 }
