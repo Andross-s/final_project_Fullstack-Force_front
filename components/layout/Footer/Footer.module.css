@@ -9,7 +9,6 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  text-align: center;
   gap: 32px;
   margin: 0 auto;
   width: 100%;
@@ -19,27 +18,23 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  width: 165px;
-  height: 46px;
 }
 
 .footer-logo-icon {
   width: 32px;
   height: 32px;
-  flex-shrink: 0;
 }
 
 .brand-text {
   font-size: 20px;
   font-weight: 600;
-  color: #ffffff;
 }
 
 .footer-nav {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 16px;
+  gap: 40px;
 }
 
 .footer-nav-link {
@@ -54,7 +49,6 @@
 }
 
 .footer-credits {
-  width: 100%;
   text-align: center;
   font-size: 14px;
   color: rgba(255, 255, 255, 0.7);
@@ -62,36 +56,23 @@
 
 @media (min-width: 768px) {
   .footer-container {
-    padding: 48px 24px;
-  }
-
-  .footer-content {
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    padding: 24px 40px;
   }
 
   .footer-nav {
     flex-direction: row;
-    justify-content: center;
     gap: 32px;
   }
 }
 
 @media (min-width: 1440px) {
   .footer-container {
-    padding: 40px 108px;
+    padding: 24px 108px;
   }
 
   .footer-content {
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    margin: 0 auto;
-  }
-
-  .footer-nav {
-    margin: 0;
-    gap: 32px;
   }
 }
