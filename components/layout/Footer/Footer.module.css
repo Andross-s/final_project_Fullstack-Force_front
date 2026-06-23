@@ -1,7 +1,7 @@
 .footer-container {
-  background-color: #3D2218;
+  background-color: #3d2218;
   color: #ffffff;
-  padding: 24px 16px;
+  padding: 24px 24px;
   width: 100%;
 }
 
@@ -30,14 +30,15 @@
 }
 
 .brand-text {
-  font-size: 20px;
+  font-size: 18px;
+  letter-spacing: -0.03em;
   font-weight: 600;
   color: #ffffff;
 }
 
 .footer-nav {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
   gap: 16px;
 }
@@ -47,6 +48,8 @@
   text-decoration: none;
   transition: opacity 0.3s;
   line-height: 24px;
+  font-weight: 600;
+  font-size: 16px;
 }
 
 .footer-nav-link:hover {
@@ -54,17 +57,19 @@
 }
 
 .footer-credits {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400;
+  font-size: 12px;
+  color: #fff;
   width: 100%;
   text-align: center;
-  font-size: 14px;
-  color: rgba(255, 255, 255, 0.7);
 }
 
 @media (min-width: 768px) {
   .footer-container {
-    padding: 48px 24px;
+    padding-left: 108px;
+    padding-right: 108px;
   }
-
   .footer-content {
     flex-direction: column;
     align-items: center;
@@ -79,10 +84,6 @@
 }
 
 @media (min-width: 1440px) {
-  .footer-container {
-    padding: 40px 108px;
-  }
-
   .footer-content {
     flex-direction: row;
     justify-content: space-between;
