@@ -2,24 +2,25 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 208px 84px 136px 84px;
+  padding: 98px 16px 24px 16px;
   gap: 0;
   flex: 1;
 }
 
 .imageWrapper {
   position: relative;
-  width: 600px;
-  height: 438px;
-  max-width: 100%;
+  width: 100%;
+  max-width: 361px;
+  height: 30vh;
+  max-height: 267px;
   border-radius: 8px;
   overflow: hidden;
-  margin-top: auto;
   margin-bottom: 32px;
 }
 
 .image {
   object-fit: cover;
+  object-position: center;
 }
 
 .code {
@@ -52,7 +53,8 @@
   justify-content: center;
   align-items: center;
   padding: 16px;
-  width: 340px;
+  width: 361px;
+  max-width: 100%;
   height: 56px;
   gap: 16px;
   background: #9b6c43;
@@ -61,8 +63,7 @@
   font-size: 16px;
   font-weight: 500;
   text-decoration: none;
-  transition: opacity var(--transition-base);
-  margin-bottom: auto;
+  transition: background var(--transition-base);
 }
 
 .btn:hover {
@@ -91,24 +92,22 @@
 /* Tablet 768px */
 @media (min-width: 768px) {
   .imageWrapper {
-    width: 600px;
-    height: 438px;
+    max-width: 600px;
+    height: 35vh;
+    max-height: 438px;
   }
 
-  .code {
-    font-size: 48px;
+  .btn {
+    width: 340px;
   }
 }
 
 /* Desktop 1440px */
 @media (min-width: 1440px) {
-  .wrapper {
-    padding: 112px 84px 36px 84px;
-  }
-
   .imageWrapper {
-    width: 600px;
-    height: 438px;
+    max-width: 600px;
+    height: 40vh;
+    max-height: 438px;
   }
 
   .btn {
