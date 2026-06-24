@@ -57,7 +57,12 @@ export default function RecipeCard({ recipe, type, onFavoriteToggled }: Props) {
     <li className={styles.card}>
       <div className={styles.imageWrapper}>
         {recipe.thumb && (
-          <Image src={recipe.thumb} alt={recipe.title} className={styles.image} />
+          <Image
+            src={recipe.thumb}
+            alt={recipe.title}
+            fill
+            className={styles.image}
+          />
         )}
       </div>
 
@@ -98,7 +103,7 @@ export default function RecipeCard({ recipe, type, onFavoriteToggled }: Props) {
                 height={18}
                 width={18}
                 strokeWidth={5}
-                color={fav ? '#fff' : '#050505'} // ← цвет зависит от состояния
+                color={fav ? '#fff' : '#050505'}
               />
             ) : (
               <BookmarkIcon className={styles.favoriteIcon} />
