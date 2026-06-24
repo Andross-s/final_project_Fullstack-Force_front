@@ -1,7 +1,7 @@
 .footer-container {
-  background-color: #3d2218;
+  background-color: #3D2218;
   color: #ffffff;
-  padding: 24px 24px;
+  padding: 24px 59px;
   width: 100%;
 }
 
@@ -33,7 +33,7 @@
 
 .footer-nav {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
   gap: 40px;
 }
@@ -52,23 +52,16 @@
 }
 
 .footer-credits {
-  font-family: 'Montserrat', sans-serif;
+ font-family: 'Montserrat', sans-serif;
   font-weight: 400;
   font-size: 12px;
   color: #fff;
-  width: 100%;
   text-align: center;
 }
 
 @media (min-width: 768px) {
   .footer-container {
-    padding-left: 108px;
-    padding-right: 108px;
-  }
-  .footer-content {
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    padding: 24px 40px;
   }
 
   .footer-nav {
@@ -78,6 +71,10 @@
 }
 
 @media (min-width: 1440px) {
+  .footer-container {
+    padding: 24px 108px;
+  }
+
   .footer-content {
     flex-direction: row;
     justify-content: space-between;
