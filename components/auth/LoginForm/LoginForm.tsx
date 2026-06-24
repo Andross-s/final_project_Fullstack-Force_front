@@ -32,6 +32,7 @@ const Login = () => {
         setUser(res);
         void loadFavorites();
         toast.success('Login successful!');
+        router.refresh(); // рефрешемо щоб побпчити кукіс для преходу у My Profile 
         router.push('/');
       }
     },
