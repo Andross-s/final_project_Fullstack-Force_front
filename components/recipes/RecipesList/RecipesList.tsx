@@ -17,14 +17,20 @@ export type RecipeListItem = {
 
 type Props = {
   recipes: RecipeListItem[];
+  type?: string;
+  onFavoriteToggled?: () => void;
 };
 
-export default function RecipesList({ recipes }: Props) {
+export default function RecipesList({ recipes, type, onFavoriteToggled }: Props) {
   return (
     <div className={styles.wrapper}>
       <ul className={styles.list}>
         {recipes.map((recipe) => (
-          <RecipeCard key={recipe._id} recipe={recipe} />
+          <RecipeCard
+            key={recipe._id}
+            recipe={recipe}
+            type={type}
+            onFavoriteToggled={onFavoriteToggled}/>
         ))}
       </ul>
     </div>

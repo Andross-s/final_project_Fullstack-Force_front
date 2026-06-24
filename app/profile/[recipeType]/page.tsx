@@ -5,7 +5,7 @@ import RecipesList from "@/components/recipes/RecipesList/RecipesList";
 import { LoadMoreBtn } from "@/components/recipes/LoadMoreBtn/LoadMoreBtn";
 
 import { useParams } from "next/navigation";
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 
 import { getOwnRecipesApi } from "@/lib/api/recipes";
@@ -16,7 +16,7 @@ import styles from "./page.module.css";
 
 export default function ProfilePage() {
   const { recipeType } = useParams<{ recipeType: string }>();
-
+  const queryClient = useQueryClient();
   const {
     data,
     fetchNextPage,
@@ -88,8 +88,16 @@ export default function ProfilePage() {
             <NoRecipesYet message="You haven't added any recipes yet" />
           )}
 
-        <RecipesList recipes={recipesToShow} />
-
+        <RecipesList
+          recipes={recipesToShow}
+          type={recipeType}
+          onFavoriteToggled={
+          recipeType === "favorites"
+          ? () => queryClient.invalidateQueries({ queryKey: ["favorites"] })
+          : undefined}
+        />
+          
+        
         {recipeType === "own" ? (
           hasNextPage && (
             <LoadMoreBtn
