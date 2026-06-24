@@ -8,7 +8,7 @@ export type UserRegisterProps = {
 };
 
 type RegisterResponse = {
-  newUser: User;
+  user: User;
 };
 
 export const register = async (data: UserRegisterProps): Promise<RegisterResponse> => {
