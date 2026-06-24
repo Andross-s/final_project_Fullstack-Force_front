@@ -2,17 +2,15 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 98px 16px 24px 16px;
-  gap: 0;
   flex: 1;
+  padding: 98px 16px 24px;
 }
 
 .imageWrapper {
   position: relative;
-  width: 100%;
-  max-width: 361px;
-  height: 30vh;
-  max-height: 267px;
+  width: 361px;
+  height: 267px;
+  max-width: 100%;
   border-radius: 8px;
   overflow: hidden;
   margin-bottom: 32px;
@@ -28,11 +26,9 @@
   font-weight: 600;
   font-size: 48px;
   line-height: 110%;
-  display: flex;
-  align-items: center;
   text-align: center;
-  color: #000000;
-  margin: 0 0 16px 0;
+  color: #000;
+  margin: 0 0 16px;
 }
 
 .text {
@@ -40,16 +36,13 @@
   font-weight: 400;
   font-size: 24px;
   line-height: 29px;
-  display: flex;
-  align-items: center;
   text-align: center;
-  color: #000000;
-  margin: 0 0 32px 0;
+  color: #000;
+  margin: 0 0 32px;
 }
 
 .btn {
   display: flex;
-  flex-direction: row;
   justify-content: center;
   align-items: center;
   padding: 16px;
@@ -68,33 +61,28 @@
 
 .btn:hover {
   background: #6d554b;
-  opacity: 1;
 }
 
 .btn:focus-visible {
   background: #9b6c43;
   box-shadow:
-    0px 0px 0px 2px #ffffff,
-    0px 0px 0px 6px rgba(78, 70, 180, 0.12);
+    0 0 0 2px #ffffff,
+    0 0 0 6px rgba(78, 70, 180, 0.12);
   outline: none;
-  opacity: 1;
 }
 
 .btn:active {
   background: #9b6c43;
   box-shadow:
-    0px 0px 0px 2px #ffffff,
-    0px 0px 0px 6px rgba(78, 70, 180, 0.12);
+    0 0 0 2px #ffffff,
+    0 0 0 6px rgba(78, 70, 180, 0.12);
   outline: none;
-  opacity: 1;
 }
 
-/* Tablet 768px */
 @media (min-width: 768px) {
   .imageWrapper {
-    max-width: 600px;
-    height: 35vh;
-    max-height: 438px;
+    width: 600px;
+    height: 438px;
   }
 
   .btn {
@@ -102,15 +90,19 @@
   }
 }
 
-/* Desktop 1440px */
 @media (min-width: 1440px) {
+  .wrapper {
+    padding-top: 112px;
+    padding-bottom: 38px;
+  }
+
   .imageWrapper {
-    max-width: 600px;
-    height: 40vh;
-    max-height: 438px;
+    width: 600px;
+    height: 438px;
   }
 
   .btn {
+    margin-bottom: 0;
     width: 288px;
   }
 }
