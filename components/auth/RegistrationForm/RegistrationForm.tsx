@@ -52,9 +52,21 @@ const RegistrationForm = () => {
         router.push('/');
       }
     },
-    onError: (error: AxiosError<{ error?: string }>) => {
-      const errorMessage = error.response?.data?.error ?? error.message ?? 'Oops... some error';
-      toast.error(errorMessage);
+    onError: (error: AxiosError<{ message?: string; error?: string }>) => {
+      const status = error.response?.status;
+
+      let friendlyMessage = 'Something went wrong. Please try again later.';
+
+      if (status === 400) {
+        friendlyMessage = 'This email address is already registered';
+      } else if (error.message === 'Network Error') {
+        friendlyMessage = 'Network error. Please check your internet connection.';
+      } else {
+        friendlyMessage =
+          error.response?.data?.message ?? error.response?.data?.error ?? error.message;
+      }
+
+      toast.error(friendlyMessage, { id: 'register-error' });
     },
   });
 
@@ -62,11 +74,11 @@ const RegistrationForm = () => {
     values: RegisterFormValues,
     actions: FormikHelpers<RegisterFormValues>
   ) => {
-  const payload = {
-    name: values.username.trim(),
-    email: values.email.trim().toLowerCase(),
-    password: values.password,
-  };
+    const payload = {
+      name: values.username.trim(),
+      email: values.email.trim().toLowerCase(),
+      password: values.password,
+    };
     mutation.mutate(payload);
     actions.setSubmitting(false);
   };
