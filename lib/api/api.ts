@@ -33,7 +33,7 @@ if (process.env.NODE_ENV === 'development') {
   });
 }
 
-const AUTH_EXCLUDED_PATHS = ['/api/auth/refresh', '/api/auth/login', '/api/auth/register'];
+const AUTH_EXCLUDED_PATHS = ['/api/auth/refresh', '/api/auth/login', '/api/auth/register', '/api/auth/logout'];
 const isAuthExcluded = (url?: string) =>
   Boolean(url && AUTH_EXCLUDED_PATHS.some(path => url.includes(path)));
 
