@@ -42,6 +42,10 @@
 }
 
 .button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
   height: 46px;
   border: none;
   border-radius: 8px;
@@ -51,6 +55,11 @@
   font-weight: 600;
   cursor: pointer;
   transition: background-color 0.2s ease;
+}
+
+.button:disabled {
+  cursor: not-allowed;
+  opacity: 0.8;
 }
 
 .button:hover,
