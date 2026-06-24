@@ -1,13 +1,15 @@
 'use client';
 
 import { useState } from 'react';
+import { Oval } from 'react-loader-spinner';
 import styles from './SearchBox.module.css';
 
 type SearchBoxProps = {
   onSearch: (value: string) => void;
+  isLoading?: boolean;
 };
 
-export default function SearchBox({ onSearch }: SearchBoxProps) {
+export default function SearchBox({ onSearch, isLoading = false }: SearchBoxProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [error, setError] = useState('');
 
@@ -30,14 +32,6 @@ export default function SearchBox({ onSearch }: SearchBoxProps) {
     onSearch(trimmedValue);
   };
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(event.target.value);
-
-    if (error) {
-      setError('');
-    }
-  };
-
   return (
     <form className={styles.form} onSubmit={handleSubmit}>
       <div className={styles.inputWrapper}>
@@ -45,12 +39,19 @@ export default function SearchBox({ onSearch }: SearchBoxProps) {
           className={`${styles.input} ${error ? styles.inputError : ''}`}
           type="text"
           value={searchQuery}
-          onChange={handleChange}
+          onChange={(event) => {
+            setSearchQuery(event.target.value);
+            if (error) setError('');
+          }}
           placeholder="Search recipes"
         />
 
-        <button className={styles.button} type="submit">
-          Search
+        <button className={styles.button} type="submit" disabled={isLoading}>
+          {isLoading ? (
+            <Oval height={20} width={20} strokeWidth={5} color="#fff" secondaryColor="#fff" />
+          ) : (
+            'Search'
+          )}
         </button>
       </div>
 
