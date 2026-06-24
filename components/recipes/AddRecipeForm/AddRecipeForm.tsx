@@ -1,4 +1,4 @@
- 'use client';
+'use client';
 
 import { Formik, Form, Field, ErrorMessage, FormikHelpers } from "formik";
 import { useEffect, useState } from "react";
@@ -92,25 +92,31 @@ export default function AddRecipeForm() {
           validateOnChange={true}
         >
           {({ values, setFieldValue }) => (
-            <Form className={styles.form}>
-              <h2 className={styles.sectionTitle}>Add Recipe</h2>
+            <Form className={styles.formLayout}>
               
-              <div className={styles.topSection}>
-                <div className={styles.photoWrapper}>
-                  <ImageUpload setFieldValue={setFieldValue} />
-                </div>
+    
+              <h2 className={styles.pageTitle}>Add Recipe</h2>
+
+              
+              <div className={styles.photoWrapper}>
+                <ImageUpload setFieldValue={setFieldValue} />
+              </div>
+              
+         
+              <div className={styles.formContent}>
                 
-                <div className={styles.leftColumn}>
+           
+                <div className={styles.sectionBlock}>
                   <h3 className={styles.blockTitle}>General Information</h3>
                   
                   <div className={styles.fieldWrapper}>
-                    <label>Recipe Title</label>
+ <label>Recipe Title</label>
                     <Field name="name" placeholder="Enter the name of your recipe" className={styles.input} />
                     <ErrorMessage name="name" component="div" className={styles.error} />
                   </div>
                   
                   <div className={styles.fieldWrapper}>
- <label>Recipe Description</label>
+                    <label>Recipe Description</label>
                     <Field as="textarea" name="descr" placeholder="Enter a brief description" className={styles.textarea} />
                     <ErrorMessage name="descr" component="div" className={styles.error} />
                   </div>
@@ -138,34 +144,35 @@ export default function AddRecipeForm() {
                     </div>
                   </div>
                 </div>
-              </div>
 
-              <IngredientsBlock ingredients={ingredients} values={values} setFieldValue={setFieldValue} />
-              
-              <div className={styles.instructionsSection}>
-                <h2 className={styles.sectionTitle}>Instructions</h2>
-                <div className={styles.instructionsWrapper}>
-                  <Field as="textarea" name="instruction" className={styles.instructionTextarea} placeholder="Enter a text" />
-                  <ErrorMessage name="instruction" component="div" className={styles.error} />
+             
+                <div className={styles.sectionBlock}>
+                  <IngredientsBlock ingredients={ingredients} values={values} setFieldValue={setFieldValue} />
                 </div>
+                
+              
+                <div className={styles.instructionsSection}>
+                  <h3 className={styles.blockTitle}>Instructions</h3>
+                  <div className={styles.instructionsWrapper}>
+                    <Field as="textarea" name="instruction" className={styles.instructionTextarea} placeholder="Enter a text" />
+                    <ErrorMessage name="instruction" component="div" className={styles.error} />
+                  </div>
+                </div>
+
+          
+                <button
+                  type="submit"
+                  className={styles.button}
+                  disabled={isLoading}
+                >
+                  {isLoading ? (
+                    <Oval height={18} width={18} strokeWidth={5} color="#fff" />
+                  ) : (
+                    "Publish Recipe"
+                  )}
+                </button>
               </div>
 
-              <button
-                type="submit"
-                className={styles.button}
-                disabled={isLoading}
-              >
-                {isLoading ? (
-                  <Oval
-                    height={18}
-                    width={18}
-                    strokeWidth={5}
-                    color="#fff"
-                  />
-                ) : (
-                  "Publish Recipe"
-                )}
-              </button>
             </Form>
           )}
         </Formik>
