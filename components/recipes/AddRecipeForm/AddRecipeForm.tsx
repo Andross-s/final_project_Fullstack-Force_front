@@ -141,36 +141,36 @@ export default function AddRecipeForm() {
                         {categories.map((c) => (<option key={c._id} value={c._id}>{c.name}</option>))}
                       </Field>
                       <ErrorMessage name="category" component="div" className={styles.error} />
-                    </div>
+     </div>
                   </div>
                 </div>
 
              
-                <div className={styles.sectionBlock}>
+   <div className={styles.sectionBlock}>
                   <IngredientsBlock ingredients={ingredients} values={values} setFieldValue={setFieldValue} />
-                </div>
+     </div>
                 
-              
-                <div className={styles.instructionsSection}>
-                  <h3 className={styles.blockTitle}>Instructions</h3>
-                  <div className={styles.instructionsWrapper}>
-                    <Field as="textarea" name="instruction" className={styles.instructionTextarea} placeholder="Enter a text" />
-                    <ErrorMessage name="instruction" component="div" className={styles.error} />
+ 
+    <div className={styles.instructionsSection}>
+    <h3 className={styles.blockTitle}>Instructions</h3>
+ <div className={styles.instructionsWrapper}>
+   <Field as="textarea" name="instruction" className={styles.instructionTextarea} placeholder="Enter a text" />
+      <ErrorMessage name="instruction" component="div" className={styles.error} />
                   </div>
-                </div>
+     </div>
 
           
-                <button
-                  type="submit"
-                  className={styles.button}
-                  disabled={isLoading}
-                >
-                  {isLoading ? (
-                    <Oval height={18} width={18} strokeWidth={5} color="#fff" />
-                  ) : (
-                    "Publish Recipe"
-                  )}
-                </button>
+  <button
+    type="submit"
+     className={styles.button}
+    disabled={isLoading}
+   >
+    {isLoading ? (
+   <Oval height={18} width={18} strokeWidth={5} color="#fff" />
+   ) : (
+    "Publish Recipe"
+       )}
+      </button>
               </div>
 
             </Form>
