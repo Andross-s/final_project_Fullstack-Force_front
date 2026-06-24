@@ -18,6 +18,9 @@ import {
   getIngredientsApi,
 } from "@/lib/api/recipes";
 
+import { Oval } from "react-loader-spinner";
+
+
 type Category = { _id: string; name: string; };
 
 const initialValues: RecipeFormValues = {
@@ -33,7 +36,7 @@ const initialValues: RecipeFormValues = {
 
 export default function AddRecipeForm() {
   const [isLoading, setIsLoading] = useState(false);
-  const [isSuccess, setIsSuccess] = useState(false);
+ 
   const [categories, setCategories] = useState<Category[]>([]);
   const [ingredients, setIngredients] = useState<Ingredient[]>([]);
 
@@ -65,10 +68,13 @@ export default function AddRecipeForm() {
       formData.append("ingredients", JSON.stringify(values.ingredients.map(i => ({ ingredient: i.ingredientId, amount: i.ingredientAmount }))));
       if (values.recipeImg) formData.append("photo", values.recipeImg);
 
-      const response = await createRecipeApi(formData);
-      if (response?.data?._id) {
-        setIsSuccess(true);
-      }
+    const response = await createRecipeApi(formData);
+
+const recipeId = response?._id || response?.data?._id;
+
+if (recipeId) {
+  router.push(`/recipes/${recipeId}`);
+}
     } catch (err) {
       console.error("Submission error:", err);
       toast.error("Failed to publish recipe");
@@ -78,16 +84,7 @@ export default function AddRecipeForm() {
     }
   };
 
-  if (isSuccess) {
-    return (
-      <div className={styles.successWrapper}>
-        <h2 className={styles.sectionTitle}>Recipe published successfully!</h2>
-        <button onClick={() => router.push('/recipes')} className={styles.button}>
-          Go to recipes
-        </button>
-      </div>
-    );
-  }
+  
 
   return (
     <div className={styles.wrapper}>
@@ -147,9 +144,22 @@ export default function AddRecipeForm() {
                 <ErrorMessage name="instruction" component="div" className={styles.error} />
               </div>
             </div>
-            <button type="submit" className={styles.button} disabled={isLoading}>
-              {isLoading ? "Publishing..." : "Publish Recipe"}
-            </button>
+           <button
+  type="submit"
+  className={styles.button}
+  disabled={isLoading}
+>
+  {isLoading ? (
+    <Oval
+      height={18}
+      width={18}
+      strokeWidth={5}
+      color="#fff"
+    />
+  ) : (
+    "Publish Recipe"
+  )}
+</button>
           </Form>
         )}
       </Formik>
