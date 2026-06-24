@@ -1,4 +1,6 @@
-
+/* ==========================================================================
+   КОНТЕЙНЕР СТРАНИЦЫ
+   ========================================================================== */
 .container {
     width: 100%;
     max-width: 1226px;
@@ -7,73 +9,114 @@
     box-sizing: border-box;
 }
 
-
 @media screen and (min-width: 768px) {
     .container {
         padding: 0 32px;
     }
 }
 
-
-@media screen and (min-width: 1226px) {
+@media screen and (min-width: 1440px) {
     .container {
+        max-width: 1226px;
         padding: 0;
     }
 }
 
-
-/* ==========================================================================
-    Мобилка
-   ========================================================================== */
-
 .wrapper {
     width: 100%;
     padding: 48px 0 60px;
+    box-sizing: border-box;
 }
 
-.form {
+/* ==========================================================================
+   УПРАВЛЕНИЕ СЕТКОЙ И ПОРЯДКОМ ЭЛЕМЕНТОВ
+   ========================================================================== */
+.formLayout {
     display: flex;
     flex-direction: column;
-    gap: 32px;
+    gap: 24px;
 }
 
-.sectionTitle,
-.blockTitle {
+
+.pageTitle {
+    order: 1;
     font-family: var(--font-family);
     font-weight: 600;
     font-size: 32px;
     line-height: 120%;
     color: var(--black);
     margin: 0;
-    white-space: nowrap;
 }
 
-.topSection {
+.photoWrapper {
+    order: 2;
+    width: 100%;
+    max-width: 100%;
+    aspect-ratio: 361 / 383;
+    display: block;
+    box-sizing: border-box;
+}
+
+.formContent {
+    order: 3;
+    width: 100%;
     display: flex;
     flex-direction: column;
     gap: 32px;
 }
 
-
-.photoWrapper {
-    width: 100%;
-    max-width: 100%;
-    height: 383px;
-    display: flex;
-    flex-direction: column;
+@media screen and (min-width: 768px) {
+    .photoWrapper {
+        aspect-ratio: 704 / 383;
+    }
 }
 
 
-.photoWrapper :global(.upload-container) {
-    height: 100%;
-    width: 100%;
+@media screen and (min-width: 1440px) {
+    .formLayout {
+        display: grid;
+        grid-template-columns: 809px 361px;
+        grid-template-rows: auto 1fr;
+        gap: 32px 56px;
+    }
+
+    .pageTitle {
+        grid-column: 1;
+        grid-row: 1;
+    }
+
+    .formContent {
+        grid-column: 1;
+        grid-row: 2;
+    }
+
+    .photoWrapper {
+        grid-column: 2;
+        grid-row: 2;
+        width: 361px;
+        height: 383px;
+        aspect-ratio: auto;
+        align-self: start;
+    }
 }
 
-.leftColumn {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
+
+.photoWrapper :global(.upload-container),
+.photoWrapper>div {
     width: 100%;
+    height: 100% !important;
+}
+
+/* ==========================================================================
+   СТИЛИ ДЛЯ КОМПОНЕНТОВ ФОРМЫ
+   ========================================================================== */
+.blockTitle {
+    font-family: var(--font-family);
+    font-weight: 600;
+    font-size: 24px;
+    line-height: 120%;
+    color: var(--black);
+    margin: 0 0 24px 0;
 }
 
 .fieldWrapper {
@@ -81,7 +124,7 @@
     flex-direction: column;
     gap: 8px;
     position: relative;
-    overflow: visible;
+    margin-bottom: 16px;
 }
 
 .fieldWrapper label {
@@ -126,7 +169,6 @@
 .instructionsSection {
     display: flex;
     flex-direction: column;
-    gap: 16px;
 }
 
 .error {
@@ -147,69 +189,5 @@
     display: flex;
     align-items: center;
     justify-content: center;
-}
-
-
-/* ==========================================================================
-   ПЛАНШЕТ (768px - 1225px)
-   ========================================================================== */
-
-@media screen and (min-width: 768px) {
-    .wrapper {
-        padding: 40px 0 80px;
-    }
-
-  
-    .photoWrapper {
-        width: 100%;
-        max-width: 100%;
-        height: 383px;
-        margin: 0;
-    }
-}
-
-
-/* ==========================================================================
-   ДЕСКТОП (от 1226px)
-   ========================================================================== */
-
-@media screen and (min-width: 1226px) {
-    .wrapper {
-        padding: 60px 0 80px;
-    }
-
-    .topSection {
-        display: grid;
-        grid-template-columns: 1fr 391px;
-        gap: 100px;
-        align-items: start;
-    }
-
-   
-
-  
-    .photoWrapper {
-        grid-column: 2;
-        order: 2;
-        width: 391px;
-        height: 374px;
-        margin: 0;
-    }
-
-    .leftColumn {
-        grid-column: 1;
-        order: 1;
-        max-width: 700px;
-    }
-}
-
-.successWrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 50vh;
-    padding: 60px 20px;
-    text-align: center;
-    gap: 20px;
+    margin-top: 16px;
 }
