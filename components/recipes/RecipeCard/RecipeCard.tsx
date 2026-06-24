@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { Oval } from 'react-loader-spinner'; 
 import { useAuthStore } from '@/stores/authStore';
 import { useFavoritesStore } from '@/stores/favoritesStore';
 import ModalNotAutor from '@/components/auth/ModalNotAutor/ModalNotAutor';
@@ -25,7 +26,7 @@ type Props = {
   onFavoriteToggled?: () => void;
 };
 
-export default function RecipeCard({ recipe,type, onFavoriteToggled }: Props) {
+export default function RecipeCard({ recipe, type, onFavoriteToggled }: Props) {
   const user = useAuthStore(state => state.user);
   const toggleFavorite = useFavoritesStore(state => state.toggleFavorite);
   const isFavorite = useFavoritesStore(state => state.isFavorite);
@@ -55,7 +56,14 @@ export default function RecipeCard({ recipe,type, onFavoriteToggled }: Props) {
   return (
     <li className={styles.card}>
       <div className={styles.imageWrapper}>
-        {recipe.thumb && <Image src={recipe.thumb} alt={recipe.title} className={styles.image} />}
+        {recipe.thumb && (
+          <Image
+            src={recipe.thumb}
+            alt={recipe.title}
+            fill
+            className={styles.image}
+          />
+        )}
       </div>
 
       <div className={styles.timeRow}>
@@ -75,20 +83,33 @@ export default function RecipeCard({ recipe,type, onFavoriteToggled }: Props) {
       </div>
 
       <div className={styles.actions}>
-        <Link href={`/recipes/${recipe._id}`} className={`${styles.learnMoreBtn} ${type === 'own' ? styles.learnMoreBtnFull : ''}`} >
+        <Link
+          href={`/recipes/${recipe._id}`}
+          className={`${styles.learnMoreBtn} ${type === 'own' ? styles.learnMoreBtnFull : ''}`}
+        >
           Learn more
         </Link>
+
         {type !== 'own' && (
-        <button
-          type="button"
-          className={`${styles.favoriteBtn} ${fav ? styles.favoriteBtnActive : ''}`}
-          onClick={handleFavoriteClick}
-          disabled={isProcessing}
-          aria-label={fav ? 'Remove from favorites' : 'Add to favorites'}
-        >
-          <BookmarkIcon className={styles.favoriteIcon} />
+          <button
+            type="button"
+            className={`${styles.favoriteBtn} ${fav ? styles.favoriteBtnActive : ''}`}
+            onClick={handleFavoriteClick}
+            disabled={isProcessing}
+            aria-label={fav ? 'Remove from favorites' : 'Add to favorites'}
+          >
+            {isProcessing ? (
+              <Oval
+                height={18}
+                width={18}
+                strokeWidth={5}
+                color={fav ? '#fff' : '#050505'}
+              />
+            ) : (
+              <BookmarkIcon className={styles.favoriteIcon} />
+            )}
           </button>
-          )}
+        )}
       </div>
 
       {showAuthModal && <ModalNotAutor onClose={() => setShowAuthModal(false)} />}
