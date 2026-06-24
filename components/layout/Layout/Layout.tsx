@@ -8,7 +8,7 @@ export default function Layout({ children }: { children: ReactNode }) {
     <div className={styles.layout}>
       <Header />
       <main className={styles.main}>{children}</main>
-      <Footer isUserAuthorized={false} />
+      <Footer />
     </div>
   );
 }
