@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useAuthStore } from '@/stores/authStore';
 import { useFavoritesStore } from '@/stores/favoritesStore';
+import { Oval } from 'react-loader-spinner';
 import ModalNotAutor from '@/components/auth/ModalNotAutor/ModalNotAutor';
 import Image from 'next/image';
 import styles from './SaveButton.module.css';
@@ -63,13 +64,19 @@ export default function SaveButton({ recipeId }: SaveButtonProps) {
           cursor: isProcessing ? 'not-allowed' : 'pointer',
         }}
       >
-        {fav ? 'Unsave' : 'Save'}
-        <Image
-          src={fav ? '/icons/bookmark-alternative-fill.svg' : '/icons/bookmark-alternative.svg'}
-          alt="Bookmark"
-          width={24}
-          height={24}
-        />
+        {isProcessing ? (
+          <Oval height={18} width={18} strokeWidth={5} color={fav ? '#fff' : '#050505'} />
+        ) : (
+          <>
+            {fav ? 'Unsave' : 'Save'}
+            <Image
+              src={fav ? '/icons/bookmark-alternative-fill.svg' : '/icons/bookmark-alternative.svg'}
+              alt="Bookmark"
+              width={24}
+              height={24}
+            />
+          </>
+        )}
       </button>
 
       {/* Модалка для неавторизованих користувачів */}

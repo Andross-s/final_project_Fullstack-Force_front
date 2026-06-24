@@ -3,23 +3,20 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useAuthStore } from '@/stores/authStore';
 
 import styles from './Footer.module.css';
 import LogoIcon from '../../icon/logo.svg';
 import ModalAccount from '../../auth/ModalAccount/ModalAccount';
 
-type Props = {
-  isUserAuthorized: boolean;
-};
-
-export const Footer = ({ isUserAuthorized }: Props) => {
+export const Footer = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const pathname = usePathname();
-  const hideAccountLink =
-    pathname?.startsWith('/auth/login') || pathname?.startsWith('/auth/register');
+  const isAuthPage = pathname?.startsWith('/auth');
+  const user = useAuthStore(state => state.user);
 
   const handleAccountClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    if (!isUserAuthorized) {
+    if (!user) {
       e.preventDefault();
       setIsModalOpen(true);
     }
@@ -34,21 +31,23 @@ export const Footer = ({ isUserAuthorized }: Props) => {
         </Link>
 
         <div className={styles['footer-credits']}>
-          <div>© 2025 CookingCompanion. All rights reserved.</div>
+          <div>© 2026 Tasteorama. All rights reserved.</div>
         </div>
 
         <nav className={styles['footer-nav']}>
-          <Link className={styles['footer-nav-link']} href="/recipes">
+          <Link className={styles['footer-nav-link']} href="/">
             Recipes
           </Link>
 
-          <Link
-            className={styles['footer-nav-link']}
-            href="/profile/own"
-            onClick={handleAccountClick}
-          >
-            Account
-          </Link>
+          {!isAuthPage && (
+            <Link
+              className={styles['footer-nav-link']}
+              href="/profile/own"
+              onClick={handleAccountClick}
+            >
+              Account
+            </Link>
+          )}
           {isModalOpen && <ModalAccount onClose={() => setIsModalOpen(false)} />}
         </nav>
       </div>
