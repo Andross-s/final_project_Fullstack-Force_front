@@ -5,18 +5,24 @@ import { Oval } from 'react-loader-spinner';
 import styles from './SearchBox.module.css';
 
 type SearchBoxProps = {
+  value: string;
+  onChange: (value: string) => void;
   onSearch: (value: string) => void;
   isLoading?: boolean;
 };
 
-export default function SearchBox({ onSearch, isLoading = false }: SearchBoxProps) {
-  const [searchQuery, setSearchQuery] = useState('');
+export default function SearchBox({
+  value,
+  onChange,
+  onSearch,
+  isLoading = false,
+}: SearchBoxProps) {
   const [error, setError] = useState('');
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    const trimmedValue = searchQuery.trim();
+    const trimmedValue = value.trim();
 
     if (!trimmedValue) {
       setError('Please enter a recipe name');
@@ -38,9 +44,9 @@ export default function SearchBox({ onSearch, isLoading = false }: SearchBoxProp
         <input
           className={`${styles.input} ${error ? styles.inputError : ''}`}
           type="text"
-          value={searchQuery}
-          onChange={(event) => {
-            setSearchQuery(event.target.value);
+          value={value}
+          onChange={event => {
+            onChange(event.target.value);
             if (error) setError('');
           }}
           placeholder="Search recipes"

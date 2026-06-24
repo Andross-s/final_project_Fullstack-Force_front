@@ -104,7 +104,12 @@ export default function RecipesSection({
           </h1>
 
           <div className={styles.search}>
-            <SearchBox onSearch={setSearchQuery} isLoading={isFetching} />
+            <SearchBox
+  value={searchQuery}
+  onChange={setSearchQuery}
+  onSearch={setSearchQuery}
+  isLoading={isFetching}
+/>
           </div>
         </div>
       </section>
