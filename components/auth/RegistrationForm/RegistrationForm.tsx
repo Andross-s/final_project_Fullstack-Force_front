@@ -44,10 +44,10 @@ const RegistrationForm = () => {
     mutationFn: register,
     onSuccess: res => {
       if (res) {
-        if (res.newUser?._id) {
-          localStorage.setItem('userId', res.newUser._id);
+        if (res.user?._id) {
+          localStorage.setItem('userId', res.user._id);
         }
-        setUser(res.newUser);
+        setUser(res.user);
         toast.success('Registration successful!');
         router.push('/');
       }
