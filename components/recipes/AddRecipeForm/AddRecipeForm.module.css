@@ -1,10 +1,34 @@
-/* MOBILE */
+
+.container {
+    width: 100%;
+    max-width: 1226px;
+    margin: 0 auto;
+    padding: 0 16px;
+    box-sizing: border-box;
+}
+
+
+@media screen and (min-width: 768px) {
+    .container {
+        padding: 0 32px;
+    }
+}
+
+
+@media screen and (min-width: 1226px) {
+    .container {
+        padding: 0;
+    }
+}
+
+
+/* ==========================================================================
+    Мобилка
+   ========================================================================== */
 
 .wrapper {
     width: 100%;
-    max-width: 1240px;
-    margin: 0 auto;
-    padding: 48px 16px 60px;
+    padding: 48px 0 60px;
 }
 
 .form {
@@ -30,10 +54,26 @@
     gap: 32px;
 }
 
+
+.photoWrapper {
+    width: 100%;
+    max-width: 100%;
+    height: 383px;
+    display: flex;
+    flex-direction: column;
+}
+
+
+.photoWrapper :global(.upload-container) {
+    height: 100%;
+    width: 100%;
+}
+
 .leftColumn {
     display: flex;
     flex-direction: column;
     gap: 16px;
+    width: 100%;
 }
 
 .fieldWrapper {
@@ -42,7 +82,6 @@
     gap: 8px;
     position: relative;
     overflow: visible;
-   
 }
 
 .fieldWrapper label {
@@ -58,7 +97,6 @@
     gap: 16px;
 }
 
-
 .input,
 .select,
 .textarea,
@@ -70,7 +108,7 @@
     background: var(--white);
     font-size: 14px;
     appearance: auto;
-   
+    box-sizing: border-box;
 }
 
 .select {
@@ -95,6 +133,7 @@
     color: var(--red);
     font-size: 12px;
 }
+
 .button {
     width: 100%;
     height: 48px;
@@ -110,17 +149,31 @@
     justify-content: center;
 }
 
-/* TABLET */
+
+/* ==========================================================================
+   ПЛАНШЕТ (768px - 1225px)
+   ========================================================================== */
 
 @media screen and (min-width: 768px) {
     .wrapper {
-        padding: 40px 32px 80px;
+        padding: 40px 0 80px;
+    }
+
+  
+    .photoWrapper {
+        width: 100%;
+        max-width: 100%;
+        height: 383px;
+        margin: 0;
     }
 }
 
-/* DESKTOP */
 
-@media screen and (min-width: 1440px) {
+/* ==========================================================================
+   ДЕСКТОП (от 1226px)
+   ========================================================================== */
+
+@media screen and (min-width: 1226px) {
     .wrapper {
         padding: 60px 0 80px;
     }
@@ -132,17 +185,23 @@
         align-items: start;
     }
 
+   
+
+  
     .photoWrapper {
         grid-column: 2;
         order: 2;
+        width: 391px;
+        height: 374px;
+        margin: 0;
     }
 
     .leftColumn {
         grid-column: 1;
         order: 1;
+        max-width: 700px;
     }
 }
-
 
 .successWrapper {
     display: flex;
