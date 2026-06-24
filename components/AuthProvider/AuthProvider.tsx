@@ -22,10 +22,18 @@ export default function AuthProvider({ children }: AuthProviderProps) {
       }
       try {
         const refreshData = await refreshSession();
+
+        if (!localStorage.getItem('userId')) {
+          console.log('[Auth] Refresh intercepted: user logged out during request.');
+          return;
+        }
+
         const userId = refreshData?.user?._id || refreshData?._id || localStorage.getItem('userId');
 
         if (userId) {
           const userData = await getUserById(userId);
+
+          if (!localStorage.getItem('userId')) return;
 
           if (userData) {
             setUser(userData);

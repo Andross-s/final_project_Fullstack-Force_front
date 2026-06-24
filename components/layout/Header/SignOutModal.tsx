@@ -17,14 +17,15 @@ export default function SignOutModal({ onClose }: Props) {
   const router = useRouter();
 
   const handleLogout = async () => {
+    localStorage.removeItem('userId');
+    clearIsAuthenticated();
+
     try {
       await logout();
     } catch (error) {
       console.error('Logout failed', error);
       toast.error('Logout request failed, but you have been signed out locally.');
     } finally {
-      localStorage.removeItem('userId');
-      clearIsAuthenticated();
       onClose();
       router.push('/');
     }

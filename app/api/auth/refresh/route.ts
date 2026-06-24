@@ -1,9 +1,8 @@
 import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import { api } from '../../api';
-import { parse } from 'cookie';
 import { isAxiosError } from 'axios';
-import { logErrorResponse } from '../../_utils/utils';
+import { forwardSetCookies, logErrorResponse } from '../../_utils/utils';
 
 export async function POST() {
   try {
@@ -19,28 +18,7 @@ export async function POST() {
       }
     );
 
-    const setCookie = apiRes.headers['set-cookie'];
-
-    if (setCookie) {
-      const cookieArray = Array.isArray(setCookie) ? setCookie : [setCookie];
-      for (const cookieStr of cookieArray) {
-        const [nameValue] = cookieStr.split(';');
-        const separatorIndex = nameValue.indexOf('=');
-        const name = nameValue.slice(0, separatorIndex).trim();
-        const value = decodeURIComponent(nameValue.slice(separatorIndex + 1).trim());
-
-        const parsed = parse(cookieStr);
-        const options = {
-          expires: parsed.Expires ? new Date(parsed.Expires) : undefined,
-          path: parsed.Path || '/',
-          maxAge: parsed['Max-Age'] ? Number(parsed['Max-Age']) : undefined,
-          httpOnly: true,
-          secure: process.env.NODE_ENV === 'production',
-        };
-
-        cookieStore.set(name, value, options);
-      }
-    }
+    forwardSetCookies(apiRes.headers['set-cookie'], cookieStore);
 
     return NextResponse.json({ success: true }, { status: 200 });
   } catch (error) {
