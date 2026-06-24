@@ -129,7 +129,7 @@ export default function RecipesSection({
           </div>
         </div>
 
-        {isLoading || isFetching ? (
+        {isLoading ? (
           <p className={styles.state}>Loading...</p>
         ) : recipes.length > 0 ? (
           <RecipesList recipes={recipes} />
