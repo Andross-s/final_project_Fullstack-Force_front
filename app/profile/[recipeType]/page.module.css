@@ -50,12 +50,11 @@
 
 @media (min-width: 1280px) {
   .container {
-    padding-top: 122px;
-    padding-bottom: 64px;
+    padding-bottom: 46px;
+    padding-top: 120px;
   }
 
   .profileTitle {
-    font-size: 48px;
     margin-bottom: 24px;
   }
 
