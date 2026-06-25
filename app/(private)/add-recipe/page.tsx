@@ -4,9 +4,6 @@ export default function AddRecipePage() {
   return (
 <section>
       <div>
-        
-        <h1>Add recipe</h1>
-        
         <AddRecipeForm />
       </div>
     </section>
