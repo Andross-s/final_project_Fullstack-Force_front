@@ -37,6 +37,7 @@ export default function RecipesSection({
 }: RecipesSectionProps) {
   const router = useRouter();
 
+  const [searchInput, setSearchInput] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedIngredient, setSelectedIngredient] = useState('');
@@ -74,10 +75,11 @@ export default function RecipesSection({
   const totalRecipes = data?.pages[0]?.total ?? 0;
 
   const handleResetFilters = () => {
-    setSearchQuery('');
-    setSelectedCategory('');
-    setSelectedIngredient('');
-  };
+  setSearchInput('');
+  setSearchQuery('');
+  setSelectedCategory('');
+  setSelectedIngredient('');
+};
 
   useEffect(() => {
     if (isError && !searchQuery) {
@@ -105,8 +107,8 @@ export default function RecipesSection({
 
           <div className={styles.search}>
             <SearchBox
-  value={searchQuery}
-  onChange={setSearchQuery}
+  value={searchInput}
+  onChange={setSearchInput}
   onSearch={setSearchQuery}
   isLoading={isFetching}
 />
@@ -134,15 +136,15 @@ export default function RecipesSection({
           </div>
         </div>
 
-        {isLoading ? (
-          <p className={styles.state}>Loading...</p>
-        ) : recipes.length > 0 ? (
-          <RecipesList recipes={recipes} />
-        ) : searchQuery ? (
-          <NoMatchFound onReset={handleResetFilters} />
-        ) : (
-          <p className={styles.state}>No recipes found</p>
-        )}
+        {isLoading || isFetching ? (
+  <p className={styles.state}>Loading...</p>
+) : recipes.length > 0 ? (
+  <RecipesList recipes={recipes} />
+) : searchQuery ? (
+  <NoMatchFound onReset={handleResetFilters} />
+) : (
+  <p className={styles.state}>No recipes found</p>
+)}
 
         {hasNextPage && (
           <LoadMoreBtn
