@@ -5,26 +5,26 @@
     width: 100%;
     max-width: 1226px;
     margin: 0 auto;
-    padding: 0 16px;
+    padding: 74px 16px 0 16px;
     box-sizing: border-box;
 }
 
 @media screen and (min-width: 768px) {
     .container {
-        padding: 0 32px;
+        padding: 74px 16px 0 16px;
     }
 }
 
 @media screen and (min-width: 1440px) {
     .container {
         max-width: 1226px;
-        padding: 0;
+        padding: 74px 16px 0 16px;
     }
 }
 
 .wrapper {
     width: 100%;
-    padding: 48px 0 60px;
+    padding: 48px 0 48px;
     box-sizing: border-box;
 }
 
